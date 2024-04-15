@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Signika+Negative:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+@font-face {
+    font-family: "Segoe UI";
+    font-weight: 400;
+    src: local("Segoe UI");
+}
+@font-face {
+    font-family: "Segoe UI";
+    font-weight: 500;
+    src: local("Segoe UI Semibold");
+}
+@font-face {
+    font-family: "Segoe UI";
+    font-weight: 600;
+    src: local("Segoe UI Semibold");
+}
+@font-face {
+    font-family: "Segoe UI";
+    font-weight: 700;
+    src: local("Segoe UI Bold");
+}
+html, body
+{
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-primary) lightgray;  
+}
+.moveTooltip
+{
+    margin-left: 1.5rem !important;
+}
+.footerHeading
+{
+	background: linear-gradient(to right, #4169E1, #8a2be2);
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+}
+footer a
+{
+	transition: .3s ease-in-out;
+	color: white !important;
+}
+footer a:visited
+{
+	color: rgb(180 139 226);
+}
+footer a:hover
+{
+	color: #4169E1 !important;
+}
+#logo
+{
+	transform-origin: 0;
+	transition: .3s ease-in-out;
+}
+#logo:hover
+{
+	transform: scale(calc(56 / 50));
+	background-color: rgb(255 255 255 / .4);
+}
+.offcanvas
+{
+	border: 0 !important;
+}
+.offcanvas:not(.show, .showing)
+{
+	width: 0;
+}
+.offcanvas:not(.show, .showing) > *
+{
+	display: none;
+}
+body
+{
+	padding-right: 0 !important;
+}
+.form-field
+{
+    font-size: 1.2rem;
+    display: block;
+    border: 1px solid rgb(115, 115, 115);
+    border-radius: 7px;
+    outline: none;
+}
+.form-field ~ label
+{
+	position: absolute;
+    font-size: 0.8rem;
+    top: -10px;
+    left: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    z-index: 10;
+    border-radius: 3px;
+    background-color: white;
+    transition: all 150ms ease-in-out;
+}
+.form-field:placeholder-shown:not(:focus) ~ label
+{
+    font-size: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1px;
+    pointer-events: none;
+}
+:is(h1, h2, h3, h4, h5, h6)
+{
+	font-family: 'Signika Negative', sans-serif;
+	font-weight: bold;
+}
+.signika-negative
+{
+	font-family: 'Signika Negative', sans-serif;
+
+}
+#registrationBackground
+{
+	background: linear-gradient(rgb(255 255 255 / .4), rgb(255 255 255 / .8)), url(./img/registration.jpg) ;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	backdrop-filter: blur(20px);
+
+}
+body
+{
+	min-height: 100vh;
+	background-color: #DDD;
+	display: flex;
+	flex-direction: column;
+}
+header
+{
+	background: linear-gradient(to right, rgb(101 163 106 / .8), rgb(101 163 106 / .5), rgb(101 163 106 / .8));
+	border-bottom-left-radius: 1rem;
+	border-bottom-right-radius: 1rem;
+	position: sticky;
+	top: 0;
+	box-shadow: 0 0.5rem 1rem rgb(0 0 0 / .15), 0 0 1rem rgb(0 128 0 / .8) inset;
+	backdrop-filter: blur(15px) saturate(0.4);	
+	z-index: 999;
+}
+header.isScrolled
+{
+	position: fixed;
+	top: -100px;
+	transform: translateY(100px);
+	transition: transform .5s ease-in-out;
+	width: 100%;
+}
+main
+{
+	flex: 1;
+	margin-top: 1rem;
+}
+footer
+{
+	min-height: 70px;
+	background: linear-gradient(to bottom, rgb(101 163 106 / .8), rgb(101 163 106 / .5), rgb(101 163 106 / .8));
+	font-family: "Itim", cursive;
+}
+#banner
+{
+	min-height: 400px;
+	background-image: url(finding_job.jpg);
+	background-position: center;
+	background-size: cover;
+	display: flex;
+	align-items: center;
+}
+#banner section
+{
+	background-color: rgb(255 255 255 / .6);
+	border-radius: .75rem;
+	backdrop-filter: blur(15px);	
+	max-width: 80%;
+	width: fit-content;	
+	font-size: 1.8rem;
+}
+#counter
+{
+	display: flex;
+	gap: .1rem;
+	height: 2.5rem;
+	overflow: hidden;
+}
+#counter > div
+{
+	font-size: 2.2rem;
+	color: darkgreen;
+	line-height: 2.5rem;
+	transition: transform .6s ease-in-out;
+}
+#counter > div > div
+{
+	text-shadow: 0 0 .4rem rgb(30 144 255 / .5);
+}
+footer
+{
+	display: flex;
+	flex-wrap: wrap;
+	padding: .4rem;
+	margin-top: 1.5rem;
+}
+.commonButton, .successButton, .dangerButton
+{
+	border: 2px solid;
+	font-weight: bold;
+	border-radius: 1.5rem;
+	letter-spacing: 2px;
+	margin: 0 .25rem;
+	padding: .75rem 1.5rem;
+	font-family: 'Signika Negative', sans-serif;
+	transition: .3s ease-in-out;
+	color: white;
+
+}
+.commonButton
+{
+	background-color: #4169E1;
+}
+.commonButton:hover
+{
+	background-color: #8fa2d8;
+    box-shadow: 0 0 12px 5px #4169E1 inset;
+}
+.successButton
+{
+	background-color: green;
+}
+.successButton:hover
+{
+	background-color: rgb(91, 156, 91);
+    box-shadow: 0 0 12px 5px green inset;
+}
+.dangerButton
+{
+	background-color: red;
+}
+.dangerButton:hover
+{
+	background-color: rgb(255, 131, 131);
+	box-shadow: 0 0 12px 5px red inset;
+}
+#advertisementInfo > section
+{
+	grid-template-columns: minmax(0, 2.5fr) minmax(250px, 1fr);
+	grid-auto-flow: dense;
+	gap: 1rem;
+	margin-top: -4rem;
+}
+#advertisementInfo > section > section
+{
+	border-radius: .5rem;
+	background-color: white;
+	box-shadow: 0 .25rem .5rem .125rem rgb(0 0 0 / .15);
+	word-break: break-all;
+	padding: .75rem;
+}
+#advertisementInfo > section > section:first-child
+{
+	grid-column: 2;
+	grid-row: 1 / 5;
+	height: fit-content;
+	gap: .5rem;
+	position: sticky;
+	top: 6rem;
+}
+@media(max-width: 768px)
+{
+	#advertisementInfo > section
+	{
+		grid-template-columns: 1fr;
+	}
+	#advertisementInfo > section > section:first-child
+	{
+		position: fixed;
+		top: auto;
+		bottom: 0;
+		width: 100%;
+		grid-column: 1;
+		margin-left: -.75rem;
+	}
+	footer
+	{
+		margin-bottom: 8rem;
+	}
+}

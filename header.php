@@ -24,7 +24,7 @@
             </section>
             <div class="offcanvas offcanvas-end text-bg-dark vh-100 rounded <?php if(isset($_SESSION["login_error"])){echo 'show ';} ?>" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                 <div class="offcanvas-header justify-content-end">
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-toggle="tooltip" title="Zamknij"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-toggle="tooltip" title="Zamknij" data-bs-custom-class='redTooltip'></button>
                 </div>
                 <div class="offcanvas-body">
                     <?php                 
@@ -44,8 +44,14 @@
                             }                    
                             echo<<<form
                             <form class="mt-3" action="login.php" method="post">
-                                <input class="form-control me-2" type="text" placeholder="Login" aria-label="Email"  name="email">
-                                <input class="form-control me-2" type="password" placeholder="Hasło" aria-label="Password" name="password">
+                                <div class="position-relative formInput mt-3">                       
+                                    <input type="email" id="email" name="email" minlength="3" maxlength="254" placeholder="E-mail" required class="rounded-4 border-0 w-100 py-2 px-3">
+                                    <label for="email" class="position-absolute">E-mail</label>
+                                </div>
+                                <div class="position-relative formInput mt-3">                       
+                                    <input type="password" id="password" name="password" minlength="8" maxlength="255" placeholder="Hasło" required class="rounded-4 border-0 w-100 py-2 px-3">
+                                <label for="password" class="position-absolute">Hasło</label>
+                            </div>
                                 <button class="successButton mt-2" type="submit"><i class="bi bi-person-check me-2"></i>Zaloguj się</button>
                             </form>
                             form;

@@ -13,10 +13,10 @@
 		<section class="row">
 			<div class="col-sm-6 col-md-4 pt-5">
 				<h3 class="text-uppercase footerHeading mb-3">Vistaaa</h3>
-				<p class="mb-2"><a href="#" class="text-decoration-none mb-2">O nas</a></p>
-				<p class="mb-2"><a href="#" class="text-decoration-none mb-2">Szukaj ofert</a></p>
-				<p class="mb-2"><a href="#" class="text-decoration-none mb-2">Ostatnio oglądane</a></p>
-				<p class="mb-2"><a href="#" class="text-decoration-none mb-2">Konto</a></p>
+				<p class="mb-2"><a href="./#mainpageBody" class="text-decoration-none mb-2">O nas</a></p>
+				<p class="mb-2"><a href="./#banner" class="text-decoration-none mb-2">Oferty pracy</a></p>
+				<p class="mb-2"><a href="./#offerSearch" class="text-decoration-none mb-2">Znajdź </a></p>
+				<p class="mb-2"><a href="./#latestOffers" class="text-decoration-none mb-2">Ostatnio oglądane</a></p>
 			</div>
 			<div class="col-sm-6 col-md-4 pt-5">
 				<h3 class="text-uppercase footerHeading mb-3">Znajdź też nas na</h3>

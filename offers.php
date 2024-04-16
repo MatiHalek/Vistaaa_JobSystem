@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Ogromny wybór, wspaniałe produkty i niskie ceny w MatiTechShop! Wiele okazji dla każdego, kto chce kupić urządzenie. Uczta dla wszystkich fanów technologii. Zapraszamy!">
-    <meta name="keywords" content="sklep, elektronika, telefony, laptopy, tablety, akcesoria, oferty, niskie ceny, promocje, okazje">
-    <meta name="robots" content="index, follow">
-    <meta name="author" content="Mateusz Marmuźniak">
-    <title>Zarejestruj się | System ogłoszeniowy Vistaaa</title>
-    <base href="https://127.0.0.1/Vistaaa/">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="img/vistaaa_small_logo.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="Znajdziesz tu tysiące atrakcyjnych i dobrze płatnych ofert pracy od sprawdzonych pracodawców z renomowanych firm w kraju i za granicą. Jeżeli szukasz pracy, ten serwis jest w sam raz dla Ciebie. Zapraszamy!">
+  <meta name="keywords" content="praca, oferty, ogłoszenia, system">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Mateusz Marmuźniak">
+  <title>Oferty pracy | System ogłoszeniowy Vistaaa</title>
+  <base href="https://127.0.0.1/Vistaaa/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="img/vistaaa_small_logo.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <?php include 'header.php'; ?>
+  <?php
+	  header('Content-Type: text/html; charset=utf-8');
+	  include "header.php";
+	?>  
     <main class="container">
         <article class="d-flex justify-content-between">
             <section>Sortuj: </section>
@@ -52,7 +54,9 @@
         </article>
         </article>
        
-    </main>
-    <?php include 'footer.php'; ?>
+  </main>
+  <?php
+		  include "footer.php";
+	?>
 </body>
 </html>

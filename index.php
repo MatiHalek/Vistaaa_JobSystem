@@ -2,20 +2,19 @@
 <html lang="pl">
 <head>
 	<meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Ogromny wybór, wspaniałe produkty i niskie ceny w MatiTechShop! Wiele okazji dla każdego, kto chce kupić urządzenie. Uczta dla wszystkich fanów technologii. Zapraszamy!">
-    <meta name="keywords" content="sklep, elektronika, telefony, laptopy, tablety, akcesoria, oferty, niskie ceny, promocje, okazje">
+    <meta name="description" content="Znajdziesz tu tysiące atrakcyjnych i dobrze płatnych ofert pracy od sprawdzonych pracodawców z renomowanych firm w kraju i za granicą. Jeżeli szukasz pracy, ten serwis jest w sam raz dla Ciebie. Zapraszamy!">
+    <meta name="keywords" content="praca, oferty, ogłoszenia, system">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Mateusz Marmuźniak">
     <title>Tysiące atrakcyjnych ofert od sprawdzonych pracodawców | System ogłoszeniowy Vistaaa</title>
-    <base href="https://127.0.0.1/vistaaa/">
+    <base href="https://127.0.0.1/Vistaaa/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="img/vistaaa_small_logo.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="mainpageBody">
 	<?php
 		header('Content-Type: text/html; charset=utf-8');
 		include "header.php";
@@ -31,7 +30,7 @@
 			</section>
 		</article>
 		<article class="container-md d-flex flex-column" style="gap: 1.5rem;">
-			<section class="row p-3">
+			<section class="row p-3" id="offerSearch">
 				<h2 class="text-center py-2">Wyszukiwarka ofert</h2>
 				<div class="input-group input-group-lg mb-3">
 					<span class="input-group-text" id="basic-addon1">@</span>
@@ -65,7 +64,7 @@
 					<a href="advertisement.html" class="btn w-75 successButton w-auto mx-auto" href="#">Szukaj</a>
 				</div>
 			</section>
-			<section>
+			<section id="latestOffers">
 				<h2 class="text-center py-2">Ostatnio oglądane</h2>
 				<div class="d-flex overflow-y-auto" style="gap: .5rem;">
 					<div style="width: 280px;" class="flex-shrink-0">
@@ -135,7 +134,10 @@
 			for(let j = 0; j < 10; j++)
 			{
 				const digit = document.createElement("div");
-				digit.innerText = j;
+				if(i > 0 && j == 0)
+					digit.innerText = "";
+				else
+					digit.innerText = j;
 				number.appendChild(digit);
 			}
 			document.querySelector("#counter").appendChild(number);
@@ -143,6 +145,11 @@
 		function UpdateCounter()
 		{
 			advertisementCount = advertisementCount + (Math.floor(Math.random() * 7) - 3);
+			for(let i = 0; i < 6; i++)
+			{
+				document.querySelector("#counter").children[i].children[0].innerText = "0";
+				document.querySelector("#counter").children[i].style.transition = `transform .${9 - i}s ease-in-out`;
+			}
 			const numbers = document.querySelectorAll("#counter > div");
 			for(let i = 0; i < numbers.length; i++)
 			{
@@ -156,7 +163,7 @@
 				
 			}
 		}
-		setInterval(UpdateCounter, 2000);
+		setInterval(UpdateCounter, 1500);
 	</script>
 </body>
 </html>

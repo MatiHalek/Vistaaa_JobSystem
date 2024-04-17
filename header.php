@@ -66,5 +66,5 @@
 </header>
 <?php
     if($pageName != "System ogłoszeniowy")
-        echo "<p class='d-md-none'>$pageName</p>";
+        echo "<p class='d-md-none ms-2 mt-4 fs-3 fw-bold text-success' id='mobileHeader'>$pageName</p>";
 ?>

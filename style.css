@@ -31,6 +31,27 @@ html, body
 {
 	font-family: Itim, cursive;
 }
+.jobOffer > *:first-child
+{
+	font-size: .75rem;
+	font-family: Itim, cursive;
+	transform: translateY(-30%);
+	right: 1.25rem
+}
+.jobOffer
+{
+	font-family: 'Signika Negative', sans-serif;	
+	transition: .3s ease-in-out;
+}
+.jobOffer:hover
+{
+	transform: translateY(-5px);
+	box-shadow: 0px 0px 1rem .25rem rgba(255, 255, 255, .6) !important;
+}
+#mobileHeader
+{
+	font-family: Itim, cursive;
+}
 .redTooltip
 {
     --bs-tooltip-bg: var(--bs-danger);

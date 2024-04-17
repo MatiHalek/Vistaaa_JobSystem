@@ -17,26 +17,30 @@
 <body>
   <?php
 	  header('Content-Type: text/html; charset=utf-8');
+    $pageName = "Oferty pracy"; 
 	  include "header.php";
 	?>  
-    <main class="container">
+    <main class="container-lg">
         <article class="d-flex justify-content-between">
             <section>Sortuj: </section>
             <section>Strona 1 z 31</section>
         </article>
         <article class="row">
              <article class="col-4">Filtry</article>
-        <article class="col-8 row">
-            <a class="d-block bg-white shadow rounded col-4 position-relative p-2 pt-3 position-relative" href="#">
-                <div class="position-absolute bg-success text-white fw-bold rounded py-1 px-2" style="top: 0; transform: translateY(-30%); right: 20px;">27 gru 2023</div>
-                <h5>Programowanie</h2>
-                <h6 class="text-secondary">Kategoria</h6>
-                <p>od 2 399 zł</p>
-                <p>Umowa o pracę | Test</p>
+        </article>
+        <article class="row m-2">
+            <a class="d-block text-decoration-none bg-white shadow rounded col-12 col-sm-6 col-lg-4 col-xl-3 position-relative p-3 pt-4 me-2 mb-2 position-relative jobOffer" href="#">
+                <div class="position-absolute bg-success text-white rounded-pill py-1 px-3 top-0">27 gru 2023</div>
+                <p class="text-secondary fw-bold fs-6 mb-1">Kategoria</p>
+                <p class="text-primary fw-bold fs-5 mb-0">Programowanie</p>              
+                <p class="text-primary-emphasis mb-2">przez: Vistaaa</p>              
+                <p class="text-success fw-bold">od 2 399 zł</p>
+                <hr class="text-body-tertiary">
+                <p class="text-body-secondary">PositionLevel &#x2022; ContractTypeName &#x2022; EmploymentTypeName &#x2022; WorkTypeName</p>
             </a>
         </article>
-        <article class="row">
-        <nav aria-label="...">
+        <article class="row"></article>
+        <nav class="row" aria-label="...">
   <ul class="pagination">
     <li class="page-item disabled">
       <span class="page-link">Previous</span>

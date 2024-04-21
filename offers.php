@@ -29,15 +29,35 @@
              <article class="col-4">Filtry</article>
         </article>
         <article class="row m-2">
-            <a class="d-block text-decoration-none bg-white shadow rounded col-12 col-sm-6 col-lg-4 col-xl-3 position-relative p-3 pt-4 me-2 mb-2 position-relative jobOffer" href="#">
-                <div class="position-absolute bg-success text-white rounded-pill py-1 px-3 top-0">27 gru 2023</div>
-                <p class="text-secondary fw-bold fs-6 mb-1">Kategoria</p>
-                <p class="text-primary fw-bold fs-5 mb-0">Programowanie</p>              
-                <p class="text-primary-emphasis mb-2">przez: Vistaaa</p>              
-                <p class="text-success fw-bold">od 2 399 zł</p>
-                <hr class="text-body-tertiary">
-                <p class="text-body-secondary">PositionLevel &#x2022; ContractTypeName &#x2022; EmploymentTypeName &#x2022; WorkTypeName</p>
-            </a>
+          <?php
+            require "connect.php";
+            $connect = new mysqli($host, $db_user, $db_password, $db_name);
+            $connect->set_charset("utf8mb4");
+            $result = $connect->execute_query('SELECT * FROM advertisement');
+            if($result->num_rows > 0)
+            {
+                while($row = $result->fetch_assoc())
+                {
+                    echo "<a class='d-block text-decoration-none bg-white shadow rounded col-12 col-sm-6 col-lg-4 col-xl-3 position-relative p-3 pt-4 me-2 mb-2 position-relative jobOffer' href='#'>";
+                    echo "<div class='position-absolute bg-success text-white rounded-pill py-1 px-3 top-0'>".(new DateTime($row["date_added"]))->format("d M Y")."</div>";
+                    $categoryResult = $connect->execute_query('SELECT name FROM advertisement_category INNER JOIN category USING(category_id) WHERE advertisement_id = ?', [$row["advertisement_id"]]);
+                    $categoryArray = array();
+                    while($categoryRow = $categoryResult->fetch_assoc())
+                        array_push($categoryArray, $categoryRow["name"]);
+                    echo "<p class='text-secondary fw-bold fs-6 mb-1'>".implode(", ", $categoryArray)."</p>";
+                    echo "<p class='text-primary fw-bold fs-5 mb-0'>{$row["title"]}</p>"; 
+                    $companyResult = $connect->execute_query('SELECT name FROM company WHERE company_id = ?', [$row["company_id"]]);  
+                    $companyRow = $companyResult->fetch_assoc();             
+                    echo "<p class='text-primary-emphasis mb-2'>przez: ".$companyRow["name"]."</p>";             
+                    echo "<p class='text-success fw-bold'>".(is_null($row["salary_lowest"]) ? $row["salary_highest"] : $row["salary_lowest"]." - ".$row["salary_highest"])." zł</p>";
+                    echo "<hr class='text-body-tertiary'>";
+                    echo "<p class='text-body-secondary'>{$row["position_level"]} &#x2022; {$row["contract_type"]} &#x2022; {$row["employment_type"]} &#x2022; {$row["work_type"]}</p>";
+                    echo "</a>";
+                }
+            }
+            $result->free_result();
+            $connect->close();
+          ?>
         </article>
         <article class="row"></article>
         <nav class="row" aria-label="...">

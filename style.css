@@ -43,6 +43,11 @@ html, body
 	font-family: 'Signika Negative', sans-serif;	
 	transition: .3s ease-in-out;
 }
+.jobOfferDisabled
+{
+	opacity: .5;
+	filter: brightness(.9);
+}
 .jobOffer:hover
 {
 	transform: translateY(-5px);

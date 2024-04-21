@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2024 at 03:40 PM
+-- Generation Time: Apr 22, 2024 at 01:27 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -165,15 +165,16 @@ CREATE TABLE `user` (
   `street` varchar(100) DEFAULT NULL,
   `home_number` varchar(10) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
-  `postcode` varchar(10) DEFAULT NULL
+  `postcode` varchar(10) DEFAULT NULL,
+  `is_admin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `phone`, `street`, `home_number`, `city`, `postcode`) VALUES
-(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$MhlOeihISLc6bEOprIctz.EDMg1a5cCFe6Fa1E2vAe9hoYTWxTQuC', '123456789', 'Zielona', '5', 'Limanowa', '34-600');
+INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `phone`, `street`, `home_number`, `city`, `postcode`, `is_admin`) VALUES
+(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$MhlOeihISLc6bEOprIctz.EDMg1a5cCFe6Fa1E2vAe9hoYTWxTQuC', '123456789', 'Zielona', '5', 'Limanowa', '34-600', 1);
 
 -- --------------------------------------------------------
 

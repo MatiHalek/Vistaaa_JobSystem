@@ -17,7 +17,11 @@
         $row = $result->fetch_assoc();
         if(password_verify($password, $row["password"]))
         {
-            $_SESSION["logged"] = $row["email"];
+            $result = $connect->execute_query('SELECT * FROM user WHERE email = ?', [$email]);
+            if($result->num_rows > 0)
+                $_SESSION["logged"] = $result->fetch_assoc();
+            else
+                $_SESSION["logged"] = ($connect->execute_query('SELECT * FROM company WHERE email = ?', [$email]))->fetch_assoc();
             unset($_SESSION["login_error"]);
         }
         else

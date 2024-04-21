@@ -42,7 +42,7 @@
 		?>
 	</article>
 	<?php
-		echo "<p>&copy; 2023 - ".$version["releaseDate"]->format("Y")." MH Corporation. Wszelkie prawa zastrzeżone. Wszystkie znaki handlowe są własnością ich prawnych właścicieli w serwisie Vistaaa i innych firmach.</div></div>";
+		echo "<p class='w-100'>&copy; 2023 - ".$version["releaseDate"]->format("Y")." MH Corporation. Wszelkie prawa zastrzeżone. Wszystkie znaki handlowe są własnością ich prawnych właścicieli w serwisie Vistaaa i innych firmach.</div></div>";
 	?>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

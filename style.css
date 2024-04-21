@@ -26,6 +26,7 @@ html, body
 {
     scrollbar-width: thin;
     scrollbar-color: var(--bs-primary) lightgray;  
+	font-family: Itim, cursive;
 }
 #logo + span
 {

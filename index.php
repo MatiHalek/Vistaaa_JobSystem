@@ -61,7 +61,7 @@
 					</select>
 				</div>
 				<div class="col-12 text-center">
-					<a href="advertisement.html" class="btn w-75 successButton w-auto mx-auto" href="#">Szukaj</a>
+					<a href="offers.php" class="btn w-75 successButton w-auto mx-auto" href="#">Szukaj</a>
 				</div>
 			</section>
 			<section id="latestOffers">

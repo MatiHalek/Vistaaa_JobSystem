@@ -28,18 +28,24 @@
         <article class="row">
              <article class="col-4">Filtry</article>
         </article>
-        <article class="row m-2">
+        <article class="row g-3">
           <?php
             require "connect.php";
             $connect = new mysqli($host, $db_user, $db_password, $db_name);
             $connect->set_charset("utf8mb4");
-            $result = $connect->execute_query('SELECT * FROM advertisement');
+            if(isset($_SESSION["logged"]) && array_key_exists("company_id", $_SESSION["logged"]))
+                $result = $connect->execute_query('SELECT * FROM advertisement WHERE company_id = ?', [$_SESSION["logged"]["company_id"]]);
+            else
+                $result = $connect->execute_query('SELECT * FROM advertisement');
             if($result->num_rows > 0)
             {
+                echo "<p class='text-center signika-negative fs-4 fw-bold'>Znalezione wyniki: ".$result->num_rows."</p>";
+                $months = array("stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia");
                 while($row = $result->fetch_assoc())
                 {
-                    echo "<a class='d-block text-decoration-none bg-white shadow rounded col-12 col-sm-6 col-lg-4 col-xl-3 position-relative p-3 pt-4 me-2 mb-2 position-relative jobOffer' href='#'>";
-                    echo "<div class='position-absolute bg-success text-white rounded-pill py-1 px-3 top-0'>".(new DateTime($row["date_added"]))->format("d M Y")."</div>";
+                    echo "<div class='d-flex col-12 col-sm-6 col-lg-4 col-xl-3'><a class='d-block w-100 text-decoration-none bg-white shadow rounded position-relative p-3 pt-4 position-relative jobOffer' href='offerdetails.php?id=".$row["advertisement_id"]."'>";
+                    $date_added = new DateTime($row["date_added"]);
+                    echo "<div class='position-absolute bg-success text-white rounded-pill py-1 px-3 top-0'>".$date_added->format("j")." ".mb_substr($months[(int)($date_added->format("n")) - 1], 0, 3)." ".$date_added->format("Y")."</div>";
                     $categoryResult = $connect->execute_query('SELECT name FROM advertisement_category INNER JOIN category USING(category_id) WHERE advertisement_id = ?', [$row["advertisement_id"]]);
                     $categoryArray = array();
                     while($categoryRow = $categoryResult->fetch_assoc())
@@ -49,12 +55,14 @@
                     $companyResult = $connect->execute_query('SELECT name FROM company WHERE company_id = ?', [$row["company_id"]]);  
                     $companyRow = $companyResult->fetch_assoc();             
                     echo "<p class='text-primary-emphasis mb-2'>przez: ".$companyRow["name"]."</p>";             
-                    echo "<p class='text-success fw-bold'>".(is_null($row["salary_lowest"]) ? $row["salary_highest"] : $row["salary_lowest"]." - ".$row["salary_highest"])." zł</p>";
+                    echo "<p class='text-success fw-bold'>".(is_null($row["salary_lowest"]) ? number_format($row["salary_highest"], 2, ",", " ") : number_format($row["salary_lowest"], 2, ",", " ")." - ".number_format($row["salary_highest"], 2, ",", " "))." zł</p>";
                     echo "<hr class='text-body-tertiary'>";
                     echo "<p class='text-body-secondary'>{$row["position_level"]} &#x2022; {$row["contract_type"]} &#x2022; {$row["employment_type"]} &#x2022; {$row["work_type"]}</p>";
-                    echo "</a>";
+                    echo "</a></div>";
                 }
             }
+            else
+                echo "<p class='text-center signika-negative fs-4 fw-bold'>Niestety, nie znaleźliśmy pasujących ofert pracy.</p>";
             $result->free_result();
             $connect->close();
           ?>

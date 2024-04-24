@@ -6,7 +6,7 @@
     <meta name="keywords" content="praca, oferty, ogłoszenia, system">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Mateusz Marmuźniak">
-    <title>Tysiące atrakcyjnych ofert od sprawdzonych pracodawców | System ogłoszeniowy Vistaaa</title>
+    <title>Szczegóły ogłoszenia | System ogłoszeniowy Vistaaa</title>
     <base href="https://127.0.0.1/Vistaaa/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="img/vistaaa_small_logo.png" type="image/x-icon">

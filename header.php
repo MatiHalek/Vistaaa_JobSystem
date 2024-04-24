@@ -48,7 +48,7 @@
                             if($userType != "Użytkownik indywidualny")
                             {
                                 echo "<hr><p class='text-light mt-3 fs-5 signika-negative'>Panel administracyjny</p>";
-                                echo "<a href='addOffer.php' class='successButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-plus-circle-fill me-2'></i>Dodaj ofertę</a>";
+                                echo "<a href='offerform.php' class='successButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-plus-circle-fill me-2'></i>Dodaj ofertę</a>";
                             }
                                 
                         }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2024 at 01:27 AM
+-- Generation Time: Apr 25, 2024 at 01:01 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -33,11 +33,11 @@ CREATE TABLE `advertisement` (
   `company_id` int(10) UNSIGNED NOT NULL,
   `position_name` varchar(50) NOT NULL,
   `position_level` varchar(50) NOT NULL,
-  `contract_type` enum('Umowa o pracę','Umowa zlecenie','Umowa o dzieło','') NOT NULL,
-  `employment_type` varchar(50) NOT NULL,
-  `work_type` enum('Zdalna','Stacjonarna','Hybrydowa','') NOT NULL,
-  `salary_lowest` decimal(6,2) DEFAULT NULL,
-  `salary_highest` decimal(6,2) NOT NULL,
+  `contract_type` enum('Umowa o pracę','Umowa zlecenie','Umowa o dzieło') NOT NULL,
+  `employment_type` enum('Pełny etat','Pół etatu','1/4 etatu','3/4 etatu','Staż','Praktyki','Wolontariat') NOT NULL,
+  `work_type` enum('Zdalna','Stacjonarna','Hybrydowa') NOT NULL,
+  `salary_lowest` decimal(8,2) DEFAULT NULL,
+  `salary_highest` decimal(8,2) NOT NULL,
   `work_days` varchar(50) NOT NULL,
   `date_added` datetime NOT NULL,
   `date_expiration` datetime NOT NULL,
@@ -51,7 +51,9 @@ CREATE TABLE `advertisement` (
 --
 
 INSERT INTO `advertisement` (`advertisement_id`, `title`, `company_id`, `position_name`, `position_level`, `contract_type`, `employment_type`, `work_type`, `salary_lowest`, `salary_highest`, `work_days`, `date_added`, `date_expiration`, `responsibilities`, `requirements`, `offer`) VALUES
-(1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', 'stałe', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test');
+(1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', '', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test'),
+(2, 'nowa2', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 9999.99, 9999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '0000-00-00 00:00:00', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf'),
+(3, 'nowa', 1, 'aaa', 'aaa', 'Umowa o dzieło', 'Pół etatu', 'Zdalna', 2000.00, 4000.00, 'aaaa', '2024-04-24 23:39:50', '2024-04-28 23:39:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
 -- --------------------------------------------------------
 
@@ -70,7 +72,9 @@ CREATE TABLE `advertisement_category` (
 --
 
 INSERT INTO `advertisement_category` (`advertisement_category_id`, `advertisement_id`, `category_id`) VALUES
-(1, 1, 1);
+(1, 1, 1),
+(3, 2, 1),
+(4, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -371,13 +375,13 @@ ALTER TABLE `user_skill`
 -- AUTO_INCREMENT for table `advertisement`
 --
 ALTER TABLE `advertisement`
-  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `advertisement_category`
 --
 ALTER TABLE `advertisement_category`
-  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `category`

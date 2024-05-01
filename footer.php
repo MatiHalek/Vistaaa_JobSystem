@@ -5,7 +5,7 @@
 		"minor" => 0,
 		"patch" => 0,
 		"otherInfo" => "",
-		"releaseDate" => new DateTime("2024-05-13")
+		"releaseDate" => new DateTime("2024-05-15")
 	);
 ?>
 <footer class="px-3 pb-2">
@@ -48,6 +48,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="./headerAnimation.js"></script>
 <script>
-	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+	const bsOffcanvas = new bootstrap.Offcanvas('#offcanvasDarkNavbar');
 </script>

@@ -201,7 +201,7 @@ body
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
-	backdrop-filter: blur(20px);
+	backdrop-filter: blur(.75rem);
 
 }
 body
@@ -311,7 +311,7 @@ footer
 {
 	background-color: green;
 }
-.successButton:hover
+.successButton:hover:not(:disabled)
 {
 	background-color: rgb(91, 156, 91);
     box-shadow: 0 0 12px 5px green inset;
@@ -324,6 +324,10 @@ footer
 {
 	background-color: rgb(255, 131, 131);
 	box-shadow: 0 0 12px 5px red inset;
+}
+.companyProfileButton, #reload
+{
+	font-size: .8rem;
 }
 #advertisementInfo > section
 {
@@ -343,10 +347,12 @@ footer
 #advertisementInfo > section > section:first-child
 {
 	grid-column: 2;
-	grid-row: 1 / 5;
+	grid-row: 1 / 6;
 	height: fit-content;
+	min-height: 8rem;
 	gap: .5rem;
 	position: sticky;
+	word-break: initial;
 	top: 6rem;
 }
 @media(max-width: 768px)

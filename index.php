@@ -32,9 +32,8 @@
 		<article class="container-md d-flex flex-column" style="gap: 1.5rem;">
 			<section class="row p-3" id="offerSearch">
 				<h2 class="text-center py-2">Wyszukiwarka ofert</h2>
-				<div class="input-group input-group-lg mb-3">
-					<span class="input-group-text" id="basic-addon1">@</span>
-					<input type="text" class="form-control" placeholder="Szukaj..." aria-label="Username">
+				<div class="mb-3">
+					<input type="text" class="form-control form-control-lg" placeholder="Wpisz szukaną frazę tutaj..." aria-label="Username">
 				</div>
 					<div class="col-md">
 					<select class="form-select form-select-lg mb-3" aria-label="Large select example">
@@ -61,7 +60,7 @@
 					</select>
 				</div>
 				<div class="col-12 text-center">
-					<a href="offers.php" class="btn w-75 successButton w-auto mx-auto" href="#">Szukaj</a>
+					<a href="offers.php" class="w-75 successButton w-auto mx-auto text-decoration-none" href="#"><i class="bi bi-search me-2"></i>Szukaj</a>
 				</div>
 			</section>
 			<section id="latestOffers">

@@ -1,7 +1,7 @@
 <?php
     //error_reporting(0);
     session_start();
-    require "connect.php";
+    require "../connect.php";
     $connect = new mysqli($host, $db_user, $db_password, $db_name);
     $connect->set_charset('utf8mb4');
     $result = $connect->execute_query('SELECT * FROM advertisement WHERE advertisement_id = ?', [$_POST["advertisement_id"]]); 

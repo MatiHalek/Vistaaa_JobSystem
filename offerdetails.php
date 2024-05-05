@@ -38,7 +38,7 @@
             if($result->num_rows > 0)
             {
 				$row = $result->fetch_assoc();
-				echo "<script>document.title='".$row["title"]." | System ogłoszeniowy Vistaaa';</script>";
+				echo "<script>document.title='Ogłoszenie: ".$row["title"]." | System ogłoszeniowy Vistaaa';</script>";
 				echo "<iframe class='w-100' src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2580.6341520898554!2d20.41741487692789!3d49.69886194119375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47161cd0d7dfe0e5%3A0x8b8e90f28d06c112!2zWmVzcMOzxYIgU3prw7PFgiBUZWNobmljem55Y2ggaSBPZ8OzbG5va3N6dGHFgmNhY3ljaCBpbS4gSmFuYSBQYXfFgmEgSUk!5e0!3m2!1spl!2spl!4v1704599107714!5m2!1spl!2spl' height='450' style='border: 0;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>";
 				echo "<article class='container-lg' id='advertisementInfo'>";
 				echo "<section class='d-grid'>";
@@ -175,7 +175,7 @@
         		sendData.append("advertisement_id", <?php echo $_GET["id"]?>);  
 				if(mode != null)
         			sendData.append("mode", mode);
-                const response = await fetch("save_apply.php", {
+                const response = await fetch("./fetch/save_apply.php", {
                     method: "POST",
                     body: sendData
                 });
@@ -183,7 +183,7 @@
             }
             catch
             {
-                saveApplySection.innerHTML = "<div class='alert alert-danger mb-0 shadow text-center'><p class='fw-bold mb-1'>Coś poszło nie tak. Spróbuj ponownie lub odśwież stronę.</p>Kod błędu: 1 (Nie udało połączyć się z serwerem)<br><button type='button' class='commonButton mt-1' id='reload'>Załaduj ponownie</a></div>";
+                saveApplySection.innerHTML = "<div class='alert alert-danger mb-0 shadow text-center'><p class='fw-bold mb-1'>Coś poszło nie tak. Spróbuj ponownie lub odśwież stronę.</p>Kod błędu: 1 (Nie udało połączyć się z serwerem)<br><button type='button' class='commonButton mt-1' id='reload'><i class='bi bi-arrow-clockwise me-2'></i>Załaduj ponownie</a></div>";
             }
 			AddFeatures(); 
 		}

@@ -21,7 +21,7 @@
 			<div class="col-sm-6 col-md-4 pt-5">
 				<h3 class="text-uppercase footerHeading mb-3">Znajdź też nas na</h3>
 				<?php
-				echo "<p class='mb-2 fs-5'><a href='https://github.com/MatiHalek/VistaaaAdvertising/releases/tag/v{$version['major']}.{$version['minor']}.{$version['patch']}' target='_blank' class='text-white text-decoration-none'><i class='bi bi-github me-2'></i> GitHub</a></p>";
+				echo "<p class='mb-2 fs-5'><a href='https://github.com/MatiHalek/Vistaaa_JobSystem/releases/tag/v{$version['major']}.{$version['minor']}.{$version['patch']}' target='_blank' class='text-white text-decoration-none'><i class='bi bi-github me-2'></i> GitHub</a></p>";
 				?>
 				<p class="mb-2 fs-5"><a href="https://www.reddit.com/user/MatiHalek/" target="_blank" class="text-white text-decoration-none"><i class="bi bi-reddit me-2"></i> Reddit</a></p>
 				<p class="mb-2 fs-5"><a href="https://www.youtube.com/MatiHalek" target="_blank" class="text-white text-decoration-none"><i class="bi bi-youtube me-2"></i> YouTube</a></p>

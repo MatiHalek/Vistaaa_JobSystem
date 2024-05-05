@@ -375,3 +375,43 @@ footer
 		margin-bottom: 8rem;
 	}
 }
+.profileHeader
+{
+	top: 80px;
+	z-index: 2;
+	background-color: rgb(92 157 255 / .9);
+}
+.profileHeader :is(h3, h5)
+{
+	overflow-wrap: anywhere;
+}
+#profilePicture
+{
+	border: .2rem inset beige;
+	border-radius: 50%;
+}
+.profileLinks
+{
+	gap: .5rem;
+	background-color: rgb(102 153 255);
+}
+.profileLinks > a
+{
+	transition: .3s ease-in-out;
+}
+.profileLinks > a:hover
+{
+	transform: scale(1.15);
+}
+.profilePositionDate
+{
+	width: 150px;
+}
+.profilePositionInfo
+{
+	width: calc(100% - 150px);
+}
+.pagination > :is(:last-child, :first-child) > a > :last-child::before
+{
+	margin-left: -.5rem;
+}

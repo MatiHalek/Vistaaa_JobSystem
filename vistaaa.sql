@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2024 at 01:01 AM
+-- Generation Time: Maj 05, 2024 at 03:14 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -51,8 +51,8 @@ CREATE TABLE `advertisement` (
 --
 
 INSERT INTO `advertisement` (`advertisement_id`, `title`, `company_id`, `position_name`, `position_level`, `contract_type`, `employment_type`, `work_type`, `salary_lowest`, `salary_highest`, `work_days`, `date_added`, `date_expiration`, `responsibilities`, `requirements`, `offer`) VALUES
-(1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', '', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test'),
-(2, 'nowa2', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 9999.99, 9999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '0000-00-00 00:00:00', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf'),
+(1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', 'Pełny etat', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test'),
+(2, 'nowa2', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 1999.99, 3999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '2024-05-05 00:48:19', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf'),
 (3, 'nowa', 1, 'aaa', 'aaa', 'Umowa o dzieło', 'Pół etatu', 'Zdalna', 2000.00, 4000.00, 'aaaa', '2024-04-24 23:39:50', '2024-04-28 23:39:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
 -- --------------------------------------------------------
@@ -105,11 +105,11 @@ CREATE TABLE `company` (
   `email` varchar(254) NOT NULL,
   `password` varchar(244) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `description` text NOT NULL,
-  `street` varchar(100) NOT NULL,
-  `number` varchar(10) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `postcode` varchar(10) NOT NULL
+  `description` text DEFAULT NULL,
+  `street` varchar(100) DEFAULT NULL,
+  `number` varchar(10) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `postcode` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 --
@@ -141,6 +141,14 @@ CREATE TABLE `portal` (
   `name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
+--
+-- Dumping data for table `portal`
+--
+
+INSERT INTO `portal` (`portal_id`, `name`) VALUES
+(1, 'GitHub'),
+(2, 'LinkedIn');
+
 -- --------------------------------------------------------
 
 --
@@ -161,8 +169,8 @@ CREATE TABLE `school` (
 
 CREATE TABLE `user` (
   `user_id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `surname` varchar(50) NOT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `surname` varchar(50) DEFAULT NULL,
   `email` varchar(254) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phone` varchar(50) DEFAULT NULL,
@@ -170,6 +178,8 @@ CREATE TABLE `user` (
   `home_number` varchar(10) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
   `postcode` varchar(10) DEFAULT NULL,
+  `position` varchar(50) DEFAULT NULL,
+  `experience` text DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
@@ -177,8 +187,28 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `phone`, `street`, `home_number`, `city`, `postcode`, `is_admin`) VALUES
-(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$MhlOeihISLc6bEOprIctz.EDMg1a5cCFe6Fa1E2vAe9hoYTWxTQuC', '123456789', 'Zielona', '5', 'Limanowa', '34-600', 1);
+INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `phone`, `street`, `home_number`, `city`, `postcode`, `position`, `experience`, `is_admin`) VALUES
+(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$MhlOeihISLc6bEOprIctz.EDMg1a5cCFe6Fa1E2vAe9hoYTWxTQuC', '123456789', 'Zielona', '5', 'Limanowa', '34-600', 'Programista', 'Jestem programistą od X lat', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `user_applied`
+--
+
+CREATE TABLE `user_applied` (
+  `user_applied_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `advertisement_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Dumping data for table `user_applied`
+--
+
+INSERT INTO `user_applied` (`user_applied_id`, `user_id`, `advertisement_id`) VALUES
+(1, 1, 1),
+(2, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -237,6 +267,14 @@ CREATE TABLE `user_link` (
   `link` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
+--
+-- Dumping data for table `user_link`
+--
+
+INSERT INTO `user_link` (`user_link_id`, `user_id`, `portal_id`, `link`) VALUES
+(1, 1, 1, 'https://github.com/MatiHalek/'),
+(2, 1, 2, 'https://pl.linkedin.com/');
+
 -- --------------------------------------------------------
 
 --
@@ -248,10 +286,38 @@ CREATE TABLE `user_position` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `position` varchar(50) NOT NULL,
   `description` text NOT NULL,
-  `company_id` int(10) UNSIGNED NOT NULL,
   `date_start` date NOT NULL,
-  `date_end` date DEFAULT NULL
+  `date_end` date DEFAULT NULL,
+  `company` varchar(50) NOT NULL,
+  `address` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Dumping data for table `user_position`
+--
+
+INSERT INTO `user_position` (`user_position_id`, `user_id`, `position`, `description`, `date_start`, `date_end`, `company`, `address`) VALUES
+(1, 1, 'test', 'esa esa', '2024-04-01', '2024-04-15', 'test', 'adres'),
+(2, 1, 'pozycja2', 'esa esa', '2024-04-16', NULL, 'firma', 'adres2');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `user_saved`
+--
+
+CREATE TABLE `user_saved` (
+  `user_saved_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `advertisement_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Dumping data for table `user_saved`
+--
+
+INSERT INTO `user_saved` (`user_saved_id`, `user_id`, `advertisement_id`) VALUES
+(13, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -321,6 +387,14 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`);
 
 --
+-- Indeksy dla tabeli `user_applied`
+--
+ALTER TABLE `user_applied`
+  ADD PRIMARY KEY (`user_applied_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `advertisement_id` (`advertisement_id`);
+
+--
 -- Indeksy dla tabeli `user_course`
 --
 ALTER TABLE `user_course`
@@ -357,7 +431,14 @@ ALTER TABLE `user_link`
 --
 ALTER TABLE `user_position`
   ADD PRIMARY KEY (`user_position_id`),
-  ADD KEY `company_id` (`company_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indeksy dla tabeli `user_saved`
+--
+ALTER TABLE `user_saved`
+  ADD PRIMARY KEY (`user_saved_id`),
+  ADD KEY `advertisement_id` (`advertisement_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
@@ -405,7 +486,7 @@ ALTER TABLE `language`
 -- AUTO_INCREMENT for table `portal`
 --
 ALTER TABLE `portal`
-  MODIFY `portal_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `portal_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `school`
@@ -418,6 +499,12 @@ ALTER TABLE `school`
 --
 ALTER TABLE `user`
   MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `user_applied`
+--
+ALTER TABLE `user_applied`
+  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_course`
@@ -441,13 +528,19 @@ ALTER TABLE `user_language`
 -- AUTO_INCREMENT for table `user_link`
 --
 ALTER TABLE `user_link`
-  MODIFY `user_link_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `user_link_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_position`
 --
 ALTER TABLE `user_position`
-  MODIFY `user_position_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `user_position_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `user_saved`
+--
+ALTER TABLE `user_saved`
+  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `user_skill`
@@ -471,6 +564,13 @@ ALTER TABLE `advertisement`
 ALTER TABLE `advertisement_category`
   ADD CONSTRAINT `advertisement_category_ibfk_1` FOREIGN KEY (`advertisement_id`) REFERENCES `advertisement` (`advertisement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `advertisement_category_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user_applied`
+--
+ALTER TABLE `user_applied`
+  ADD CONSTRAINT `user_applied_ibfk_1` FOREIGN KEY (`advertisement_id`) REFERENCES `advertisement` (`advertisement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_applied_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_course`
@@ -504,8 +604,14 @@ ALTER TABLE `user_link`
 -- Constraints for table `user_position`
 --
 ALTER TABLE `user_position`
-  ADD CONSTRAINT `user_position_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `user_position_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `company` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `user_position_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user_saved`
+--
+ALTER TABLE `user_saved`
+  ADD CONSTRAINT `user_saved_ibfk_1` FOREIGN KEY (`advertisement_id`) REFERENCES `advertisement` (`advertisement_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_saved_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_skill`

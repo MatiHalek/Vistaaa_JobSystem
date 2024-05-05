@@ -10,7 +10,7 @@
         <div class="container-fluid">          
             <section class="h-100 d-flex align-items-center">
                 <a class="navbar-brand rounded p-1 ms-2" id="logo" href="./" data-bs-html="true" title="<i><b>System ogłoszeniowy Vistaaa</b></i> - Strona główna" data-bs-custom-class="moveTooltip" data-bs-toggle="tooltip">
-                    <img src="vistaaa_full_logo.png" class="d-none d-sm-block" height="50" alt="Logo systemu ogłoszeniowego Vistaaa">
+                    <img src="img/vistaaa_full_logo.png" class="d-none d-sm-block" height="50" alt="Logo systemu ogłoszeniowego Vistaaa">
                     <img src="img/vistaaa_small_logo.png" class="d-sm-none" height="50" alt="Logo systemu ogłoszeniowego Vistaaa">             
                 </a>
                 <span class="d-none d-md-block text-white fs-5 fw-semibold">| <?php echo  $pageName?></span>
@@ -43,7 +43,7 @@
                             echo "<h6 class='text-light mt-4 fs-4'>".($userType != "Firma" ? $_SESSION["logged"]["name"]." ".$_SESSION["logged"]["surname"] : $_SESSION["logged"]["name"])."</h6>";                          
                             echo "<h6 class='text-light fs-6'>".$_SESSION["logged"]["email"]."</h6>";
                             echo "<p class='fs-6 text-white text-opacity-50'>".$userType."</p>";
-                            echo "<a href='registration.php' class='commonButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-person-bounding-box me-2'></i>Profil</a>";
+                            echo "<a href='profile.php".(array_key_exists("company_id", $_SESSION["logged"]) ? "/company/?id=".$_SESSION["logged"]["company_id"] : "?id=".$_SESSION["logged"]["user_id"])."' class='commonButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-person-bounding-box me-2'></i>Profil</a>";
                             echo "<a href='logout.php' class='dangerButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-door-closed-fill me-2'></i>Wyloguj</a>";
                             if($userType != "Użytkownik indywidualny")
                             {

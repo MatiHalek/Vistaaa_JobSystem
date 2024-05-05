@@ -1,11 +1,11 @@
 <?php
-    error_reporting(0);
+    //error_reporting(0);
     session_start();
-    /*if(isset($_SESSION["logged"]) && $_SESSION["logged"])
+    if(isset($_SESSION["logged"]) && $_SESSION["logged"])
     {
-        header("Location: index.php");
+        header("Location: ./");
         exit();
-    }
+    }/*
     require "functions.php";
     if(isset($_POST["reg_login"]))
     {

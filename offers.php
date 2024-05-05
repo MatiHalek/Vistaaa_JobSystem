@@ -21,84 +21,30 @@
 	  include "header.php";
 	?>  
     <main class="container-lg">
-        <article class="d-flex justify-content-between">
-            <section>Sortuj: </section>
-            <section>Strona 1 z 31</section>
+        <article class="d-flex justify-content-between flex-wrap">
+            <section class='d-flex align-items-center mb-2'>
+              <span class='fw-bold fs-5'>Sortuj: </span>
+              <select class="form-select ms-2 w-auto" aria-label="Sortowanie ofert" id="sortingOffersSelect">
+                <option value="">Od najnowszych</option>
+                <option value="salary">Od najlepiej płatnych</option>
+              </select>
+            </section>
+            <section class='d-flex align-items-center mb-2'>
+              <span class='fw-bold fs-5'>Liczba ogłoszeń na stronie: </span>
+              <select class="form-select ms-2 w-auto" aria-label="Liczba ogłoszeń na jednej stronie" id="offersPerPageSelect">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </section>
         </article>
         <article class="row">
              <article class="col-4">Filtry</article>
         </article>
-        <article class="row g-3 justify-content-center">
-          <?php
-            require "connect.php";
-            $connect = new mysqli($host, $db_user, $db_password, $db_name);
-            $connect->set_charset("utf8mb4");
-            $page = (isset($_GET["page"]) && is_numeric($_GET["page"]) && $_GET["page"] > 0) ? $_GET["page"] : 1;
-            $offersPerPage = 1;
-            if(isset($_SESSION["logged"]) && array_key_exists("company_id", $_SESSION["logged"]))
-            {
-              $result = $connect->execute_query("SELECT *, 1 AS avaliable FROM advertisement WHERE company_id = ? AND date_expiration >= NOW() UNION SELECT *, 0 AS avaliable FROM advertisement WHERE company_id = ? AND date_expiration < NOW() ORDER BY avaliable DESC LIMIT ".($page - 1).", 1;", [$_SESSION["logged"]["company_id"], $_SESSION["logged"]["company_id"]]);
-              $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement WHERE company_id = ?", [$_SESSION["logged"]["company_id"]]))->num_rows;
-            }                
-            else
-            {
-              $result = $connect->execute_query("SELECT *, 1 AS avaliable FROM advertisement WHERE date_expiration >= NOW() UNION SELECT *, 0 AS avaliable FROM advertisement WHERE date_expiration < NOW() ORDER BY avaliable DESC LIMIT ".($page - 1).", 1;");
-              $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement"))->num_rows;
-            }
-            $totalPages = ceil($totalOffers / $offersPerPage);
-            if($result->num_rows > 0)
-            {
-                echo "<p class='text-center signika-negative fs-4 fw-bold'>Znalezione wyniki: ".$totalOffers."</p>";
-                $months = array("stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia");
-                while($row = $result->fetch_assoc())
-                {
-                    echo "<div class='d-flex col-12 col-sm-6 col-lg-4 col-xl-3'><a class='d-block w-100 text-decoration-none bg-white shadow rounded position-relative p-3 pt-4 position-relative jobOffer ".($row["avaliable"] == 0 ? " jobOfferDisabled" : "")."' href='offerdetails.php?id=".$row["advertisement_id"]."'>";
-                    $date_added = new DateTime($row["date_added"]);
-                    echo "<div class='position-absolute bg-success text-white rounded-pill py-1 px-3 top-0'>".$date_added->format("j")." ".mb_substr($months[(int)($date_added->format("n")) - 1], 0, 3)." ".$date_added->format("Y")."</div>";
-                    $categoryResult = $connect->execute_query('SELECT name FROM advertisement_category INNER JOIN category USING(category_id) WHERE advertisement_id = ?', [$row["advertisement_id"]]);
-                    $categoryArray = array();
-                    while($categoryRow = $categoryResult->fetch_assoc())
-                        array_push($categoryArray, $categoryRow["name"]);
-                    echo "<p class='text-secondary fw-bold fs-6 mb-1'>".implode(", ", $categoryArray)."</p>";
-                    echo "<p class='text-primary fw-bold fs-5 mb-0'>{$row["title"]}</p>"; 
-                    $companyResult = $connect->execute_query('SELECT name FROM company WHERE company_id = ?', [$row["company_id"]]);  
-                    $companyRow = $companyResult->fetch_assoc();             
-                    echo "<p class='text-primary-emphasis mb-2'>przez: ".$companyRow["name"]."</p>";             
-                    echo "<p class='text-success fw-bold'>".(is_null($row["salary_lowest"]) ? number_format($row["salary_highest"], 2, ",", " ") : number_format($row["salary_lowest"], 2, ",", " ")." - ".number_format($row["salary_highest"], 2, ",", " "))." zł</p>";
-                    echo "<hr class='text-body-tertiary'>";
-                    echo "<p class='text-body-secondary'>{$row["position_level"]} &#x2022; {$row["contract_type"]} &#x2022; {$row["employment_type"]} &#x2022; {$row["work_type"]}</p>";
-                    echo "</a></div>";
-                    echo "<nav class='row mt-5'>";
-                    echo "<ul class='pagination d-flex justify-content-center'>";
-                    echo "<li class='page-item'>";
-                    echo "<a title='Pierwsza strona' data-bs-toggle='tooltip' class='page-link".($page > 1 ? "' href='offers.php?page=1'" : " disabled'")."><i class='bi bi-caret-left-fill'></i><i class='bi bi-caret-left-fill'></i></a>";
-                    echo "</li>";
-                    echo "<li class='page-item'>";
-                    echo "<a title='Poprzednia strona' data-bs-toggle='tooltip' class='page-link".($page > 1 ? "' href='offers.php?page=".($page - 1)."'" : " disabled'")."><i class='bi bi-caret-left-fill'></i></a>";
-                    echo "</li>";
-                    for($i = $page - 3; $i <= $page + 3; $i++)
-                    {
-                        if($i > 0 && $i <= $totalPages)
-                        {
-                            echo "<li class='page-item".($i == $page ? " active" : "")."'>";
-                            echo "<a class='page-link' href='offers.php?page=$i'>$i</a>";
-                            echo "</li>";
-                        }
-                    }
-                    echo "<li class='page-item'>";
-                    echo "<a title='Następna strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' href='offers.php?page=".($page + 1)."'")."><i class='bi bi-caret-right-fill'></i></a>";
-                    echo "</li>";
-                    echo "<li class='page-item'>";
-                    echo "<a title='Ostatnia strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' href='offers.php?page=$totalPages'")."><i class='bi bi-caret-right-fill'></i><i class='bi bi-caret-right-fill'></i></a>";
-                    echo "</li>";
-                    echo "</ul></nav>";
-                }
-            }
-            else
-                echo "<p class='text-center signika-negative fs-4 fw-bold'>Niestety, nie znaleźliśmy pasujących ofert pracy.</p>";
-            $result->free_result();
-            $connect->close();
-          ?>
+        <article class="row g-3 justify-content-center" id="offersContainer">
+          
         </article>
         <article class="row"></article>
         </article>
@@ -108,5 +54,47 @@
   <?php
 		  include "footer.php";
 	?>
+  <script>
+    const loadingAnimation = "<div class='spinner-border text-primary' style='scale: 2;' role='status'><span class='visually-hidden'>Loading...</span></div>";
+    let page = <?php echo isset($_GET["page"]) ? $_GET["page"] : 1; ?>;
+    let sort = "<?php echo isset($_GET["sort"]) ? $_GET["sort"] : ""; ?>";
+    if(localStorage.getItem("offersPerPage") !== null)
+      document.querySelector("#offersPerPageSelect").value = localStorage.getItem("offersPerPage");
+    else
+      localStorage.setItem("offersPerPage", document.querySelector("#offersPerPageSelect").value);
+    document.querySelector("#offersPerPageSelect").addEventListener("input", function() {
+      localStorage.setItem("offersPerPage", this.value);
+      GetOffers();
+    });
+    if(sort !== "")
+      document.querySelector("#sortingOffersSelect").value = sort;
+    document.querySelector("#sortingOffersSelect").addEventListener("input", function() {
+      sort = this.value;
+      history.replaceState(null, "", "offers.php" + (page > 1 || sort !== "" ? "?" : "") + (page > 1 ? "page=" + page : "") + (sort !== "" ? ((page > 1 ? "&" : "") + "sort=" + sort) : ""));
+      GetOffers();
+    });
+    async function GetOffers()
+    {
+      try
+      {
+        document.querySelector("#offersContainer").innerHTML = loadingAnimation;
+        const sendData = new FormData();
+        sendData.append("page", page);
+        sendData.append("sort", sort);
+        sendData.append("offersPerPage", localStorage.getItem("offersPerPage"));
+        const response = await fetch("./fetch/getoffers.php", {
+          method: "POST",
+          body: sendData
+        });
+        document.querySelector("#offersContainer").innerHTML = await response.text(); 
+      }
+      catch
+      {
+        document.querySelector("#offersContainer").innerHTML = "<div class='alert alert-danger mb-0 shadow text-center'><p class='fw-bold mb-1'>Coś poszło nie tak. Spróbuj ponownie lub odśwież stronę.</p>Kod błędu: 1 (Nie udało połączyć się z serwerem)<br><button type='button' class='commonButton mt-1' id='reload'><i class='bi bi-arrow-clockwise me-2'></i>Załaduj ponownie</a></div>";
+        document.querySelector("#reload").addEventListener("click", GetOffers);
+      }      
+    } 
+    GetOffers();    
+  </script>
 </body>
 </html>

@@ -58,6 +58,7 @@
     const loadingAnimation = "<div class='spinner-border text-primary' style='scale: 2;' role='status'><span class='visually-hidden'>Loading...</span></div>";
     let page = <?php echo isset($_GET["page"]) ? $_GET["page"] : 1; ?>;
     let sort = "<?php echo isset($_GET["sort"]) ? $_GET["sort"] : ""; ?>";
+    let search = "<?php echo isset($_GET["search"]) ? $_GET["search"] : ""; ?>";
     if(localStorage.getItem("offersPerPage") !== null)
       document.querySelector("#offersPerPageSelect").value = localStorage.getItem("offersPerPage");
     else
@@ -79,6 +80,7 @@
       {
         document.querySelector("#offersContainer").innerHTML = loadingAnimation;
         const sendData = new FormData();
+        sendData.append("search", search);
         sendData.append("page", page);
         sendData.append("sort", sort);
         sendData.append("offersPerPage", localStorage.getItem("offersPerPage"));

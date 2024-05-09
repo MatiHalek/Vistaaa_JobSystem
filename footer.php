@@ -1,5 +1,5 @@
 <?php
-	error_reporting(0);
+	//error_reporting(0);
 	$version = array(
 		"major" => 1,
 		"minor" => 0,

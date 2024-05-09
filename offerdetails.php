@@ -28,8 +28,27 @@
 		header('Content-Type: text/html; charset=utf-8');
 		$pageName = "Szczegóły ogłoszenia";
 		include "header.php";
-	?>  
+	?>
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">  Launch demo modal</button>
+	<div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Potwierdź aplikowanie</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					...
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="dangerButton" data-bs-dismiss="modal">Anuluj</button>
+					<button type="button" class="successButton">Aplikuj teraz</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<main>
+	
 		<?php
 			require "connect.php";
             $connect = new mysqli($host, $db_user, $db_password, $db_name);
@@ -70,7 +89,7 @@
 				echo "<h6 class='fs-4'>".$companyRow["name"]."</h6>";
 				echo "<p>".$companyRow["description"]."</p>";
 				echo "<p class='fw-bold text-primary-emphasis'><i class='bi bi-building-fill me-2'></i>".$companyRow["street"]." ".$companyRow["number"].", ".$companyRow["postcode"]." ".$companyRow["city"]."</p>";
-				echo "<a href='./profile.php?mode=company?id=".$row["company_id"]."' target='_blank' class='commonButton companyProfileButton py-2 mt-2 d-inline-block text-decoration-none'><i class='bi bi-person-bounding-box me-2'></i>Profil firmy</a>";
+				echo "<a href='./profile.php?id=".$row["company_id"]."&type=company' target='_blank' class='commonButton companyProfileButton py-2 mt-2 d-inline-block text-decoration-none'><i class='bi bi-person-bounding-box me-2'></i>Profil firmy</a>";
 				echo "</div>";
 				echo "</section>";
 				echo<<<info
@@ -195,11 +214,11 @@
 				if(!logged)
 					bsOffcanvas.show();
 			});
-			document.querySelector("#applyButton")?.addEventListener("click", () => {
+			/*document.querySelector("#applyButton")?.addEventListener("click", () => {
 				RefreshData("applied");
 				if(!logged)
 					bsOffcanvas.show();
-			});
+			});*/
 			document.querySelector("#reload")?.addEventListener("click", () => RefreshData());
 		}
 		RefreshData();

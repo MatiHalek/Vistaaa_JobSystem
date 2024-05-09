@@ -82,8 +82,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfiUfknAAAAAKF3I0Lw4sYPLhNeU2eEhLFvtd9C"></script>
 </head>
-<body id="registrationBackground">
+<body id="registrationBackground" class="overflow-x-hidden">
    <?php
         header('Content-Type: text/html; charset=utf-8');
         $pageName = "Rejestracja";
@@ -98,114 +99,82 @@
                     unset($_SESSION["reg_error_captcha"]);
                 }
             ?>
-            <p>Jako...</p>
+            <section class='d-flex justify-content-end'>
+                <label for="companyRegistrationSwitch" class="me-2">Konto dla firmy</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="companyRegistrationSwitch" <?php echo ((isset($_GET["type"]) && $_GET["type"] == "company") ? "checked" : "") ?>>
+                </div>
+            </section>
             <form action="registration" method="POST"> 
-                <div class="input position-relative">
-                    <input type="text" name="reg_login" minlength="3" maxlength="15" placeholder="Login" id="login" class="form-control" data-toggle="tooltip" data-placement="right" data-html="true" title="<b>Login będzie służył do logowania do sklepu. Stanie się także Twoją nazwą użytkownika.</b><br>Musi być unikalny." value="<?php
-                        if(isset($_SESSION["remember_login"]))
-                        {
-                            echo $_SESSION["remember_login"];
-                            unset($_SESSION["remember_login"]);
-                        }
-                    ?>" required> 
-                    <label for="login" class="labelText position-absolute"><span title="To pole jest wymagane." class="requiredField" data-toggle="tooltip"><sup>*</sup></span>Login</label>             
+                <div class="position-relative formInput mt-3">                       
+                    <input type="email" id="reg_email" name="reg_email" minlength="3" maxlength="254" placeholder="E-mail" required class="rounded-4 border border-secondary w-100 py-2 px-3" value="<?php
+                    if(isset($_SESSION["remember_reg_email"]))
+                    {
+                        echo $_SESSION["remember_reg_email"];
+                        unset($_SESSION["remember_reg_email"]);
+                    }?>">
+                    <label for="email" class="position-absolute">E-mail</label>
                 </div>
                 <div>
-                        <?php
-                            if(isset($_SESSION["reg_error_login"]))
-                            {
-                                echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_login"]."</div>";
-                                unset($_SESSION["reg_error_login"]);
-                            }
-                        ?>
-                    </div> 
-                <div class="input">
-                    <label for="password" class="labelText"><span title="To pole jest wymagane." class="requiredField" data-toggle="tooltip"><sup>*</sup></span>Hasło</label> 
-                    <div class="input-group">                       
-                        <input type="password" name="reg_password" placeholder="Hasło" id="password" class="form-control" minlength="8" maxlength="255" data-toggle="tooltip" data-placement="left" data-html="true" title="<b>Wymyśl silne hasło.</b><br>Nie udostępniaj go nikomu." required>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" title="Pokaż znaki" data-toggle="tooltip"><span class="bi bi-eye-fill"></span></button>
-                        </div>
-                        <div>
-                            <?php
-                                if(isset($_SESSION["reg_error_password"]))
-                                {
-                                    echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_password"]."</div>";
-                                    unset($_SESSION["reg_error_password"]);
-                                }
-                            ?>
-                        </div>
-                    </div>      
+                    <?php
+                        if(isset($_SESSION["reg_error_email"]))
+                        {
+                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_email"]."</div>";
+                            unset($_SESSION["reg_error_email"]);
+                        }
+                    ?>
                 </div> 
-                <div class="input">
-                    <label for="password2" class="labelText"><span title="To pole jest wymagane." class="requiredField" data-toggle="tooltip"><sup>*</sup></span>Powtórz hasło</label>                         
-                    <div class="input-group"> 
-                        <input type="password" name="reg_password2" class="form-control" placeholder="Powtórz hasło" id="password2" minlength="8" maxlength="255" data-toggle="tooltip" data-placement="left" data-html="true" title="<b>Powtórz wpisane wcześniej hasło.</b>" required>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary" title="Pokaż znaki" data-toggle="tooltip"><span class="bi bi-eye-fill"></span></button>
-                        </div>
-                        <div>
-                            <?php
-                                if(isset($_SESSION["reg_error_password2"]))
-                                {
-                                    echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_password2"]."</div>";
-                                    unset($_SESSION["reg_error_password2"]);
-                                }
-                            ?>
-                        </div>
-                    </div>                    
-                </div> 
-                <div class="input">
-                    <label for="email" class="labelText"><span title="To pole jest wymagane." class="requiredField" data-toggle="tooltip"><sup>*</sup></span>E-mail</label>
-                    <input type="email" name="reg_email" class="form-control" placeholder="E-mail" id="email" maxlength="254" data-toggle="tooltip" data-placement="right" data-html="true" title="<b>Połącz konto ze swoim adresem e-mail.</b>" value="<?php
-                        if(isset($_SESSION["remember_email"]))
-                        {
-                            echo $_SESSION["remember_email"];
-                            unset($_SESSION["remember_email"]);
-                        }
-                    ?>" required>
-                    <div>
-                        <?php
-                            if(isset($_SESSION["reg_error_email"]))
-                            {
-                                echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_email"]."</div>";
-                                unset($_SESSION["reg_error_email"]);
-                            }
-                        ?>
-                    </div>            
-                </div>
-                <div class="input">
-                    <label for="date" class="labelText"><span title="To pole jest wymagane." class="requiredField" data-toggle="tooltip"><sup>*</sup></span>Data urodzenia</label>
-                    <input type="date" name="reg_date" class="form-control" max="<?php echo date("Y-m-d");?>" id="date" data-toggle="tooltip" data-placement="right" data-html="true" title="<b>Wybierz swoją datę urodzenia.</b><br>Pozwoli to na lepsze spersonalizowanie ofert." value="<?php
-                        if(isset($_SESSION["remember_date"]))
-                        {
-                            echo $_SESSION["remember_date"];
-                            unset($_SESSION["remember_date"]);
-                        }
-                    ?>" required>
-                    <div>
-                        <?php
-                            if(isset($_SESSION["reg_error_date"]))
-                            {
-                                echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_date"]."</div>";
-                                unset($_SESSION["reg_error_date"]);
-                            }
-                        ?>
-                    </div>             
-                </div>
-                <div class="input">
-                    <label for="phone" class="labelText">Numer telefonu</label>  
-                    <input type="tel" name="reg_tel" class="form-control" placeholder="Numer telefonu" id="phone" data-toggle="tooltip" data-placement="right" data-html="true" title="<b>Podaj swój numer telefonu.</b><i>(opcjonalne)</i>" value="<?php
-                        if(isset($_SESSION["remember_phone"]))
-                        {
-                            echo $_SESSION["remember_phone"];
-                            unset($_SESSION["remember_phone"]);
-                        }
-                    ?>">             
+                <div class="position-relative formInput input-group mt-3">     
+                    <input type="password" id="reg_password" name="reg_password" minlength="8" maxlength="255" placeholder="Hasło" required class="w-100 rounded-4 border border-secondary py-2 px-3">                       
+                    <button type="button" class="passwordToggler position-absolute h-100 end-0 px-3 btn btn-primary rounded-end-4" title="Pokaż znaki" data-bs-toggle="tooltip"><span class="bi bi-eye-fill"></span></button>
+                    <label for="reg_password" class="position-absolute">Hasło</label>                                                  
                 </div>
                 <div>
-                    <input type="checkbox" name="reg_regulations" id="regulations" required>                  
-                    <label for="regulations"><span title="To pole jest wymagane." class="requiredField" data-toggle="tooltip"><sup>*</sup></span>Akceptuję <a href="./">regulamin</a> MatiTechShop.</label>   
+                    <?php
+                        if(isset($_SESSION["reg_error_password"]))
+                        {
+                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_password"]."</div>";
+                            unset($_SESSION["reg_error_password"]);
+                        }
+                    ?>
+                </div>
+                <div class="position-relative formInput input-group mt-3">     
+                    <input type="password" id="reg_password2" name="reg_password2" minlength="8" maxlength="255" placeholder="Powtórz hasło" required class="w-100 rounded-4 border border-secondary py-2 px-3">                       
+                    <button type="button" class="passwordToggler position-absolute h-100 end-0 px-3 btn btn-primary rounded-end-4" title="Pokaż znaki" data-bs-toggle="tooltip"><span class="bi bi-eye-fill"></span></button>
+                    <label for="reg_password2" class="position-absolute">Powtórz hasło</label>                                                  
+                </div>
+                <div>
+                    <?php
+                        if(isset($_SESSION["reg_error_password2"]))
+                        {
+                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_password2"]."</div>";
+                            unset($_SESSION["reg_error_password2"]);
+                        }
+                    ?>
+                </div>
+                <div class="position-relative formInput mt-3">                       
+                    <input type="date" id="reg_birth" name="reg_birth" required class="rounded-4 border border-secondary w-100 py-2 px-3" value="<?php
+                    if(isset($_SESSION["remember_reg_birth"]))
+                    {
+                        echo $_SESSION["remember_reg_birth"];
+                        unset($_SESSION["remember_breg_irth"]);
+                    }?>">
+                    <label for="email" class="position-absolute">Data urodzenia</label>
+                </div>
+                <div>
+                    <?php
+                        if(isset($_SESSION["reg_error_birth"]))
+                        {
+                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_birth"]."</div>";
+                            unset($_SESSION["reg_error_birth"]);
+                        }
+                    ?>
+                </div>         
+                <div class="my-3">
+                    <div>
+                        <input type="checkbox" name="reg_regulations" id="reg_regulations" class="me-2" required>                  
+                        <label for="reg_regulations">Oświadczam, że znam i akceptuję postanowienia serwisu Vistaaa.</label>   
+                    </div>                   
                     <div>
                         <?php
                             if(isset($_SESSION["reg_error_regulations"]))
@@ -216,16 +185,78 @@
                         ?>
                     </div>
                 </div>                                             
-                <input type="submit" value="Zarejestruj się" id="registrationButton" class="g-recaptcha" data-size="invisible" data-badge="left" data-sitekey="6LfiUfknAAAAAKF3I0Lw4sYPLhNeU2eEhLFvtd9C" data-callback='OnSubmit' data-action='submit'>
+                <button type="submit" id="registrationButton" class="g-recaptcha commonButton" data-size="invisible" data-badge="left" data-sitekey="6LfiUfknAAAAAKF3I0Lw4sYPLhNeU2eEhLFvtd9C" data-callback='OnSubmit' data-action='submit'><i class='bi bi-person-badge me-2'></i> Zarejestruj się</button>
             </form>
             <hr>
-            <strong>Masz już konto? </strong><a href="login">Zaloguj się</a>        
+            <strong>Masz już konto? </strong><span id="openNavbarSpan" role="button" class='ms-2 badge text-bg-success fs-6 rounded-pill'>Zaloguj się</span>        
         </article>
     </main>
     <?php
         include "footer.php";
     ?>
-    <script>        
+    <script>   
+        document.querySelectorAll(".passwordToggler").forEach(function(el){
+            el.addEventListener("click", function(){
+                const tooltip = bootstrap.Tooltip.getInstance(this);
+                if(this.parentElement.children[0].type == "password")
+                {
+                    this.parentElement.children[0].type = "text";
+                    tooltip.setContent({'.tooltip-inner' : "Ukryj znaki"});
+                    this.innerHTML = "<span class='bi bi-eye-slash-fill'></span>";
+                }
+                else
+                {
+                    this.parentElement.children[0].type = "password";
+                    tooltip.setContent({'.tooltip-inner' : "Pokaż znaki"});
+                    this.innerHTML = "<span class='bi bi-eye-fill'></span>";
+                }
+            });
+        });
+        document.querySelector("#openNavbarSpan").addEventListener("click", () => bsOffcanvas.show());
+        document.querySelector("#companyRegistrationSwitch").addEventListener("click", function(){
+            if(this.checked)
+                window.location.href = "./registration.php?type=company";
+            else
+                window.location.href = "./registration.php";
+        });
+        async function Validate(element)
+        {
+            const sendData = new FormData();
+            sendData.append("property", element.id.replace("reg_", ""));
+            if(element.id == "reg_regulations")
+                sendData.append("q", element.checked);
+            else
+                sendData.append("q", element.value);
+            if(element.id == "reg_password2")
+                sendData.append("tmp", document.querySelector("#reg_password").value);
+            else if(element.id == "reg_password")
+                sendData.append("tmp", document.querySelector("#reg_email").value);
+            const response = await fetch("fetch/validation.php", {
+                method: "POST",
+                body: sendData
+            });
+            const result = await response.text();
+            console.log(result);
+            if(result.lastIndexOf("<div class='text-danger'>") == 0)
+            {
+                element.parentElement.nextElementSibling.innerHTML = result;
+                element.classList.remove("valid");
+                element.classList.add("invalid");
+            }
+            else
+            {
+                element.parentElement.nextElementSibling.innerHTML = "";
+                element.classList.remove("invalid");
+                element.classList.add("valid");
+            }
+        }
+        ["keyup", "change", "input"].forEach(function(event){
+            document.querySelectorAll(":is(#reg_email, #reg_password, #reg_password2, #reg_birth, #reg_regulations)").forEach(function(el){
+                el.addEventListener(event, function(){
+                    Validate(this);
+                });
+            });
+        });
         /*$("#login, #password, #password2, #email, #date, #regulations").on("keyup change input", function(){         
             var element = this;
             var data = new Object();
@@ -259,52 +290,14 @@
                 $("#password2").keyup();
             if(element.id == "login" && document.querySelector("#password").value)
                 $("#password").keyup();
-        });
-        if(document.querySelector("#date").type != "date")
-            $("#date").datepicker({
-                dateFormat: "yy-mm-dd",
-            });
-        [].forEach.call(document.querySelectorAll("input[type='password'] ~ .input-group-append > button"), function(el){
-            el.addEventListener("click", function(){
-                if(this.parentElement.parentElement.children[0].type == "password")
-                {
-                    this.parentElement.parentElement.children[0].type = "text";
-                    this.title = "Ukryj znaki";
-                    this.innerHTML = "<span class='bi bi-eye-slash-fill'></span>";
-                }
-                else
-                {
-                    this.parentElement.parentElement.children[0].type = "password";
-                    this.title = "Pokaż znaki";
-                    this.innerHTML = "<span class='bi bi-eye-fill'></span>";
-                }
-                $(this).tooltip("dispose").tooltip("show");
-            }, false);
-        });
-        if(window.matchMedia)
-        {
-            var mediaQueryList = window.matchMedia("(min-width: 768px)");
-            function ToggleTooltips(mql)
-            {
-                if(!mql.matches)
-                    $("#login, #password, #password2, #email, #date, #phone").tooltip("dispose");
-                else
-                    $("#login, #password, #password2, #email, #date, #phone").tooltip({"trigger" : "focus"});
-            }
-            if(mediaQueryList.addEventListener)
-                mediaQueryList.addEventListener("change", ToggleTooltips, false);
-            else
-                mediaQueryList.addListener(ToggleTooltips);
-        }
-        $('[data-toggle="tooltip"]:not(#login, #password, #password2, #email, #date, #phone)').tooltip();
-        $("#login, #password, #password2, #email, #date, #phone").tooltip({"trigger" : "focus"});
+        });*/
         function OnSubmit(token)
         {
             if(document.querySelector("main form").checkValidity())
                 document.querySelector("main form").submit();
             else
                 document.querySelector("main form").reportValidity();
-        }*/
+        }
     </script>
 </body>
 </html>

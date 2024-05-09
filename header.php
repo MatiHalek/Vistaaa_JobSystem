@@ -43,7 +43,7 @@
                             echo "<h6 class='text-light mt-4 fs-4'>".($userType != "Firma" ? $_SESSION["logged"]["name"]." ".$_SESSION["logged"]["surname"] : $_SESSION["logged"]["name"])."</h6>";                          
                             echo "<h6 class='text-light fs-6'>".$_SESSION["logged"]["email"]."</h6>";
                             echo "<p class='fs-6 text-white text-opacity-50'>".$userType."</p>";
-                            echo "<a href='profile.php".(array_key_exists("company_id", $_SESSION["logged"]) ? "/company/?id=".$_SESSION["logged"]["company_id"] : "?id=".$_SESSION["logged"]["user_id"])."' class='commonButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-person-bounding-box me-2'></i>Profil</a>";
+                            echo "<a href='profile.php".(array_key_exists("company_id", $_SESSION["logged"]) ? "?id=".$_SESSION["logged"]["company_id"]."&type=company" : "?id=".$_SESSION["logged"]["user_id"])."' class='commonButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-person-bounding-box me-2'></i>Profil</a>";
                             echo "<a href='logout.php' class='dangerButton mt-2 d-inline-block text-decoration-none'><i class='bi bi-door-closed-fill me-2'></i>Wyloguj</a>";
                             if($userType != "Użytkownik indywidualny")
                             {

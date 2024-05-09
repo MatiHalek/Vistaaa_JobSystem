@@ -32,36 +32,40 @@
 		<article class="container-md d-flex flex-column" style="gap: 1.5rem;">
 			<section class="row p-3" id="offerSearch">
 				<h2 class="text-center py-2">Wyszukiwarka ofert</h2>
-				<div class="mb-3">
-					<input type="text" class="form-control form-control-lg" placeholder="Wpisz szukaną frazę tutaj..." aria-label="Username">
-				</div>
+				<form action="offers.php" method="GET">
+					<div class="position-relative formInput mt-3">                       
+                        <input type="search" id="search" name="search" minlength="3" maxlength="100" placeholder="Wpisz szukaną frazę tutaj..." class="rounded-4 border-0 w-100 py-2 px-3">
+                         <label for="search" class="position-absolute">Wpisz szukaną frazę tutaj...</label>
+                    </div>
+						<div class="col-md">
+						<select class="form-select form-select-lg mb-3" aria-label="Large select example">
+							<option selected>Rodzaj umowy</option>
+							<option value="1">One</option>
+							<option value="2">Two</option>
+							<option value="3">Three</option>
+						</select>
+					</div>
 					<div class="col-md">
-					<select class="form-select form-select-lg mb-3" aria-label="Large select example">
-						<option selected>Rodzaj umowy</option>
-						<option value="1">One</option>
-						<option value="2">Two</option>
-						<option value="3">Three</option>
-					</select>
-				</div>
-				<div class="col-md">
-					<select class="form-select form-select-lg mb-3" aria-label="Large select example">
-						<option selected>Tryb pracy</option>
-						<option value="1">One</option>
-						<option value="2">Two</option>
-						<option value="3">Three</option>
-					</select>
-				</div>
-				<div class="col-md">
-					<select class="form-select form-select-lg mb-3" aria-label="Large select example">
-						<option selected>Kategoria</option>
-						<option value="1">One</option>
-						<option value="2">Two</option>
-						<option value="3">Three</option>
-					</select>
-				</div>
-				<div class="col-12 text-center">
-					<a href="offers.php" class="w-75 successButton w-auto mx-auto text-decoration-none" href="#"><i class="bi bi-search me-2"></i>Szukaj</a>
-				</div>
+						<select class="form-select form-select-lg mb-3" aria-label="Large select example">
+							<option selected>Tryb pracy</option>
+							<option value="1">One</option>
+							<option value="2">Two</option>
+							<option value="3">Three</option>
+						</select>
+					</div>
+					<div class="col-md">
+						<select class="form-select form-select-lg mb-3" aria-label="Large select example">
+							<option selected>Kategoria</option>
+							<option value="1">One</option>
+							<option value="2">Two</option>
+							<option value="3">Three</option>
+						</select>
+					</div>
+					<div class="col-12 text-center">
+						<button type="submit" class="w-75 successButton w-auto mx-auto text-decoration-none" href="#"><i class="bi bi-search me-2"></i>Szukaj</button>
+					</div>
+				</form>
+				
 			</section>
 			<section id="latestOffers">
 				<h2 class="text-center py-2">Ostatnio oglądane</h2>

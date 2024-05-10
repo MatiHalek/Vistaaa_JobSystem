@@ -325,7 +325,7 @@ footer
 	background-color: rgb(255, 131, 131);
 	box-shadow: 0 0 12px 5px red inset;
 }
-.companyProfileButton, #reload
+.companyProfileButton, #reload, #applyingProfileButton, .addToProfileButton
 {
 	font-size: .8rem;
 }
@@ -470,8 +470,4 @@ footer
 #profilePictureEdit label:hover::after
 {
 	opacity: 1;
-}
-.addToProfileButton
-{
-	font-size: .8rem;
 }

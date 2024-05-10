@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Maj 06, 2024 at 11:27 PM
--- Wersja serwera: 10.4.28-MariaDB
--- Wersja PHP: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Maj 10, 2024 at 03:56 AM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `Vistaaa`
+-- Database: `vistaaa`
 --
 
 -- --------------------------------------------------------
@@ -207,7 +207,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `date_of_birth`, `phone`, `street`, `home_number`, `city`, `postcode`, `position`, `experience`, `is_admin`) VALUES
-(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$nZ0vnDlPKwlQM/a5.QvaW.Lyf1Q434IH25PRYx7M0Q11q38NNweGq', '2005-02-07', '123456789', 'Zielona', '5', 'Limanowa', '34-600', 'Programista', 'Jestem programistą od X lat', 1);
+(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$nZ0vnDlPKwlQM/a5.QvaW.Lyf1Q434IH25PRYx7M0Q11q38NNweGq', '2005-02-07', '123456789', 'Zielona', '5', 'Limanowa', '34-600', 'Programista', 'Jestem programistą od X lat', 1),
+(2, 'aaa', 'aaa', 'aaa', 'aaa', '2024-05-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -220,6 +221,13 @@ CREATE TABLE `user_applied` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `advertisement_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Dumping data for table `user_applied`
+--
+
+INSERT INTO `user_applied` (`user_applied_id`, `user_id`, `advertisement_id`) VALUES
+(10, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -308,7 +316,7 @@ CREATE TABLE `user_link` (
 
 INSERT INTO `user_link` (`user_link_id`, `user_id`, `portal_id`, `link`) VALUES
 (1, 1, 1, 'https://github.com/MatiHalek/'),
-(2, 1, 2, 'https://pl.linkedin.com/');
+(3, 2, 1, 'aa');
 
 -- --------------------------------------------------------
 
@@ -345,13 +353,6 @@ CREATE TABLE `user_saved` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `advertisement_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
-
---
--- Dumping data for table `user_saved`
---
-
-INSERT INTO `user_saved` (`user_saved_id`, `user_id`, `advertisement_id`) VALUES
-(16, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -541,13 +542,13 @@ ALTER TABLE `school`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_applied`
 --
 ALTER TABLE `user_applied`
-  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_course`
@@ -571,7 +572,7 @@ ALTER TABLE `user_language`
 -- AUTO_INCREMENT for table `user_link`
 --
 ALTER TABLE `user_link`
-  MODIFY `user_link_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_link_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_position`
@@ -583,7 +584,7 @@ ALTER TABLE `user_position`
 -- AUTO_INCREMENT for table `user_saved`
 --
 ALTER TABLE `user_saved`
-  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `user_skill`

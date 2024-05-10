@@ -28,25 +28,57 @@
 		header('Content-Type: text/html; charset=utf-8');
 		$pageName = "Szczegóły ogłoszenia";
 		include "header.php";
+		if(isset($_SESSION["logged"]) && $_SESSION["logged"] && array_key_exists("user_id", $_SESSION["logged"]))
+		{
+			echo "<div class='modal fade' id='applyModal' tabindex='-1' aria-hidden='true'>";
+			echo "<div class='modal-dialog modal-dialog-centered'>";
+			echo "<div class='modal-content'>";
+			echo "<div class='modal-header'>";
+			echo "<h1 class='modal-title fs-5'>Potwierdź aplikowanie</h1>";
+			echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+			echo "</div>";
+			echo "<div class='modal-body'>";
+			echo "<strong>Raz wysłana aplikacja nie może zostać cofnięta.</strong><br><br>";
+			echo "Aby aplikować na ogłoszenia, wymagane jest uzupełnienie kilku podstawowych informacji w profilu. Zalecamy jednak uzupełnienie wszystkich danych, a także sprawdzenie poprawności tych istniejących, aby zwiększyć swoje szanse na zatrudnienie.<br>";
+			echo "<a href='profile.php?id=".$_SESSION["logged"]["user_id"]."' id='applyingProfileButton' class='commonButton mt-2 d-inline-block text-decoration-none' target='_blank'><i class='bi bi-person-bounding-box me-2'></i>Zobacz profil</a><br><br>";
+			$completedProfile = true;
+			if(mb_strlen($_SESSION["logged"]["name"]) > 0 && mb_strlen($_SESSION["logged"]["surname"]) > 0)
+				echo "<p class='text-success mb-0'><i class='bi bi-check-circle-fill me-2'></i><b>Imię i nazwisko: </b>".$_SESSION["logged"]["name"]." ".$_SESSION["logged"]["surname"]."</p>";
+			else
+			{
+				echo "<p class='text-danger mb-0 fw-bold'><i class='bi bi-x-circle-fill me-2'></i>Imię i/lub nazwisko nie jest uzupełnione.</p>";
+				$completedProfile = false;
+			}		
+			if(mb_strlen($_SESSION["logged"]["street"]) > 0 && mb_strlen($_SESSION["logged"]["home_number"]) > 0 && mb_strlen($_SESSION["logged"]["postcode"]) > 0 && mb_strlen($_SESSION["logged"]["city"]) > 0)
+				echo "<p class='text-success mb-0'><i class='bi bi-check-circle-fill me-2'></i><b>Adres: </b>".$_SESSION["logged"]["street"]." ".$_SESSION["logged"]["home_number"].", ".$_SESSION["logged"]["postcode"]." ".$_SESSION["logged"]["city"]."</p>";
+			else
+			{
+				echo "<p class='text-danger mb-0 fw-bold'><i class='bi bi-x-circle-fill me-2'></i>Adres zamieszkania nie jest uzupełniony.</p>";
+				$completedProfile = false;
+			}
+			if(mb_strlen($_SESSION["logged"]["position"]) > 0 && mb_strlen($_SESSION["logged"]["experience"]) > 0)
+				echo "<p class='text-success mb-0'><b><i class='bi bi-check-circle-fill me-2'></i>Stanowisko (".$_SESSION["logged"]["position"].") i podsumowanie zawodowe jest uzupełnione.</b></p>";
+			else
+			{
+				echo "<p class='text-danger mb-0 fw-bold'><i class='bi bi-x-circle-fill me-2'></i>Stanowisko i/lub podsumowanie zawodowe nie jest uzupełnione.</p>";
+				$completedProfile = false;
+			}
+			echo "<br>";
+			if($completedProfile)
+				echo "<strong>Aplikując, zgadzasz się na udostępnienie danych pracodawcy przez serwis Vistaaa. Czy na pewno chcesz teraz aplikować na to ogłoszenie?</strong>";
+			else
+				echo "<strong>Nie wszystkie wymagane informacje są uzupełnione. Aby móc aplikować na ogłoszenia, uzupełnij swoje dane w profilu.</strong>";
+			echo "</div>";
+			echo "<div class='modal-footer'>";
+			echo "<button type='button' class='dangerButton' data-bs-dismiss='modal'>".($completedProfile ? "Anuluj" : "Zamknij")."</button>";
+			if($completedProfile)
+				echo "<button type='button' class='successButton' id='confirmApplying'>Aplikuj teraz</button>";
+			echo "</div>";
+			echo "</div>";
+			echo "</div>";
+			echo "</div>";
+		}
 	?>
-	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">  Launch demo modal</button>
-	<div class="modal fade" id="applyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">Potwierdź aplikowanie</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					...
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="dangerButton" data-bs-dismiss="modal">Anuluj</button>
-					<button type="button" class="successButton">Aplikuj teraz</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	<main>
 	
 		<?php
@@ -206,6 +238,9 @@
             }
 			AddFeatures(); 
 		}
+		let applyModal = null;
+		if(document.querySelector("#applyModal") != null)
+			applyModal = new bootstrap.Modal(document.querySelector("#applyModal"));
 		function AddFeatures()
 		{
 			const logged = <?php echo isset($_SESSION["logged"]) && $_SESSION["logged"] ? "true" : "false"?>;
@@ -214,11 +249,17 @@
 				if(!logged)
 					bsOffcanvas.show();
 			});
-			/*document.querySelector("#applyButton")?.addEventListener("click", () => {
+			document.querySelector("#confirmApplying")?.addEventListener("click", () => {
 				RefreshData("applied");
+				applyModal?.hide();
+				//applyModal?.dispose();
+			});
+			document.querySelector("#applyButton")?.addEventListener("click", () => {
 				if(!logged)
 					bsOffcanvas.show();
-			});*/
+				else
+					applyModal?.show();
+			});
 			document.querySelector("#reload")?.addEventListener("click", () => RefreshData());
 		}
 		RefreshData();

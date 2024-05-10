@@ -93,19 +93,48 @@
                     </div>";
 				}
 				echo "</div></div>";
-				
-				$linksResult = $connect->execute_query("SELECT * FROM user_link INNER JOIN portal USING(portal_id) WHERE user_id = ?;", [$_GET["id"]]);
-				if($linksResult->num_rows > 0)
+				if(!$editMode)
 				{
-					echo "<div class='profileLinks d-flex justify-content-center p-2 rounded'>";
-					while($linkRow = $linksResult->fetch_assoc())
+					$linksResult = $connect->execute_query("SELECT * FROM user_link INNER JOIN portal USING(portal_id) WHERE user_id = ?;", [$_GET["id"]]);
+					if($linksResult->num_rows > 0)
 					{
-						echo "<a href='".$linkRow["link"]."' class='text-decoration-none' target='_blank'>";
-						echo "<span class='badge rounded-pill text-primary bg-white'><i class='bi bi-".mb_strtolower($linkRow["name"])."' title='".$linkRow["name"]."'></i> ".$linkRow["name"]."</span>";
-						echo "</a>";
+						echo "<div class='profileLinks d-flex justify-content-center p-2 rounded'>";
+						while($linkRow = $linksResult->fetch_assoc())
+						{
+							echo "<a href='".$linkRow["link"]."' class='text-decoration-none' target='_blank'>";
+							echo "<span class='badge rounded-pill text-primary bg-white'><i class='bi bi-".mb_strtolower($linkRow["name"])."' title='".$linkRow["name"]."'></i> ".$linkRow["name"]."</span>";
+							echo "</a>";
+						}
+						echo "</div>";	
 					}
-					echo "</div>";	
-				}										
+				}
+				else
+				{
+					$portalResult = $connect->execute_query("SELECT * FROM portal");
+					echo "<div class='profileLinks p-2 pb-1 rounded'>";
+					echo "<div class='container'>";
+					while($portalRow = $portalResult->fetch_assoc())
+					{
+						echo "<div class='row mb-2 align-items-center'>";
+						echo "<div class='col-6'>";
+						echo "<p class='d-flex fs-5 mb-1'><i class='bi bi-".mb_strtolower($portalRow["name"])." me-2'></i> ".$portalRow["name"]."</p>";
+						echo "</div>";
+						echo "<div class='col-6'>";
+						$linkresult = $connect->execute_query("SELECT * FROM user_link WHERE user_id = ? AND portal_id = ?;", [$_GET["id"], $portalRow["portal_id"]]);
+						$defaultvalue = "";
+						if($linkresult->num_rows > 0)
+						{
+							$linkRow = $linkresult->fetch_assoc();
+							$defaultvalue = $linkRow["link"];
+						}
+						echo "<input type='url' name='profile_link_".$portalRow["name"]."' class='form-control' placeholder='Link do profilu' value='".(isset($_SESSION["remember_profile_link_".$portalRow["name"]]) ? htmlspecialchars($_SESSION["remember_profile_link_".$portalRow["name"]]) : htmlspecialchars($defaultvalue))."' maxlength='30'>";
+						echo "</div>";
+						echo "</div>";
+					}
+					echo "</div>";					
+					echo "</div>";
+				}
+														
 				echo "</div>";
 				echo "<div class='container pt-4'>";
 				echo "<section class='p-2'>";

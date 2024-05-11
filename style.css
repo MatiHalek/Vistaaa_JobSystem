@@ -89,6 +89,10 @@ html, body
 	background-color: rgb(101 163 106);
 	font-family: 'Signika Negative', sans-serif;
 }
+#searchCheckboxes .formInput input:placeholder-shown:not(:focus) ~ label
+{
+	background-color: transparent;
+}
 .formInput > :is(input, textarea):placeholder-shown:not(:focus) ~ label
 {
     font-size: 1.2rem;
@@ -474,4 +478,9 @@ footer
 #searchCheckboxes input
 {
 	cursor: pointer;
+	transition: .5s ease-in-out;
+}
+#searchCheckboxes input:hover
+{
+	background-color: rgb(65 105 225 / .2);
 }

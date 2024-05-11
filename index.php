@@ -1,3 +1,8 @@
+
+<?php
+	//error_reporting(0);
+	session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -33,7 +38,7 @@
 			</section>
 		</article>
 		<article class="container-md d-flex flex-column mt-5 p-1" style="gap: 1.5rem;">
-			<section class="p-3 rounded-3 bg-primary bg-opacity-25" id="offerSearch">
+			<section class="p-3 rounded-3 bg-primary bg-opacity-10" id="offerSearch">
 				<h2 class="text-center py-2">Wyszukiwarka ofert</h2>
 				<form action="offers.php" method="GET">
 					<div class='modal fade show' id='searchModal' tabindex='-1' aria-hidden='true'>
@@ -50,7 +55,7 @@
 											while($position = $positionResult->fetch_assoc())
 											{
 												echo "<div class='d-flex justify-content-between mb-1'>";
-												echo "<label><input type='checkbox' class='form-check-input me-2' name='search_position[]' value='{$position['position_name']}'>{$position['position_name']}</label>";
+												echo "<label><input type='checkbox' class='form-check-input me-2' name='search_position_name[]' value='{$position['position_name']}'>{$position['position_name']}</label>";
 												echo "<span class='text-secondary'>{$position['number']}</span>";
 												echo "</div>";
 											}
@@ -74,7 +79,7 @@
 											while($location = $locationResult->fetch_assoc())
 											{
 												echo "<div class='d-flex justify-content-between mb-1'>";
-												echo "<label><input type='checkbox' class='form-check-input me-2' name='search_location[]' value='{$location['city']}'>{$location['city']}</label>";
+												echo "<label><input type='checkbox' class='form-check-input me-2' name='search_city[]' value='{$location['city']}'>{$location['city']}</label>";
 												echo "<span class='text-secondary'>{$location['number']}</span>";
 												echo "</div>";
 											}
@@ -86,7 +91,7 @@
 											while($company = $companyResult->fetch_assoc())
 											{
 												echo "<div class='d-flex justify-content-between mb-1'>";
-												echo "<label><input type='checkbox' class='form-check-input me-2' name='search_company[]' value='{$company['name']}'>{$company['name']}</label>";
+												echo "<label><input type='checkbox' class='form-check-input me-2' name='search_name[]' value='{$company['name']}'>{$company['name']}</label>";
 												echo "<span class='text-secondary'>{$company['number']}</span>";
 												echo "</div>";
 											}
@@ -154,49 +159,49 @@
 					<div class="row justify-content-center" id="searchCheckboxes">
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="position_search" form="nosubmit" placeholder="Stanowisko" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="position_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="position_search" class="position-absolute">Stanowisko</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="category_search" form="nosubmit" placeholder="Kategoria" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="category_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="category_search" class="position-absolute">Kategoria</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="location_search" form="nosubmit" placeholder="Lokalizacja" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="location_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="location_search" class="position-absolute">Lokalizacja</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="company_search" form="nosubmit" placeholder="Firma" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="company_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="company_search" class="position-absolute">Firma</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="position_level_search" form="nosubmit" placeholder="Poziom stanowiska" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="position_level_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="position_level_search" class="position-absolute">Poziom stanowiska</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="contract_type_search" form="nosubmit" placeholder="Rodzaj umowy" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="contract_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="contract_type_search" class="position-absolute">Rodzaj umowy</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="employment_type_search" form="nosubmit" placeholder="Wymiar pracy" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="employment_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="employment_search" class="position-absolute">Wymiar pracy</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="work_type_search" form="nosubmit" placeholder="Tryb pracy" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="work_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
                          		<label for="work_type_search" class="position-absolute">Tryb pracy</label>
                     		</div>
 						</div>
@@ -325,7 +330,9 @@
 				searchModal.show();
 			});
 		});
-		document.querySelector("#searchModal").addEventListener("hide.bs.modal", () => {
+		document.querySelector("#searchModal").addEventListener("hide.bs.modal", UpdateInputs);
+		function UpdateInputs()
+		{
 			const modals = document.querySelectorAll("#searchModal .modal-body > div");
 			for(let i = 0; i < modals.length; i++)
 			{
@@ -344,7 +351,9 @@
 				else
 					document.querySelector(`#searchCheckboxes > div:nth-child(${i + 1}) input`).value = "";
 			}
-		});
+		}
+		UpdateInputs();
+		window.addEventListener("pageshow", UpdateInputs);
 	</script>
 </body>
 </html>

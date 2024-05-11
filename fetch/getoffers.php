@@ -13,13 +13,13 @@
     $offersPerPage = (isset($_POST["offersPerPage"]) && is_numeric($_POST["offersPerPage"]) && $_POST["offersPerPage"] > 0) ? $_POST["offersPerPage"] : 20;
     if(isset($_SESSION["logged"]) && array_key_exists("company_id", $_SESSION["logged"]))
     {
-        $result = $connect->execute_query("SELECT *, 1 AS available FROM advertisement WHERE company_id = ? AND date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement WHERE company_id = ? AND date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).", ".$offersPerPage.";", [$_SESSION["logged"]["company_id"], $_SESSION["logged"]["company_id"]]);
+        $result = $connect->execute_query("SELECT *, 1 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = ? AND date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = ? AND date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).", ".$offersPerPage.";", [$_SESSION["logged"]["company_id"], $_SESSION["logged"]["company_id"]]);
         $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement WHERE company_id = ?".$search, [$_SESSION["logged"]["company_id"]]))->num_rows;
     }                
     else
     {
-        $result = $connect->execute_query("SELECT *, 1 AS available FROM advertisement WHERE date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement WHERE date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).",".$offersPerPage.";");
-        $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement".(mb_strlen($search) > 0 ? (" WHERE".str_replace(" AND", "", $search)) : "")))->num_rows;
+        $result = $connect->execute_query("SELECT *, 1 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).",".$offersPerPage.";");
+        $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement WHERE 1=1".$search))->num_rows;
     }
     $totalPages = ceil($totalOffers / $offersPerPage);
     if($result->num_rows > 0)
@@ -39,10 +39,8 @@
             while($categoryRow = $categoryResult->fetch_assoc())
                 array_push($categoryArray, $categoryRow["name"]);
             echo "<p class='text-secondary fw-bold fs-6 mb-1'>".implode(", ", $categoryArray)."</p>";
-            echo "<p class='text-primary fw-bold fs-5 mb-0'>{$row["title"]}</p>"; 
-            $companyResult = $connect->execute_query('SELECT name FROM company WHERE company_id = ?', [$row["company_id"]]);  
-            $companyRow = $companyResult->fetch_assoc();             
-            echo "<p class='text-primary-emphasis mb-2'>przez: ".$companyRow["name"]."</p>";             
+            echo "<p class='text-primary fw-bold fs-5 mb-0'>{$row["title"]}</p>";           
+            echo "<p class='text-primary-emphasis mb-2'>przez: ".$row["name"]."</p>";             
             echo "<p class='text-success fw-bold'>".(is_null($row["salary_lowest"]) ? number_format($row["salary_highest"], 2, ",", " ") : number_format($row["salary_lowest"], 2, ",", " ")." - ".number_format($row["salary_highest"], 2, ",", " "))." zł</p>";
             echo "<hr class='text-body-tertiary'>";
             echo "<p class='text-body-secondary'>".mb_strtolower($row["position_level"])." &#x2022; ".mb_strtolower($row["contract_type"])." &#x2022; ".strtolower($row["employment_type"])." &#x2022; ".mb_strtolower($row["work_type"])."</p>";
@@ -72,6 +70,10 @@
         echo "<a title='Ostatnia strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' href='offers.php?page=$totalPages'")."><i class='bi bi-caret-right-fill'></i><i class='bi bi-caret-right-fill'></i></a>";
         echo "</li>";
         echo "</ul></nav>";
+        if(!empty($_GET["position_name"]))
+        echo "ok";
+        else
+        echo "null";
     }
     else
         echo "<p class='text-center signika-negative fs-4 fw-bold'>Niestety, nie znaleźliśmy pasujących ofert pracy.</p>";

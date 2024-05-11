@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -59,6 +62,9 @@
     let page = <?php echo isset($_GET["page"]) ? $_GET["page"] : 1; ?>;
     let sort = "<?php echo isset($_GET["sort"]) ? $_GET["sort"] : ""; ?>";
     let search = "<?php echo isset($_GET["search"]) ? $_GET["search"] : ""; ?>";
+
+    const position_name = <?php echo isset($_GET["search_position_name"]) ? json_encode($_GET["search_position_name"]) : "''" ?>;
+
     if(localStorage.getItem("offersPerPage") !== null)
       document.querySelector("#offersPerPageSelect").value = localStorage.getItem("offersPerPage");
     else
@@ -84,6 +90,7 @@
         sendData.append("page", page);
         sendData.append("sort", sort);
         sendData.append("offersPerPage", localStorage.getItem("offersPerPage"));
+        sendData.append("position_name", position_name);
         const response = await fetch("./fetch/getoffers.php", {
           method: "POST",
           body: sendData

@@ -471,3 +471,7 @@ footer
 {
 	opacity: 1;
 }
+#searchCheckboxes input
+{
+	cursor: pointer;
+}

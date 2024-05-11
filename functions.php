@@ -1,35 +1,57 @@
 <?php
     //error_reporting(0);
-    function ValidateLogin($item)
+    function ValidateName($item)
     {
         $function = substr(strtolower(__FUNCTION__), 8);
-        if(empty($item))
-            return ["parameter" => $function, "passed" => false, "note" => "Proszę podać login."];
-        if(!preg_match("/^[0-9A-Za-z]{1}[0-9A-Za-z_]{1,13}[0-9A-Za-z]{1}$/", $item))
-        {
-            if(strlen($item) < 3 || strlen($item) > 15)
-                return ["parameter" => $function, "passed" => false, "note" => "Login musi zawierać od 3 do 15 znaków."];
-            if(str_ends_with($item, "_") || str_starts_with($item, "_"))
-                return ["parameter" => $function, "passed" => false, "note" => "Znak _ nie może znajdować się na początku lub końcu loginu."];   
-           
-            return ["parameter" => $function, "passed" => false, "note" => "Login może zawierać tylko wielkie i małe litery alfabetu łacińskiego, cyfry i znak _."];
-        }
-        if(preg_match("/^\d+$/", $item))
-                return ["parameter" => $function, "passed" => false, "note" => "Login nie może składać się z samych cyfr."];  
-        if(substr_count($item, "_") > 1)       
-            return ["parameter" => $function, "passed" => false, "note" => "Login może zawierać maksymalnie jeden znak _."];        
+        if(empty($item) || ctype_space($item))
+            return ["parameter" => $function, "passed" => false, "note" => "Proszę podać nazwę firmy."];
+        if(strlen($item) < 3 || strlen($item) > 100)
+            return ["parameter" => $function, "passed" => false, "note" => "Nazwa firmy musi zawierać od 3 do 100 znaków."];    
         require "connect.php";
         $connect = new mysqli($host, $db_user, $db_password, $db_name);
         $connect->set_charset("utf8mb4");
-        $query = $connect->prepare("SELECT * FROM uzytkownik WHERE nazwa_uzytkownika = ?");
-        $query->bind_param('s', $item);
-        $query->execute();
-        $result = $query->get_result();
+        $result= $connect->execute_query("SELECT * FROM company WHERE name = ?", [$item]);
         $howManyRows = $result->num_rows;
         $connect->close();
         if($howManyRows > 0)
-            return ["parameter" => $function, "passed" => false, "note" => "Taki login już istnieje. Wybierz inny."];
+            return ["parameter" => $function, "passed" => false, "note" => "Taka nazwa firmy już istnieje."];
         return ["parameter" => $function, "passed" => true, "note" => null];          
+    }
+    function ValidatePostcode($item)
+    {
+        $function = substr(strtolower(__FUNCTION__), 8);
+        if(empty($item))
+            return ["parameter" => $function, "passed" => false, "note" => "Proszę podać kod pocztowy."];
+        if(!preg_match("/^[0-9]{2}-[0-9]{3}$/", $item))
+            return ["parameter" => $function, "passed" => false, "note" => "Kod pocztowy musi być w formacie XX-XXX."];
+        return ["parameter" => $function, "passed" => true, "note" => null]; 
+    }
+    function ValidateStreet($item)
+    {
+        $function = substr(strtolower(__FUNCTION__), 8);
+        if(empty($item) || ctype_space($item))
+            return ["parameter" => $function, "passed" => false, "note" => "Proszę podać nazwę ulicy."];
+        if(strlen($item) < 3 || strlen($item) > 100)
+            return ["parameter" => $function, "passed" => false, "note" => "Nazwa ulicy musi zawierać od 3 do 100 znaków."];    
+        return ["parameter" => $function, "passed" => true, "note" => null]; 
+    }
+    function ValidateNumber($item)
+    {
+        $function = substr(strtolower(__FUNCTION__), 8);
+        if(empty($item) || ctype_space($item))
+            return ["parameter" => $function, "passed" => false, "note" => "Proszę podać numer budynku."];
+        if(strlen($item) > 10)
+            return ["parameter" => $function, "passed" => false, "note" => "Numer budynku nie może mieć więcej niż 10 znaków."];    
+        return ["parameter" => $function, "passed" => true, "note" => null];
+    }
+    function ValidateCity($item)
+    {
+        $function = substr(strtolower(__FUNCTION__), 8);
+        if(empty($item) || ctype_space($item))
+            return ["parameter" => $function, "passed" => false, "note" => "Proszę podać nazwę miasta."];
+        if(strlen($item) > 50)
+            return ["parameter" => $function, "passed" => false, "note" => "Nazwa miasta nie może mieć więcej niż 50 znaków."]; 
+        return ["parameter" => $function, "passed" => true, "note" => null];
     }
     function ValidatePassword($item, $check)
     {
@@ -39,7 +61,7 @@
         if(!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!-\/:-@[-`{-~])[a-zA-Z\d!-\/:-@[-`{-~ ]{8,255}$/", $item))
             return ["parameter" => $function, "passed" => false, "note" => "Hasło musi zawierać minimum 8 znaków (w tym cyfry, małe i duże litery oraz znaki specjalne)."];
         if($item == $check)
-            return ["parameter" => $function, "passed" => false, "note" => "Hasło powinno być inne niż login."];
+            return ["parameter" => $function, "passed" => false, "note" => "Hasło powinno być inne niż adres email."];
         return ["parameter" => $function, "passed" => true, "note" => null]; 
     }
     function ValidatePassword2($item, $check)

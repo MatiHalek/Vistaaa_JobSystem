@@ -5,18 +5,31 @@
     {
         header("Location: ./");
         exit();
-    }/*
+    }
+    $isCompany = false;
+    if(isset($_GET["type"]) && $_GET["type"] == "company")
+        $isCompany = true;
     require "functions.php";
-    if(isset($_POST["reg_login"]))
+    if(isset($_POST["reg_email"]))
     {
         $success = true;
-        $reg_login = $_POST["reg_login"];
         $reg_email = $_POST["reg_email"];
         $reg_password = $_POST["reg_password"];
         $reg_password2 = $_POST["reg_password2"];
-        $reg_date = $_POST["reg_date"];
-        $reg_phone = $_POST["reg_tel"];
-        $tests = array(ValidateLogin($reg_login), ValidatePassword($reg_password, $reg_login), ValidatePassword2($reg_password2, $reg_password), ValidateEmail($reg_email), ValidateDate($reg_date),ValidateRegulations((isset($_POST["reg_regulations"]))?("true"):("false")), ValidateCaptcha());
+        if($isCompany)
+        {
+            $reg_name = $_POST["reg_name"];
+            $reg_street = $_POST["reg_street"];
+            $reg_number = $_POST["reg_number"];
+            $reg_postcode = $_POST["reg_postcode"];
+            $reg_city = $_POST["reg_city"];
+            $tests = array(ValidateName($reg_name), ValidateStreet($reg_street), ValidateNumber($reg_number), ValidatePostcode($reg_postcode), ValidateCity($reg_city), ValidateEmail($reg_email), ValidatePassword($reg_password, $reg_email), ValidatePassword2($reg_password2, $reg_password), ValidateRegulations((isset($_POST["reg_regulations"]))?("true"):("false")), ValidateCaptcha());
+        }
+        else
+        {
+            $reg_birth = $_POST["reg_birth"];
+            $tests = array(ValidateEmail($reg_email), ValidatePassword($reg_password, $reg_email), ValidatePassword2($reg_password2, $reg_password), ValidateBirth($reg_birth), ValidateRegulations((isset($_POST["reg_regulations"]))?("true"):("false")), ValidateCaptcha());
+        }
         foreach($tests as $i)
         {
             if(!$i["passed"])
@@ -25,47 +38,48 @@
                 $_SESSION["reg_error_".$i["parameter"]] = $i["note"];
             }               
         }  
-        $_SESSION["remember_login"] = $reg_login;
-        $_SESSION["remember_email"] = $reg_email;
-        $_SESSION["remember_date"] = $reg_date;
-        $_SESSION["remember_phone"] = $reg_phone;                
+        $_SESSION["remember_reg_email"] = $reg_email;
+        if($isCompany)
+        {
+            $_SESSION["remember_reg_name"] = $reg_name;
+            $_SESSION["remember_reg_street"] = $reg_street;
+            $_SESSION["remember_reg_number"] = $reg_number;
+            $_SESSION["remember_reg_postcode"] = $reg_postcode;
+            $_SESSION["remember_reg_city"] = $reg_city;
+        }
+        else
+            $_SESSION["remember_reg_birth"] = $reg_birth;            
         if($success)
         {
             $pass_hash = password_hash($reg_password, PASSWORD_DEFAULT);
             require "connect.php";
             $connect = new mysqli($host, $db_user, $db_password, $db_name);
             $connect->set_charset('utf8mb4');
-            $query = $connect->prepare("INSERT INTO uzytkownik(nazwa_uzytkownika, haslo, email, data_urodzenia, numer_telefonu, czy_zalogowany, stanowisko_id) VALUES(?, ?, ?, ?, ?, 1, 1)");
-            $query->bind_param('sssss', $reg_login, $pass_hash, $reg_email, $reg_date, $reg_phone);
-            $query->execute();
-            
-            unset($_SESSION["remember_login"]);
+            if($isCompany)
+                $connect->execute_query("INSERT INTO company(email, password, name, description, street, number, city, postcode) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", [$reg_email, $pass_hash, $reg_name, null, $reg_street, $reg_number, $reg_city, $reg_postcode]);
+            else
+                $connect->execute_query("INSERT INTO user(name, surname, email, password, date_of_birth, phone, street, home_number, city, postcode, position, experience, is_admin) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [null, null, $reg_email, $pass_hash, $reg_birth, null, null, null, null, null, null, null, 0]);           
             unset($_SESSION["remember_email"]);
-            unset($_SESSION["remember_date"]);
-            unset($_SESSION["remember_phone"]);
-            $_SESSION["logged"] = true;
-            $_SESSION["user_id"] = mysqli_insert_id($connect);
-            $_SESSION["username"] = $reg_login;
-            $_SESSION["position"] = 1;
-            $_SESSION["user_data"] = array(
-                "user_id" => mysqli_insert_id($connect),
-                "username" => $reg_login,
-                "email" => $reg_email,
-                "birth_date" => $reg_date,
-                "phone_number" => $reg_phone,
-                "first_name" => null,
-                "surname" => null,
-                "postcode" => null,
-                "city" => null,
-                "street" => null,
-                "house_number" => null,
-                "position" => 1
-            );
+            if($isCompany)
+            {
+                unset($_SESSION["remember_reg_name"]);
+                unset($_SESSION["remember_reg_street"]);
+                unset($_SESSION["remember_reg_number"]);
+                unset($_SESSION["remember_reg_postcode"]);
+                unset($_SESSION["remember_reg_city"]);
+            }
+            else
+                unset($_SESSION["remember_birth"]);
+            if($isCompany)
+                $result = $connect->execute_query("SELECT * FROM company WHERE email = ?", [$reg_email]);
+            else
+                $result = $connect->execute_query("SELECT * FROM user WHERE email = ?", [$reg_email]);
+            $_SESSION["logged"] = $result->fetch_assoc();
             $connect->close();
-            header("Location: index.php");
+            header("Location: ./");
             exit();
         }
-    }*/
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -105,7 +119,29 @@
                     <input class="form-check-input" type="checkbox" role="switch" id="companyRegistrationSwitch" <?php echo ((isset($_GET["type"]) && $_GET["type"] == "company") ? "checked" : "") ?>>
                 </div>
             </section>
-            <form action="registration" method="POST"> 
+            <form action=<?php echo "registration.php".($isCompany ? "?type=company" : "")?> method="POST"> 
+                <?php
+                    if($isCompany)
+                    {
+                        echo "<div class='position-relative formInput mt-3'>                       
+                            <input type='text' id='reg_name' name='reg_name' minlength='3' maxlength='100' placeholder='Nazwa firmy' required class='rounded-4 border border-secondary w-100 py-2 px-3' value='";
+                        if(isset($_SESSION["remember_reg_name"]))
+                        {
+                            echo $_SESSION["remember_reg_name"];
+                            unset($_SESSION["remember_reg_name"]);
+                        }
+                        echo "'>
+                            <label for='reg_name' class='position-absolute'>Nazwa firmy</label>";
+                        echo "</div>
+                            <div>";
+                        if(isset($_SESSION["reg_error_name"]))
+                        {
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_name"]."</div>";
+                            unset($_SESSION["reg_error_name"]);
+                        }
+                        echo "</div>";
+                    }
+                ?>
                 <div class="position-relative formInput mt-3">                       
                     <input type="email" id="reg_email" name="reg_email" minlength="3" maxlength="254" placeholder="E-mail" required class="rounded-4 border border-secondary w-100 py-2 px-3" value="<?php
                     if(isset($_SESSION["remember_reg_email"]))
@@ -119,7 +155,7 @@
                     <?php
                         if(isset($_SESSION["reg_error_email"]))
                         {
-                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_email"]."</div>";
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_email"]."</div>";
                             unset($_SESSION["reg_error_email"]);
                         }
                     ?>
@@ -133,7 +169,7 @@
                     <?php
                         if(isset($_SESSION["reg_error_password"]))
                         {
-                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_password"]."</div>";
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_password"]."</div>";
                             unset($_SESSION["reg_error_password"]);
                         }
                     ?>
@@ -147,29 +183,114 @@
                     <?php
                         if(isset($_SESSION["reg_error_password2"]))
                         {
-                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_password2"]."</div>";
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_password2"]."</div>";
                             unset($_SESSION["reg_error_password2"]);
                         }
                     ?>
                 </div>
-                <div class="position-relative formInput mt-3">                       
-                    <input type="date" id="reg_birth" name="reg_birth" required class="rounded-4 border border-secondary w-100 py-2 px-3" value="<?php
-                    if(isset($_SESSION["remember_reg_birth"]))
+                <?php
+                    if(!$isCompany)
                     {
-                        echo $_SESSION["remember_reg_birth"];
-                        unset($_SESSION["remember_breg_irth"]);
-                    }?>">
-                    <label for="email" class="position-absolute">Data urodzenia</label>
-                </div>
-                <div>
-                    <?php
+                        echo "<div class='position-relative formInput mt-3'>                       
+                            <input type='date' id='reg_birth' name='reg_birth' required class='rounded-4 border border-secondary w-100 py-2 px-3' value='";
+                        if(isset($_SESSION["remember_reg_birth"]))
+                        {
+                            echo $_SESSION["remember_reg_birth"];
+                            unset($_SESSION["remember_reg_birth"]);
+                        }
+                        echo "'>
+                            <label for='email' class='position-absolute'>Data urodzenia</label>
+                        </div>
+                        <div>";
                         if(isset($_SESSION["reg_error_birth"]))
                         {
-                            echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_birth"]."</div>";
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_birth"]."</div>";
                             unset($_SESSION["reg_error_birth"]);
                         }
-                    ?>
-                </div>         
+                        echo "</div>";
+                    }
+                    else
+                    {
+                        echo "<div class='row'>";
+                        echo "<div class='col-12 col-md-6'>";
+                        echo "<div class='position-relative formInput mt-3'>";
+                        echo "<input type='text' id='reg_street' name='reg_street' minlength='3' maxlength='100' placeholder='Ulica' required class='rounded-4 border border-secondary w-100 py-2 px-3' value='";
+                        if(isset($_SESSION["remember_reg_street"]))
+                        {
+                            echo $_SESSION["remember_reg_street"];
+                            unset($_SESSION["remember_reg_street"]);
+                        }
+                        echo "'>
+                            <label for='reg_street' class='position-absolute'>Ulica</label>
+                        </div>
+                        <div>";
+                        if(isset($_SESSION["reg_error_street"]))
+                        {
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_street"]."</div>";
+                            unset($_SESSION["reg_error_street"]);
+                        }
+                        echo "</div>";
+                        echo "</div>";
+                        echo "<div class='col-12 col-md-6'>";
+                        echo "<div class='position-relative formInput mt-3'>";
+                        echo "<input type='text' id='reg_number' name='reg_number' maxlength='10' placeholder='Numer budynku' required class='rounded-4 border border-secondary w-100 py-2 px-3' value='";
+                        if(isset($_SESSION["remember_reg_number"]))
+                        {
+                            echo $_SESSION["remember_reg_number"];
+                            unset($_SESSION["remember_reg_number"]);
+                        }
+                        echo "'>
+                            <label for='reg_number' class='position-absolute'>Numer budynku</label>
+                        </div>
+                        <div>";
+                        if(isset($_SESSION["reg_error_number"]))
+                        {
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_number"]."</div>";
+                            unset($_SESSION["reg_error_number"]);
+                        }
+                        echo "</div>";
+                        echo "</div>";
+                        echo "<div class='col-12 col-md-6'>";
+                        echo "<div class='position-relative formInput mt-3'>";
+                        echo "<input type='text' id='reg_postcode' name='reg_postcode' pattern='[0-9]{2}-[0-9]{3}' title='Proszę wpisać poprawny kod pocztowy.' placeholder='Kod pocztowy' required class='rounded-4 border border-secondary w-100 py-2 px-3' value='";
+                        if(isset($_SESSION["remember_reg_postcode"]))
+                        {
+                            echo $_SESSION["remember_reg_postcode"];
+                            unset($_SESSION["remember_reg_postcode"]);
+                        }
+                        echo "'>
+                            <label for='reg_postcode' class='position-absolute'>Kod pocztowy</label>
+                        </div>
+                        <div>";
+                        if(isset($_SESSION["reg_error_postcode"]))
+                        {
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_postcode"]."</div>";
+                            unset($_SESSION["reg_error_postcode"]);
+                        }
+                        echo "</div>";
+                        echo "</div>";
+                        echo "<div class='col-12 col-md-6'>";
+                        echo "<div class='position-relative formInput mt-3'>";
+                        echo "<input type='text' id='reg_city' name='reg_city' maxlength='50' placeholder='Miejscowość' required class='rounded-4 border border-secondary w-100 py-2 px-3' value='";
+                        if(isset($_SESSION["remember_reg_city"]))
+                        {
+                            echo $_SESSION["remember_reg_city"];
+                            unset($_SESSION["remember_reg_city"]);
+                        }
+                        echo "'>
+                            <label for='reg_city' class='position-absolute'>Miejscowość</label>
+                        </div>
+                        <div>";
+                        if(isset($_SESSION["reg_error_city"]))
+                        {
+                            echo "<div class='text-danger'>".$_SESSION["reg_error_city"]."</div>";
+                            unset($_SESSION["reg_error_city"]);
+                        }
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
+                    }
+                ?>      
                 <div class="my-3">
                     <div>
                         <input type="checkbox" name="reg_regulations" id="reg_regulations" class="me-2" required>                  
@@ -179,7 +300,7 @@
                         <?php
                             if(isset($_SESSION["reg_error_regulations"]))
                             {
-                                echo "<div class='invalid-tooltip'>".$_SESSION["reg_error_regulations"]."</div>";
+                                echo "<div class='text-danger'>".$_SESSION["reg_error_regulations"]."</div>";
                                 unset($_SESSION["reg_error_regulations"]);
                             }
                         ?>
@@ -236,7 +357,6 @@
                 body: sendData
             });
             const result = await response.text();
-            console.log(result);
             if(result.lastIndexOf("<div class='text-danger'>") == 0)
             {
                 element.parentElement.nextElementSibling.innerHTML = result;
@@ -251,46 +371,12 @@
             }
         }
         ["keyup", "change", "input"].forEach(function(event){
-            document.querySelectorAll(":is(#reg_email, #reg_password, #reg_password2, #reg_birth, #reg_regulations)").forEach(function(el){
+            document.querySelectorAll(":is(#reg_email, #reg_password, #reg_password2, #reg_birth, #reg_regulations, #reg_name, #reg_street, #reg_number, #reg_city, #reg_postcode)").forEach(function(el){
                 el.addEventListener(event, function(){
                     Validate(this);
                 });
             });
         });
-        /*$("#login, #password, #password2, #email, #date, #regulations").on("keyup change input", function(){         
-            var element = this;
-            var data = new Object();
-            data.property = element.id;
-            if(element.id == "regulations")
-                data.q = element.checked;
-            else
-                data.q = element.value;
-            if(element.id == "password2")
-                data.tmp = document.querySelector("#password").value;
-            else if(element.id == "password")
-                data.tmp = document.querySelector("#login").value;
-            $.ajax({
-            method: "POST",
-            url: "test.php",
-            data: data,
-            success: 
-            function(result){
-                if(result.lastIndexOf("<div class='invalid-tooltip'>") == 0)
-                {
-                    $("#" + element.id + " ~ div:last-of-type").html(result);
-                    $(element).removeClass("valid").addClass("invalid");
-                }
-                else
-                {
-                    $("#" + element.id + " ~ div:last-of-type").html("");
-                    $(element).removeClass("invalid").addClass("valid");
-                }
-            }});
-            if(element.id == "password" && document.querySelector("#password2").value)
-                $("#password2").keyup();
-            if(element.id == "login" && document.querySelector("#password").value)
-                $("#password").keyup();
-        });*/
         function OnSubmit(token)
         {
             if(document.querySelector("main form").checkValidity())

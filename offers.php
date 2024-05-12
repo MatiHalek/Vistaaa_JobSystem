@@ -1,4 +1,5 @@
 <?php
+  //error_reporting(0);
   session_start();
 ?>
 <!DOCTYPE html>
@@ -43,28 +44,42 @@
               </select>
             </section>
         </article>
-        <article class="row">
-             <article class="col-4">Filtry</article>
-        </article>
-        <article class="row g-3 justify-content-center" id="offersContainer">
-          
-        </article>
-        <article class="row"></article>
-        </article>
-        </article>
-       
+        <?php
+          if(isset($_SESSION["logged"]) && (array_key_exists("company_id", $_SESSION["logged"]) || $_SESSION["logged"]["is_admin"]))
+          {
+            echo "<article class='my-2 d-flex align-items-center justify-content-end flex-wrap'>";
+            echo "<label for='deleteModeSwitch' class='me-2 mb-2'>Tryb usuwania</label>";
+            echo "<div class='form-check form-switch mb-2'>";
+            echo "<input class='form-check-input' type='checkbox' role='switch' id='deleteModeSwitch'>";
+            echo "</div>";
+            echo "<button id='deleteButton' class='mb-2 dangerButton disabled'><i class='bi bi-trash-fill me-2'></i>Usuń zaznaczone (0)</button>";
+            echo "</article>";
+          }           
+        ?>
+        <article class="row g-3 justify-content-center" id="offersContainer">         
+        </article>     
   </main>
   <?php
 		  include "footer.php";
+      $searches = array("position_name", "category", "city", "company", "position_level", "contract_type", "employment_type", "work_type");
 	?>
   <script>
+    let deleteMode = false;
+    document.querySelector("#deleteModeSwitch")?.addEventListener("input", function() {
+      if(this.checked)
+        deleteMode = true;
+      else
+        deleteMode = false;
+    });
+    const deletingOffers = [];
     const loadingAnimation = "<div class='spinner-border text-primary' style='scale: 2;' role='status'><span class='visually-hidden'>Loading...</span></div>";
     let page = <?php echo isset($_GET["page"]) ? $_GET["page"] : 1; ?>;
     let sort = "<?php echo isset($_GET["sort"]) ? $_GET["sort"] : ""; ?>";
     let search = "<?php echo isset($_GET["search"]) ? $_GET["search"] : ""; ?>";
-
-    const position_name = <?php echo isset($_GET["search_position_name"]) ? json_encode($_GET["search_position_name"]) : "''" ?>;
-
+    <?php
+      foreach($searches as $search)
+        echo "const $search = \"".(isset($_GET["search_$search"]) ? implode(";", $_GET["search_$search"]) : "")."\";\n";
+    ?>
     if(localStorage.getItem("offersPerPage") !== null)
       document.querySelector("#offersPerPageSelect").value = localStorage.getItem("offersPerPage");
     else
@@ -77,7 +92,12 @@
       document.querySelector("#sortingOffersSelect").value = sort;
     document.querySelector("#sortingOffersSelect").addEventListener("input", function() {
       sort = this.value;
-      history.replaceState(null, "", "offers.php" + (page > 1 || sort !== "" ? "?" : "") + (page > 1 ? "page=" + page : "") + (sort !== "" ? ((page > 1 ? "&" : "") + "sort=" + sort) : ""));
+      const url = new URL(location.href);
+      if(url.searchParams.has("sort") && this.value === "")
+        url.searchParams.delete("sort");
+      else
+        url.searchParams.set("sort", this.value);
+      history.replaceState(null, "", url);
       GetOffers();
     });
     async function GetOffers()
@@ -90,7 +110,10 @@
         sendData.append("page", page);
         sendData.append("sort", sort);
         sendData.append("offersPerPage", localStorage.getItem("offersPerPage"));
-        sendData.append("position_name", position_name);
+        <?php
+          foreach($searches as $search)
+            echo "sendData.append(\"$search\", $search);\n";
+        ?>
         const response = await fetch("./fetch/getoffers.php", {
           method: "POST",
           body: sendData
@@ -102,6 +125,53 @@
         document.querySelector("#offersContainer").innerHTML = "<div class='alert alert-danger mb-0 shadow text-center'><p class='fw-bold mb-1'>Coś poszło nie tak. Spróbuj ponownie lub odśwież stronę.</p>Kod błędu: 1 (Nie udało połączyć się z serwerem)<br><button type='button' class='commonButton mt-1' id='reload'><i class='bi bi-arrow-clockwise me-2'></i>Załaduj ponownie</a></div>";
         document.querySelector("#reload").addEventListener("click", GetOffers);
       }      
+      document.querySelectorAll("[data-page]").forEach(element => {
+        element.addEventListener("click", function() {
+          page = this.getAttribute("data-page");
+          const url = new URL(location.href);
+          if(url.searchParams.has("page") && page === "1")
+            url.searchParams.delete("page");
+          else
+            url.searchParams.set("page", page);
+          history.replaceState(null, "", url);
+          GetOffers();
+        });
+      });
+      document.querySelectorAll("[data-offer]").forEach(element => {
+        element.addEventListener("click", function(e) {
+          if(deleteMode)
+          {
+            e.preventDefault();
+            if(this.classList.contains("bg-danger"))
+            {
+              this.classList.remove("bg-danger");
+              this.classList.remove("bg-opacity-50");
+              this.classList.add("bg-white");
+              deletingOffers.splice(deletingOffers.indexOf(this.getAttribute("data-offer")), 1);
+            }            
+            else
+            {
+              this.classList.add("bg-opacity-50");
+              this.classList.remove("bg-white");
+              this.classList.add("bg-danger");
+              deletingOffers.push(this.getAttribute("data-offer"));
+
+            } 
+            console.log(deletingOffers);            
+            const deleteButton = document?.querySelector("#deleteButton");
+            if(document.querySelectorAll(".bg-danger").length > 0)
+            {
+              deleteButton.classList.remove("disabled");
+              deleteButton.textContent = `Usuń zaznaczone (${document.querySelectorAll(".bg-danger").length})`;
+            }
+            else
+            {
+              deleteButton.classList.add("disabled");
+              deleteButton.textContent = "Usuń zaznaczone (0)";
+            }
+          }
+        });
+      });
     } 
     GetOffers();    
   </script>

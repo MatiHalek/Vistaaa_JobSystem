@@ -329,7 +329,7 @@ footer
 	background-color: rgb(255, 131, 131);
 	box-shadow: 0 0 12px 5px red inset;
 }
-.companyProfileButton, #reload, #applyingProfileButton, .addToProfileButton
+.companyProfileButton, #reload, #applyingProfileButton, .addToProfileButton, #deleteButton
 {
 	font-size: .8rem;
 }
@@ -434,7 +434,7 @@ footer
 {
 	width: calc(100% - 150px);
 }
-.pagination > :is(:last-child, :first-child) > a > :last-child::before
+.pagination > :is(:last-child, :first-child) > button > :last-child::before
 {
 	margin-left: -.5rem;
 }
@@ -479,8 +479,21 @@ footer
 {
 	cursor: pointer;
 	transition: .5s ease-in-out;
+	text-overflow: ellipsis;
 }
 #searchCheckboxes input:hover
 {
 	background-color: rgb(65 105 225 / .2);
+}
+#searchCheckboxes > div > div::after
+{
+	font-family: 'Bootstrap-icons';
+	content: '\F229';
+	position: absolute;
+	right: .5rem;
+	top: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	pointer-events: none;
 }

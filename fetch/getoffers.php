@@ -9,17 +9,34 @@
     $sortOptions = array("salary");
     $sortColumn = array(", salary_highest");
     $search = (isset($_POST["search"]) && !empty($_POST["search"]) && !ctype_space($_POST["search"])) ? " AND POSITION(TRIM('".$_POST["search"]."') IN title) > 0" : "";
+    $search_filters = array("position_name", "category", "city", "company", "position_level", "contract_type", "employment_type", "work_type");
+    foreach($search_filters as $filter)
+    {
+        if(isset($_POST[$filter]) && !empty($_POST[$filter]) && !ctype_space($_POST[$filter]))
+        {
+            if($filter == "category")
+            {
+                $tmp = str_replace(";", "', '", $_POST[$filter]);
+                $search .= " AND advertisement_id IN (SELECT advertisement_id FROM advertisement_category INNER JOIN category USING(category_id) WHERE name IN ('".$tmp."'))";
+                continue;
+            }
+            $tmp = str_replace(";", "', '", $_POST[$filter]);
+            $search .= " AND $filter IN ('".$tmp."')";
+        }
+    }
     $sort = (isset($_POST["sort"]) && in_array($_POST["sort"], $sortOptions)) ? $sortColumn[array_search($_POST["sort"], $sortOptions)] : "";
     $offersPerPage = (isset($_POST["offersPerPage"]) && is_numeric($_POST["offersPerPage"]) && $_POST["offersPerPage"] > 0) ? $_POST["offersPerPage"] : 20;
+    /*$query_company = "<br>SELECT *, 1 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = 1 AND date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = 1 AND date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).", ".$offersPerPage.";";
+    echo $query_company;*/
     if(isset($_SESSION["logged"]) && array_key_exists("company_id", $_SESSION["logged"]))
     {
         $result = $connect->execute_query("SELECT *, 1 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = ? AND date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = ? AND date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).", ".$offersPerPage.";", [$_SESSION["logged"]["company_id"], $_SESSION["logged"]["company_id"]]);
-        $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement WHERE company_id = ?".$search, [$_SESSION["logged"]["company_id"]]))->num_rows;
+        $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = ?".$search, [$_SESSION["logged"]["company_id"]]))->num_rows;
     }                
     else
     {
         $result = $connect->execute_query("SELECT *, 1 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).",".$offersPerPage.";");
-        $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement WHERE 1=1".$search))->num_rows;
+        $totalOffers = ($connect->execute_query("SELECT advertisement_id FROM advertisement INNER JOIN company USING(company_id) WHERE 1=1".$search))->num_rows;
     }
     $totalPages = ceil($totalOffers / $offersPerPage);
     if($result->num_rows > 0)
@@ -31,7 +48,7 @@
             echo "<div class='d-flex col-12 col-sm-6 col-lg-4 col-xl-3 position-relative'>";
             if(isset($_SESSION["logged"]) && array_key_exists("company_id", $_SESSION["logged"]) && $row["company_id"] == $_SESSION["logged"]["company_id"] || isset($_SESSION["logged"]) && $_SESSION["logged"]["is_admin"] == 1)
                 echo "<a href='offerform.php?id=".$row["advertisement_id"]."&mode=edit' class='d-flex align-items-center bg-primary text-white position-absolute bottom-0 end-0 text-success rounded-circle py-1 px-3' id='editOfferButton'><i class='bi bi-pen-fill'></i></a>";
-            echo "<a class='d-block w-100 text-decoration-none bg-white shadow rounded position-relative p-3 pt-4 position-relative jobOffer ".($row["available"] == 0 ? " jobOfferDisabled" : "")."' href='offerdetails.php?id=".$row["advertisement_id"]."'>";
+            echo "<a data-offer='".$row["advertisement_id"]."' class='d-block w-100 text-decoration-none bg-white shadow rounded position-relative p-3 pt-4 position-relative jobOffer ".($row["available"] == 0 ? " jobOfferDisabled" : "")."' href='offerdetails.php?id=".$row["advertisement_id"]."'>";
             $date_added = new DateTime($row["date_added"]);
             echo "<div class='position-absolute bg-success text-white rounded-pill py-1 px-3 top-0'>".$date_added->format("j")." ".mb_substr($months[(int)($date_added->format("n")) - 1], 0, 3)." ".$date_added->format("Y")."</div>";
             $categoryResult = $connect->execute_query('SELECT name FROM advertisement_category INNER JOIN category USING(category_id) WHERE advertisement_id = ?', [$row["advertisement_id"]]);
@@ -49,31 +66,27 @@
         echo "<nav class='row mt-5'>";
         echo "<ul class='pagination d-flex justify-content-center'>";
         echo "<li class='page-item'>";
-        echo "<a title='Pierwsza strona' data-bs-toggle='tooltip' class='page-link".($page > 1 ? "' href='offers.php?page=1'" : " disabled'")."><i class='bi bi-caret-left-fill'></i><i class='bi bi-caret-left-fill'></i></a>";
+        echo "<button title='Pierwsza strona' data-bs-toggle='tooltip' class='page-link".($page > 1 ? "' data-page='1'" : " disabled'")."><i class='bi bi-caret-left-fill'></i><i class='bi bi-caret-left-fill'></i></button>";
         echo "</li>";
         echo "<li class='page-item'>";
-        echo "<a title='Poprzednia strona' data-bs-toggle='tooltip' class='page-link".($page > 1 ? "' href='offers.php?page=".($page - 1)."'" : " disabled'")."><i class='bi bi-caret-left-fill'></i></a>";
+        echo "<button title='Poprzednia strona' data-bs-toggle='tooltip' class='page-link".($page > 1 ? "' data-page='".($page - 1)."'" : " disabled'")."><i class='bi bi-caret-left-fill'></i></button>";
         echo "</li>";
         for($i = $page - 3; $i <= $page + 3; $i++)
         {
             if($i > 0 && $i <= $totalPages)
             {
                 echo "<li class='page-item".($i == $page ? " active" : "")."'>";
-                echo "<a class='page-link' href='offers.php?page=$i'>$i</a>";
+                echo "<button class='page-link' data-page='$i'>$i</button>";
                 echo "</li>";
             }
         }
         echo "<li class='page-item'>";
-        echo "<a title='Następna strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' href='offers.php?page=".($page + 1)."'")."><i class='bi bi-caret-right-fill'></i></a>";
+        echo "<button title='Następna strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' data-page='".($page + 1)."'")."><i class='bi bi-caret-right-fill'></i></button>";
         echo "</li>";
         echo "<li class='page-item'>";
-        echo "<a title='Ostatnia strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' href='offers.php?page=$totalPages'")."><i class='bi bi-caret-right-fill'></i><i class='bi bi-caret-right-fill'></i></a>";
+        echo "<button title='Ostatnia strona' data-bs-toggle='tooltip' class='page-link".($page >= $totalPages ? " disabled'" : "' data-page='$totalPages'")."><i class='bi bi-caret-right-fill'></i><i class='bi bi-caret-right-fill'></i></button>";
         echo "</li>";
         echo "</ul></nav>";
-        if(!empty($_GET["position_name"]))
-        echo "ok";
-        else
-        echo "null";
     }
     else
         echo "<p class='text-center signika-negative fs-4 fw-bold'>Niestety, nie znaleźliśmy pasujących ofert pracy.</p>";

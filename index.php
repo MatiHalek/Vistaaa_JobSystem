@@ -159,49 +159,49 @@
 					<div class="row justify-content-center" id="searchCheckboxes">
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="position_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="position_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="position_search" class="position-absolute">Stanowisko</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="category_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="category_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="category_search" class="position-absolute">Kategoria</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="location_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="location_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="location_search" class="position-absolute">Lokalizacja</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="company_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="company_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="company_search" class="position-absolute">Firma</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="position_level_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="position_level_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="position_level_search" class="position-absolute">Poziom stanowiska</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="contract_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="contract_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="contract_type_search" class="position-absolute">Rodzaj umowy</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="employment_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="employment_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="employment_search" class="position-absolute">Wymiar pracy</label>
                     		</div>
 						</div>
 						<div class="col-12 col-md-6 col-lg-4">
 							<div class="position-relative formInput mt-3">                       
-                        		<input type="text" id="work_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3" readonly>
+                        		<input type="text" id="work_type_search" form="nosubmit" placeholder="" class="rounded-4 border-0 w-100 py-2 px-3 pe-4" readonly>
                          		<label for="work_type_search" class="position-absolute">Tryb pracy</label>
                     		</div>
 						</div>

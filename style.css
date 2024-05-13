@@ -324,7 +324,11 @@ footer
 {
 	background-color: red;
 }
-.dangerButton:hover
+.dangerButton[disabled]
+{
+	opacity: .3;
+}
+.dangerButton:hover:not(:disabled)
 {
 	background-color: rgb(255, 131, 131);
 	box-shadow: 0 0 12px 5px red inset;

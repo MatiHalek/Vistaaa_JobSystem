@@ -29,6 +29,76 @@
 	if(isset($_POST["mode"]))
     {
         $success = true;
+		if(!isset($_POST["title"]) || empty($_POST["title"]) || ctype_space($_POST["title"]) || strlen($_POST["title"]) < 3 || strlen($_POST["title"]) > 100)
+		{
+			$success = false;
+			$_SESSION["offer_error_title"] = "Tytuł musi zawierać od 3 do 100 znaków.";
+		}
+		if(!isset($_POST["category"]) || empty($_POST["category"]) || !is_array($_POST["category"]))
+		{
+			$success = false;
+			$_SESSION["offer_error_category"] = "Musisz wybrać co najmniej jedną kategorię.";
+		}
+		if(!isset($_POST["name"]) || empty($_POST["name"]) || ctype_space($_POST["name"]) || strlen($_POST["name"]) < 3 || strlen($_POST["name"]) > 50)
+		{
+			$success = false;
+			$_SESSION["offer_error_name"] = "Nazwa stanowiska musi zawierać od 3 do 50 znaków.";
+		}
+		if(!isset($_POST["level"]) || empty($_POST["level"]) || ctype_space($_POST["level"]) || strlen($_POST["level"]) < 3 || strlen($_POST["level"]) > 50)
+		{
+			$success = false;
+			$_SESSION["offer_error_level"] = "Poziom stanowiska musi zawierać od 3 do 50 znaków.";
+		}
+		if(!isset($_POST["contract"]) || empty($_POST["contract"]) || !is_numeric($_POST["contract"]) || $_POST["contract"] < 0 || $_POST["contract"] >= count($contract_types))
+		{
+			$success = false;
+			$_SESSION["offer_error_contract"] = "Musisz wybrać rodzaj umowy.";
+		}
+		if(!isset($_POST["employment"]) || empty($_POST["employment"]) || !is_numeric($_POST["employment"]) || $_POST["employment"] < 0 || $_POST["employment"] >= count($employment_types))
+		{
+			$success = false;
+			$_SESSION["offer_error_employment"] = "Musisz wybrać rodzaj zatrudnienia.";
+		}
+		if(!isset($_POST["work"]) || empty($_POST["work"]) || !is_numeric($_POST["work"]) || $_POST["work"] < 0 || $_POST["work"] >= count($work_types))
+		{
+			$success = false;
+			$_SESSION["offer_error_work"] = "Musisz wybrać rodzaj pracy.";
+		}
+		if(!isset($_POST["days"]) || empty($_POST["days"]) || ctype_space($_POST["days"]) || strlen($_POST["days"]) < 4 || strlen($_POST["days"]) > 50)
+		{
+			$success = false;
+			$_SESSION["offer_error_days"] = "Dni i godziny pracy muszą zawierać od 4 do 50 znaków.";
+		}
+		if(!isset($_POST["salary_lowest"]) || empty($_POST["salary_lowest"]) || !is_numeric($_POST["salary_lowest"]) || $_POST["salary_lowest"] < 0 || $_POST["salary_lowest"] > 999999.99)
+		{
+			$success = false;
+			$_SESSION["offer_error_salary"] = "Najniższe wynagrodzenie musi być liczbą z przedziału od 0 do 999999.99.";
+		}
+		if(!isset($_POST["salary_highest"]) || empty($_POST["salary_highest"]) || !is_numeric($_POST["salary_highest"]) || $_POST["salary_highest"] < 0 || $_POST["salary_highest"] > 999999.99)
+		{
+			$success = false;
+			$_SESSION["offer_error_salary"] = "Najwyższe wynagrodzenie musi być liczbą z przedziału od 0 do 999999.99.";
+		}
+		if(!isset($_POST["date"]) || empty($_POST["date"]) || !preg_match("/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/", $_POST["date"]))
+		{
+			$success = false;
+			$_SESSION["offer_error_date"] = "Nieprawidłowy format daty.";
+		}
+		if(!isset($_POST["responsibilities"]) || empty($_POST["responsibilities"]) || ctype_space($_POST["responsibilities"]) || strlen($_POST["responsibilities"]) < 20 || strlen($_POST["responsibilities"]) > 1000)
+		{
+			$success = false;
+			$_SESSION["offer_error_responsibilities"] = "Zakres obowiązków musi zawierać od 20 do 1000 znaków.";
+		}
+		if(!isset($_POST["requirements"]) || empty($_POST["requirements"]) || ctype_space($_POST["requirements"]) || strlen($_POST["requirements"]) < 20 || strlen($_POST["requirements"]) > 1000)
+		{
+			$success = false;
+			$_SESSION["offer_error_requirements"] = "Wymagania muszą zawierać od 20 do 1000 znaków.";
+		}
+		if(!isset($_POST["offer"]) || empty($_POST["offer"]) || ctype_space($_POST["offer"]) || strlen($_POST["offer"]) < 20 || strlen($_POST["offer"]) > 1000)
+		{
+			$success = false;
+			$_SESSION["offer_error_offer"] = "Oferta musi zawierać od 20 do 1000 znaków.";
+		}
         $editing = $_POST["mode"] == "edit" ? true : false;
 		if($success)
 		{
@@ -101,28 +171,23 @@
 				}           
 				if(!$editError)
 				{
-					echo "<form action='offerform.php' id='offerForm'";
+					echo "<form action='offerform.php' novalidate id='offerForm'";
 					if($isEditModeEnabled)
 						echo "?id=".$_GET["id"];
 					echo "' method='POST'>";
 					if($isEditModeEnabled)
-						echo "<script>document.title = 'Edytowanie ogłoszenia | System ogłoszeniowy Vistaaa';</script>";  
-					if(isset($_SESSION["offer_error_title"]))
-					{
-						echo "<div class='invalid-tooltip'>".$_SESSION["offer_error_title"]."</div>";
-						unset($_SESSION["offer_error_title"]);
-					}               
+						echo "<script>document.title = 'Edytowanie ogłoszenia | System ogłoszeniowy Vistaaa';</script>";               
 					echo "<div class='position-relative formInput mt-3'>";                  
                     echo "<input type='text' id='title' name='title' minlength='3' maxlength='100' placeholder='Tytuł' required class='rounded-4 border-0 w-100 py-2 px-3'";
 					if($isEditModeEnabled)
 						echo " value='".htmlspecialchars($editRow["title"])."'";
                     echo "><label for='title' class='position-absolute'>Tytuł</label>";
                     echo "</div>"; 
-					if(isset($_SESSION["offer_error_category"]))
+					if(isset($_SESSION["offer_error_title"]))
 					{
-						echo "<div class='invalid-tooltip'>".$_SESSION["offer_error_category"]."</div>";
-						unset($_SESSION["offer_error_category"]);
-					}  
+						echo "<div class='text-danger mt-2'>".$_SESSION["offer_error_title"]."</div>";
+						unset($_SESSION["offer_error_title"]);
+					}   
 					echo "<div class='position-relative formInput mt-4'>";
 					echo "<select id='category' multiple required name='category[]' class='rounded-4 border-0 w-100 py-2 px-3'>";
 					$result = $connect->execute_query('SELECT category_id, name FROM category');
@@ -135,6 +200,11 @@
 					}                                   
 					$result->free_result();
                     echo "</select><label for='category' class='position-absolute'>Kategorie</label></div>";
+					if(isset($_SESSION["offer_error_category"]))
+					{
+						echo "<div class='text-danger mt-2'>".$_SESSION["offer_error_category"]."</div>";
+						unset($_SESSION["offer_error_category"]);
+					} 
 					echo "<div class='position-relative formInput mt-4'>";
 					echo "<select id='company' name='company' class='rounded-4 border-0 w-100 py-2 px-3'";
 					if(array_key_exists("company_id", $_SESSION["logged"]))
@@ -151,14 +221,8 @@
 							echo ">".$row["name"]."</option>";
 						}                                   
 						$result->free_result();
-					}
-					
+					}					
                     echo "</select><label for='company' class='position-absolute'>Firma</label></div>";
-					if(isset($_SESSION["offer_error_name"]))
-					{
-						echo "<div class='invalid-tooltip'>".$_SESSION["offer_error_name"]."</div>";
-						unset($_SESSION["offer_error_name"]);
-					}
 					if(isset($_SESSION["offer_error_level"]))
 					{
 						echo "<div class='invalid-tooltip'>".$_SESSION["offer_error_level"]."</div>";
@@ -170,7 +234,13 @@
 					if($isEditModeEnabled)
 						echo " value='".htmlspecialchars($editRow["position_name"])."'";
                     echo "><label for='name' class='position-absolute'>Nazwa stanowiska</label>";
-                    echo "</div></div>"; 
+                    echo "</div>";
+					if(isset($_SESSION["offer_error_name"]))
+					{
+						echo "<div class='text-danger mt-2'>".$_SESSION["offer_error_name"]."</div>";
+						unset($_SESSION["offer_error_name"]);
+					}
+					echo "</div>"; 
 					echo "<div class='col-12 col-md-6'><div class='position-relative formInput mt-3'>";
 					echo "<input type='text' id='level' name='level' minlength='3' maxlength='50' placeholder='Poziom stanowiska' required class='rounded-4 border-0 w-100 py-2 px-3'";
 					if($isEditModeEnabled)

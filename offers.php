@@ -1,6 +1,25 @@
 <?php
   //error_reporting(0);
   session_start();
+  if(isset($_SESSION["logged"]) && (array_key_exists("company_id", $_SESSION["logged"]) || $_SESSION["logged"]["is_admin"]) && isset($_POST["deletingOffers"]))
+  {
+    require "connect.php";
+    $connect = new mysqli($host, $db_user, $db_password, $db_name);
+    $connect->set_charset('utf8mb4');
+    foreach($_POST["deletingOffers"] as $offer)
+    {
+      if(array_key_exists("company_id", $_SESSION["logged"]))
+      {
+        $result = $connect->execute_query('SELECT * FROM advertisement WHERE advertisement_id = ? AND company_id = ?', [$offer, $_SESSION["logged"]["company_id"]]);
+        if($result->num_rows == 0)
+          continue;
+      }
+      $connect->execute_query('DELETE FROM advertisement WHERE advertisement_id = ?', [$offer]);
+    }
+    $connect->close();
+    header("Refresh:0");
+    exit();
+  }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -47,13 +66,36 @@
         <?php
           if(isset($_SESSION["logged"]) && (array_key_exists("company_id", $_SESSION["logged"]) || $_SESSION["logged"]["is_admin"]))
           {
-            echo "<article class='my-2 d-flex align-items-center justify-content-end flex-wrap'>";
+            echo "<article class='my-2 d-flex justify-content-end'>";
+            echo "<div class='pt-2 pb-0 px-2 border-0 shadow alert alert-danger flex-wrap d-flex align-items-center justify-content-center'>";
             echo "<label for='deleteModeSwitch' class='me-2 mb-2'>Tryb usuwania</label>";
             echo "<div class='form-check form-switch mb-2'>";
             echo "<input class='form-check-input' type='checkbox' role='switch' id='deleteModeSwitch'>";
             echo "</div>";
-            echo "<button id='deleteButton' class='mb-2 dangerButton disabled'><i class='bi bi-trash-fill me-2'></i>Usuń zaznaczone (0)</button>";
+            echo "<button type='button' id='deleteButton' data-bs-toggle='modal' data-bs-target='#deleteModal' class='px-3 py-2 mb-2 dangerButton' disabled><i class='bi bi-trash-fill me-2'></i><span>Usuń zaznaczone (0)</span></button>";
+            echo "</div>";
             echo "</article>";
+            echo "<div class='modal fade' id='deleteModal' tabindex='-1' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered'>
+                      <div class='modal-content'>
+						            <div class='modal-header'>
+						              <h1 class='modal-title fs-5'>Potwierdź usunięcie ofert</h1>
+						              <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+						            </div>
+								        <div class='modal-body'>
+                          <p>Czy na pewno chcesz usunąć zaznaczone oferty w liczbie: <span id='deleteCount'></span>?</p>
+                          <p class='fw-bold'>Ta czynność jest nieodwracalna.</p>
+									      </div>
+								        <div class='modal-footer'>
+                          <form action='' method='POST' id='deleteForm'>
+                            <div class='d-none' id='deletingOffers'></div>
+                            <button type='button' class='commonButton' data-bs-dismiss='modal'>Anuluj</button>
+									          <button type='submit' class='dangerButton' data-bs-dismiss='modal'>Usuń</button>
+                          </form>
+								        </div>
+							        </div>
+						        </div>
+					        </div>";
           }           
         ?>
         <article class="row g-3 justify-content-center" id="offersContainer">         
@@ -69,9 +111,19 @@
       if(this.checked)
         deleteMode = true;
       else
+      { 
         deleteMode = false;
+        deletingOffers = [];
+        document.querySelectorAll("[data-offer]").forEach(element => {
+          element.classList.remove("bg-danger");
+          element.classList.remove("bg-opacity-50");
+          element.classList.add("bg-white");
+        });
+        document.querySelector("#deleteButton").setAttribute("disabled", "");
+        document.querySelector("#deleteButton").lastElementChild.textContent = "Usuń zaznaczone (0)";
+      }     
     });
-    const deletingOffers = [];
+    let deletingOffers = [];
     const loadingAnimation = "<div class='spinner-border text-primary' style='scale: 2;' role='status'><span class='visually-hidden'>Loading...</span></div>";
     let page = <?php echo isset($_GET["page"]) ? $_GET["page"] : 1; ?>;
     let sort = "<?php echo isset($_GET["sort"]) ? $_GET["sort"] : ""; ?>";
@@ -157,23 +209,43 @@
               deletingOffers.push(this.getAttribute("data-offer"));
 
             } 
-            console.log(deletingOffers);            
+            deletingOffers = [...new Set(deletingOffers)];          
             const deleteButton = document?.querySelector("#deleteButton");
             if(document.querySelectorAll(".bg-danger").length > 0)
             {
               deleteButton.classList.remove("disabled");
-              deleteButton.textContent = `Usuń zaznaczone (${document.querySelectorAll(".bg-danger").length})`;
+              deleteButton.removeAttribute("disabled"); 
+              deleteButton.lastElementChild.textContent = `Usuń zaznaczone (${document.querySelectorAll(".bg-danger").length})`;
             }
             else
             {
               deleteButton.classList.add("disabled");
-              deleteButton.textContent = "Usuń zaznaczone (0)";
+              deleteButton.setAttribute("disabled", "");
+              deleteButton.lastElementChild.textContent = "Usuń zaznaczone (0)";
             }
           }
         });
       });
     } 
-    GetOffers();    
+    GetOffers(); 
+    window.addEventListener("pageshow", () => document.querySelector("#deleteModeSwitch").checked = false);  
+    document.querySelector("#deleteModal").addEventListener("show.bs.modal", function() {
+      document.querySelector("#deleteCount").textContent = deletingOffers.length;
+      document.querySelector("#deletingOffers").innerHTML = "";
+      deletingOffers.forEach(offer => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", "deletingOffers[]");
+        input.setAttribute("value", offer);
+        document.querySelector("#deletingOffers").appendChild(input);
+      });
+    }); 
+  document.querySelector("#deleteForm").addEventListener("submit", () => {
+    const url = new URL(location.href);
+    if(url.searchParams.has("page"))
+        url.searchParams.delete("page");
+    document.querySelector("#deleteForm").action = url.toString();
+  });
   </script>
 </body>
 </html>

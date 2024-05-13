@@ -110,6 +110,7 @@
 				$connect->execute_query('DELETE FROM advertisement_category WHERE advertisement_id = ?', [$_POST["id"]]);
 				foreach($_POST["category"] as $category)
 					$connect->execute_query('INSERT INTO advertisement_category (advertisement_id, category_id) VALUES (?, ?)', [$_POST["id"], $category]);
+				$returnedId = $_POST["id"];
 			}
 			else
 			{

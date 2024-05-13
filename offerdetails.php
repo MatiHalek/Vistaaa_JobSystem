@@ -42,21 +42,21 @@
 			echo "Aby aplikować na ogłoszenia, wymagane jest uzupełnienie kilku podstawowych informacji w profilu. Zalecamy jednak uzupełnienie wszystkich danych, a także sprawdzenie poprawności tych istniejących, aby zwiększyć swoje szanse na zatrudnienie.<br>";
 			echo "<a href='profile.php?id=".$_SESSION["logged"]["user_id"]."' id='applyingProfileButton' class='commonButton mt-2 d-inline-block text-decoration-none' target='_blank'><i class='bi bi-person-bounding-box me-2'></i>Zobacz profil</a><br><br>";
 			$completedProfile = true;
-			if(mb_strlen($_SESSION["logged"]["name"]) > 0 && mb_strlen($_SESSION["logged"]["surname"]) > 0)
+			if(!empty($_SESSION["logged"]["name"]) && !empty($_SESSION["logged"]["surname"]) && !ctype_space($_SESSION["logged"]["name"]) && !ctype_space($_SESSION["logged"]["surname"]))
 				echo "<p class='text-success mb-0'><i class='bi bi-check-circle-fill me-2'></i><b>Imię i nazwisko: </b>".$_SESSION["logged"]["name"]." ".$_SESSION["logged"]["surname"]."</p>";
 			else
 			{
 				echo "<p class='text-danger mb-0 fw-bold'><i class='bi bi-x-circle-fill me-2'></i>Imię i/lub nazwisko nie jest uzupełnione.</p>";
 				$completedProfile = false;
 			}		
-			if(mb_strlen($_SESSION["logged"]["street"]) > 0 && mb_strlen($_SESSION["logged"]["home_number"]) > 0 && mb_strlen($_SESSION["logged"]["postcode"]) > 0 && mb_strlen($_SESSION["logged"]["city"]) > 0)
+			if(!empty($_SESSION["logged"]["street"]) && !empty($_SESSION["logged"]["home_number"]) && !empty($_SESSION["logged"]["postcode"]) && !empty($_SESSION["logged"]["city"] && !ctype_space($_SESSION["logged"]["street"]) && !ctype_space($_SESSION["logged"]["home_number"]) && !ctype_space($_SESSION["logged"]["postcode"]) && !ctype_space($_SESSION["logged"]["city"])))
 				echo "<p class='text-success mb-0'><i class='bi bi-check-circle-fill me-2'></i><b>Adres: </b>".$_SESSION["logged"]["street"]." ".$_SESSION["logged"]["home_number"].", ".$_SESSION["logged"]["postcode"]." ".$_SESSION["logged"]["city"]."</p>";
 			else
 			{
 				echo "<p class='text-danger mb-0 fw-bold'><i class='bi bi-x-circle-fill me-2'></i>Adres zamieszkania nie jest uzupełniony.</p>";
 				$completedProfile = false;
 			}
-			if(mb_strlen($_SESSION["logged"]["position"]) > 0 && mb_strlen($_SESSION["logged"]["experience"]) > 0)
+			if(!empty($_SESSION["logged"]["position"]) && !empty($_SESSION["logged"]["experience"]) && !ctype_space($_SESSION["logged"]["position"]) && !ctype_space($_SESSION["logged"]["experience"]))
 				echo "<p class='text-success mb-0'><b><i class='bi bi-check-circle-fill me-2'></i>Stanowisko (".$_SESSION["logged"]["position"].") i podsumowanie zawodowe jest uzupełnione.</b></p>";
 			else
 			{

@@ -68,7 +68,7 @@
           {
             echo "<article class='my-2 d-flex justify-content-end'>";
             echo "<div class='pt-2 pb-0 px-2 border-0 shadow alert alert-danger flex-wrap d-flex align-items-center justify-content-center'>";
-            echo "<label for='deleteModeSwitch' class='me-2 mb-2'>Tryb usuwania</label>";
+            echo "<label for='deleteModeSwitch' class='me-2 mb-2 user-select-none'>Tryb usuwania</label>";
             echo "<div class='form-check form-switch mb-2'>";
             echo "<input class='form-check-input' type='checkbox' role='switch' id='deleteModeSwitch'>";
             echo "</div>";
@@ -128,6 +128,15 @@
     let page = <?php echo isset($_GET["page"]) ? $_GET["page"] : 1; ?>;
     let sort = "<?php echo isset($_GET["sort"]) ? $_GET["sort"] : ""; ?>";
     let search = "<?php echo isset($_GET["search"]) ? $_GET["search"] : ""; ?>";
+    if(search === "")
+    {
+      const url = new URL(location.href);
+      if(url.searchParams.has("search"))
+      {
+        url.searchParams.delete("search");
+        history.replaceState(null, "", url);
+      }    
+    }
     <?php
       foreach($searches as $search)
         echo "const $search = \"".(isset($_GET["search_$search"]) ? implode(";", $_GET["search_$search"]) : "")."\";\n";
@@ -226,7 +235,15 @@
           }
         });
       });
-    } 
+      document.querySelectorAll(".jobOffer").forEach(element => {
+        if(deletingOffers.includes(element.getAttribute("data-offer")))
+        {
+          element.classList.add("bg-danger");
+          element.classList.add("bg-opacity-50");
+          element.classList.remove("bg-white");
+        }
+      });
+    }
     GetOffers(); 
     window.addEventListener("pageshow", () => document.querySelector("#deleteModeSwitch").checked = false);  
     document.querySelector("#deleteModal").addEventListener("show.bs.modal", function() {

@@ -24,7 +24,7 @@
         $savedResult = $connect->execute_query('SELECT * FROM user_applied WHERE user_id = ? AND advertisement_id = ?', [$_SESSION["logged"]["user_id"], $_POST["advertisement_id"]]);
         if($savedResult->num_rows == 0)
         {
-            if($currentDate <= $expirationDate)
+            if($currentDate <= $expirationDate && !empty($_SESSION["logged"]["name"]) && !empty($_SESSION["logged"]["surname"]) && !ctype_space($_SESSION["logged"]["name"]) && !ctype_space($_SESSION["logged"]["surname"]) && !empty($_SESSION["logged"]["street"]) && !empty($_SESSION["logged"]["home_number"]) && !empty($_SESSION["logged"]["postcode"]) && !empty($_SESSION["logged"]["city"]) && !ctype_space($_SESSION["logged"]["street"]) && !ctype_space($_SESSION["logged"]["home_number"]) && !ctype_space($_SESSION["logged"]["postcode"]) && !ctype_space($_SESSION["logged"]["city"]) && !empty($_SESSION["logged"]["position"]) && !empty($_SESSION["logged"]["experience"]) && !ctype_space($_SESSION["logged"]["position"]) && !ctype_space($_SESSION["logged"]["experience"]))
                 $connect->execute_query('INSERT INTO user_applied (user_id, advertisement_id) VALUES (?, ?)', [$_SESSION["logged"]["user_id"], $_POST["advertisement_id"]]);
         }
     }

@@ -56,7 +56,7 @@
 				else
 				{
 					echo "<div class='d-flex flex-column align-items-center text-center' id='profilePictureEdit'>";
-					echo "<label class='position-relative'>";
+					echo "<label class='position-relative' title='Zmień zdjęcie profilowe' data-bs-toggle='tooltip'>";
 					echo "<input type='file' name='profile_picture' class='d-none' accept='image/*'>";
 					echo "<img id='profilePicture' class='bg-white' src='".(count($files) > 0 ? ($path.scandir($path)[2]) : "./img/user.png")."' alt='Profil' width='100' height='100'>";
 					echo "</label>";
@@ -350,7 +350,7 @@
 			}
 		?>
 		const oldImage = document.querySelector("#profilePicture").getAttribute("src");
-		document.querySelector("input[type='file']").addEventListener("change", function(){
+		document.querySelector("input[type='file']")?.addEventListener("change", function(){
 		if(this.files[0])
 		{
 			document.querySelector("#uploadedFileName").textContent = this.files[0].name;
@@ -383,13 +383,16 @@
             deleteButton.className = "dangerButton";
             deleteButton.type = "button";
             deleteButton.innerHTML = "<span class='bi bi-trash-fill'></span>";
-            deleteButton.title = "Usuń umiejętność";         
-            deleteButton.addEventListener("click", function(){               
+            deleteButton.title = "Usuń umiejętność";   
+			deleteButton.setAttribute("data-bs-toggle", "tooltip");        
+            deleteButton.addEventListener("click", function(){     
+				bootstrap.Tooltip.getInstance(this).dispose();           
                 this.parentElement.remove();
             });
             skillDiv.appendChild(deleteButton);
+			UpdateTooltips();
         }
-		document.querySelector("#addSkillButton").addEventListener("click", () => AddSkill());
+		document.querySelector("#addSkillButton")?.addEventListener("click", () => AddSkill());
 		function AddLanguage(language = new Language(0, "", ""))
         {
             if(document.querySelector("#userLanguages").children.length >= languages.length)
@@ -447,14 +450,17 @@
             deleteButton.className = "dangerButton mt-2";
             deleteButton.type = "button";
             deleteButton.innerHTML = "<span class='bi bi-trash-fill'></span>";
-            deleteButton.title = "Usuń język";         
-            deleteButton.addEventListener("click", function(){               
-                this.parentElement.remove();
+            deleteButton.title = "Usuń język";      
+			deleteButton.setAttribute("data-bs-toggle", "tooltip");   
+            deleteButton.addEventListener("click", function(){     
+				bootstrap.Tooltip.getInstance(this).dispose();          
+                this.parentElement.remove();				
             });
             languageDiv.appendChild(deleteButton);
+			UpdateTooltips();
 			languageDivsCount++;
         }
-		document.querySelector("#addLanguageButton").addEventListener("click", () => AddLanguage());
+		document.querySelector("#addLanguageButton")?.addEventListener("click", () => AddLanguage());
 	</script>
 	<?php
         if($editMode && (!isset($_GET["type"]) || $_GET["type"] != "company"))

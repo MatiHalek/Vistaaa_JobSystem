@@ -46,14 +46,23 @@
     <main class="container-lg">
         <article class="d-flex justify-content-between flex-wrap">
             <section class='d-flex align-items-center mb-2'>
-              <span class='fw-bold fs-5'>Sortuj: </span>
+              <label class='fw-bold fs-5' for='sortingOffersSelect'>Sortuj: </label>
               <select class="form-select ms-2 w-auto" aria-label="Sortowanie ofert" id="sortingOffersSelect">
                 <option value="">Od najnowszych</option>
                 <option value="salary">Od najlepiej płatnych</option>
               </select>
             </section>
+            <?php
+              if(isset($_SESSION["logged"]) && array_key_exists("user_id", $_SESSION["logged"]))
+              {
+                echo "<section class='d-flex align-items-center mb-2'>";
+                echo "<input class='form-check-input' type='checkbox' value='' id='savedOffersCheckbox'>";
+                echo "<label class='fw-bold fs-5 ms-2 mt-1' for='savedOffersCheckbox'>Tylko zapisane</label>";              
+                echo "</section>";
+              }
+            ?>
             <section class='d-flex align-items-center mb-2'>
-              <span class='fw-bold fs-5'>Liczba ogłoszeń na stronie: </span>
+              <label for="offersPerPageSelect" class='fw-bold fs-5'>Liczba ogłoszeń na stronie: </label>
               <select class="form-select ms-2 w-auto" aria-label="Liczba ogłoszeń na jednej stronie" id="offersPerPageSelect">
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -243,10 +252,12 @@
           element.classList.remove("bg-white");
         }
       });
+      UpdateTooltips();
     }
     GetOffers(); 
-    window.addEventListener("pageshow", () => document.querySelector("#deleteModeSwitch").checked = false);  
-    document.querySelector("#deleteModal").addEventListener("show.bs.modal", function() {
+    if(document.querySelector("#deleteModeSwitch") !== null)
+      window.addEventListener("pageshow", () => document.querySelector("#deleteModeSwitch").checked = false);  
+    document.querySelector("#deleteModal")?.addEventListener("show.bs.modal", function() {
       document.querySelector("#deleteCount").textContent = deletingOffers.length;
       document.querySelector("#deletingOffers").innerHTML = "";
       deletingOffers.forEach(offer => {
@@ -257,7 +268,7 @@
         document.querySelector("#deletingOffers").appendChild(input);
       });
     }); 
-  document.querySelector("#deleteForm").addEventListener("submit", () => {
+  document.querySelector("#deleteForm")?.addEventListener("submit", () => {
     const url = new URL(location.href);
     if(url.searchParams.has("page"))
         url.searchParams.delete("page");

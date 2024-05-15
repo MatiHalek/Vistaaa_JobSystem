@@ -49,7 +49,7 @@
 				echo "<p class='text-danger mb-0 fw-bold'><i class='bi bi-x-circle-fill me-2'></i>Imię i/lub nazwisko nie jest uzupełnione.</p>";
 				$completedProfile = false;
 			}		
-			if(!empty($_SESSION["logged"]["street"]) && !empty($_SESSION["logged"]["home_number"]) && !empty($_SESSION["logged"]["postcode"]) && !empty($_SESSION["logged"]["city"] && !ctype_space($_SESSION["logged"]["street"]) && !ctype_space($_SESSION["logged"]["home_number"]) && !ctype_space($_SESSION["logged"]["postcode"]) && !ctype_space($_SESSION["logged"]["city"])))
+			if(!empty($_SESSION["logged"]["street"]) && !empty($_SESSION["logged"]["home_number"]) && !empty($_SESSION["logged"]["postcode"]) && !empty($_SESSION["logged"]["city"]) && !ctype_space($_SESSION["logged"]["street"]) && !ctype_space($_SESSION["logged"]["home_number"]) && !ctype_space($_SESSION["logged"]["postcode"]) && !ctype_space($_SESSION["logged"]["city"]))
 				echo "<p class='text-success mb-0'><i class='bi bi-check-circle-fill me-2'></i><b>Adres: </b>".$_SESSION["logged"]["street"]." ".$_SESSION["logged"]["home_number"].", ".$_SESSION["logged"]["postcode"]." ".$_SESSION["logged"]["city"]."</p>";
 			else
 			{

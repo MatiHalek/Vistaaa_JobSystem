@@ -57,7 +57,7 @@
               {
                 echo "<section class='d-flex align-items-center mb-2'>";
                 echo "<input class='form-check-input' type='checkbox' value='' id='savedOffersCheckbox'>";
-                echo "<label class='fw-bold fs-5 ms-2 mt-1' for='savedOffersCheckbox'>Tylko zapisane</label>";              
+                echo "<label class='fw-bold fs-5 ms-2 mt-1 user-select-none' for='savedOffersCheckbox'>Tylko zapisane</label>";              
                 echo "</section>";
               }
             ?>
@@ -170,6 +170,8 @@
       history.replaceState(null, "", url);
       GetOffers();
     });
+    if(document.querySelector("#savedOffersCheckbox") !== null && new URL(location.href).searchParams.has("saved"))
+      document.querySelector("#savedOffersCheckbox").checked = true;
     async function GetOffers()
     {
       try
@@ -180,6 +182,8 @@
         sendData.append("page", page);
         sendData.append("sort", sort);
         sendData.append("offersPerPage", localStorage.getItem("offersPerPage"));
+        if(document.querySelector("#savedOffersCheckbox") !== null && document.querySelector("#savedOffersCheckbox").checked)
+          sendData.append("saved", "1");
         <?php
           foreach($searches as $search)
             echo "sendData.append(\"$search\", $search);\n";
@@ -273,6 +277,24 @@
     if(url.searchParams.has("page"))
         url.searchParams.delete("page");
     document.querySelector("#deleteForm").action = url.toString();
+  });
+  document.querySelector("#savedOffersCheckbox")?.addEventListener("change", function(){
+    if(this.checked)
+    {
+      const url = new URL(location.href);
+      url.searchParams.set("saved", "1");
+      history.replaceState(null, "", url);
+    }
+    else
+    {
+      const url = new URL(location.href);
+      if(url.searchParams.has("saved"))
+      {
+        url.searchParams.delete("saved");
+        history.replaceState(null, "", url);
+      }
+    }
+    GetOffers();
   });
   </script>
 </body>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 10, 2024 at 03:56 AM
+-- Generation Time: Maj 18, 2024 at 05:04 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -52,8 +52,7 @@ CREATE TABLE `advertisement` (
 
 INSERT INTO `advertisement` (`advertisement_id`, `title`, `company_id`, `position_name`, `position_level`, `contract_type`, `employment_type`, `work_type`, `salary_lowest`, `salary_highest`, `work_days`, `date_added`, `date_expiration`, `responsibilities`, `requirements`, `offer`) VALUES
 (1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', 'Pełny etat', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test'),
-(2, 'nowa2', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 1999.99, 3999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '2024-05-05 00:48:19', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf'),
-(3, 'nowa', 1, 'aaa', 'aaa', 'Umowa o dzieło', 'Pół etatu', 'Zdalna', 2000.00, 4000.00, 'aaaa', '2024-04-24 23:39:50', '2024-04-28 23:39:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+(2, 'nowa23', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 1999.99, 3999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '2024-05-05 00:48:19', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol\r\nehhhh', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf');
 
 -- --------------------------------------------------------
 
@@ -73,8 +72,7 @@ CREATE TABLE `advertisement_category` (
 
 INSERT INTO `advertisement_category` (`advertisement_category_id`, `advertisement_id`, `category_id`) VALUES
 (1, 1, 1),
-(3, 2, 1),
-(4, 3, 1);
+(12, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -219,15 +217,24 @@ INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `date_of_
 CREATE TABLE `user_applied` (
   `user_applied_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
-  `advertisement_id` int(10) UNSIGNED NOT NULL
+  `advertisement_id` int(10) UNSIGNED NOT NULL,
+  `applied_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 --
 -- Dumping data for table `user_applied`
 --
 
-INSERT INTO `user_applied` (`user_applied_id`, `user_id`, `advertisement_id`) VALUES
-(10, 1, 2);
+INSERT INTO `user_applied` (`user_applied_id`, `user_id`, `advertisement_id`, `applied_date`) VALUES
+(14, 1, 2, '2024-05-18 04:29:57');
+
+--
+-- Wyzwalacze `user_applied`
+--
+DELIMITER $$
+CREATE TRIGGER `add_applied_date` BEFORE INSERT ON `user_applied` FOR EACH ROW SET NEW.applied_date = NOW()
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -353,6 +360,13 @@ CREATE TABLE `user_saved` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `advertisement_id` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+--
+-- Dumping data for table `user_saved`
+--
+
+INSERT INTO `user_saved` (`user_saved_id`, `user_id`, `advertisement_id`) VALUES
+(20, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -500,13 +514,13 @@ ALTER TABLE `user_skill`
 -- AUTO_INCREMENT for table `advertisement`
 --
 ALTER TABLE `advertisement`
-  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `advertisement_category`
 --
 ALTER TABLE `advertisement_category`
-  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -548,7 +562,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_applied`
 --
 ALTER TABLE `user_applied`
-  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user_course`
@@ -584,7 +598,7 @@ ALTER TABLE `user_position`
 -- AUTO_INCREMENT for table `user_saved`
 --
 ALTER TABLE `user_saved`
-  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `user_skill`

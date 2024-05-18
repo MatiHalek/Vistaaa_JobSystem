@@ -6,6 +6,28 @@
 		header("Location: offerdetails.php?id=1");
 		exit();
 	}
+	if(!isset($_COOKIE["vistaaaRecentlyViewedOffers"]) || empty($_COOKIE["vistaaaRecentlyViewedOffers"]))
+		setcookie("vistaaaRecentlyViewedOffers", json_encode(array($_GET["id"])), time() + 30 * 24 * 3600, "/");
+	else
+	{
+		require "connect.php";
+		$connect = new mysqli($host, $db_user, $db_password, $db_name);
+		$recentlyViewed = json_decode($_COOKIE["vistaaaRecentlyViewedOffers"]);
+		$offer_ids = $connect->execute_query("SELECT advertisement_id FROM advertisement");
+		$offer_ids_array = array();
+		while($offer_id = $offer_ids->fetch_assoc())
+			array_push($offer_ids_array, $offer_id["advertisement_id"]);
+		for($i = 0; $i < count($recentlyViewed); $i++)
+		{
+			if(!in_array($recentlyViewed[$i], $offer_ids_array))
+				array_splice($recentlyViewed, $i, 1);
+		}			
+		array_unshift($recentlyViewed, $_GET["id"]);
+		$recentlyViewed = array_values(array_unique($recentlyViewed));
+		$recentlyViewed = array_slice($recentlyViewed, 0, 10);
+		setcookie("vistaaaRecentlyViewedOffers", json_encode($recentlyViewed), time() + 30 * 24 * 3600, "/");
+		$connect->close();
+	}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -132,7 +154,7 @@
 								<i class="bi bi-pencil-square"></i>
 							</div>
 							<div>
-								<strong>Rodzaj umowy</strong>
+								<strong class='text-secondary'>Rodzaj umowy</strong>
 								<p>{$row["contract_type"]}</p>
 							</div>
 						</div>
@@ -141,7 +163,7 @@
 								<i class="bi bi-person-vcard-fill"></i>
 							</div>
 							<div>
-								<strong>Stanowisko</strong>
+								<strong class='text-secondary'>Stanowisko</strong>
 								<p>{$row["position_name"]}</p>
 							</div>
 						</div>
@@ -150,7 +172,7 @@
 								<i class="bi bi-person-standing"></i>
 							</div>
 							<div>
-								<strong>Poziom stanowiska</strong>
+								<strong class='text-secondary'>Poziom stanowiska</strong>
 								<p>{$row["position_level"]}</p>
 							</div>
 						</div>
@@ -159,7 +181,7 @@
 								<i class="bi bi-clock-fill"></i>
 							</div>
 							<div>
-								<strong>Wymiar etatu</strong>
+								<strong class='text-secondary'>Wymiar etatu</strong>
 								<p>{$row["employment_type"]}</p>
 							</div>
 						</div>
@@ -168,7 +190,7 @@
 								<i class="bi bi-person-workspace"></i>
 							</div>
 							<div>
-								<strong>Rodzaj pracy</strong>
+								<strong class='text-secondary'>Rodzaj pracy</strong>
 								<p>{$row["work_type"]}</p>
 							</div>
 						</div>
@@ -177,7 +199,7 @@
 								<i class="bi bi-calendar2-week-fill"></i>
 							</div>
 							<div>
-								<strong>Godziny i dni pracy</strong>
+								<strong class='text-secondary'>Godziny i dni pracy</strong>
 				info;
 				echo "<p>".str_replace(["\r\n", "\r", "\n"], "<br>", $row["work_days"])."</p>";
 				echo "</div></div></div></section>";

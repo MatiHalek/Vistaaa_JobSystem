@@ -209,65 +209,61 @@
 					<div class="row text-center mt-3">
 							<button type="submit" class="w-75 successButton w-auto mx-auto text-decoration-none" href="#"><i class="bi bi-search me-2"></i>Szukaj</button>
 					</div>
-				</form>
-				
+				</form>				
 			</section>
-			<section id="latestOffers">
-				<h2 class="text-center py-2">Ostatnio oglądane</h2>
-				<div class="d-flex overflow-y-auto" style="gap: .5rem;">
-					<div style="width: 280px;" class="flex-shrink-0">
-						<div class="card h-100">
-							<div class="card-body">
-							<h5 class="card-title">Tytuł ogłoszenia</h5>
-							<p class="card-text">Treść ogłoszenia</p>
-							</div>
-							<div class="card-footer">
-							<small class="text-body-secondary">Przeglądane 58 sekund temu</small>
-							</div>
-						</div>
-					</div>
-					<div style="width: 280px;" class="flex-shrink-0">
-						<div class="card h-100">
-							<div class="card-body">
-							<h5 class="card-title">Tytuł ogłoszenia</h5>
-							<p class="card-text">Treść ogłoszenia</p>
-							</div>
-							<div class="card-footer">
-							<small class="text-body-secondary">Przeglądane 58 sekund temu</small>
-							</div>
-						</div>
-					</div><div style="width: 280px;" class="flex-shrink-0">
-						<div class="card h-100">
-							<div class="card-body">
-							<h5 class="card-title">Tytuł ogłoszenia</h5>
-							<p class="card-text">Treść ogłoszenia</p>
-							</div>
-							<div class="card-footer">
-							<small class="text-body-secondary">Przeglądane 58 sekund temu</small>
-							</div>
-						</div>
-					</div><div style="width: 280px;" class="flex-shrink-0">
-						<div class="card h-100">
-							<div class="card-body">
-							<h5 class="card-title">Tytuł ogłoszenia</h5>
-							<p class="card-text">Treść ogłoszenia</p>
-							</div>
-							<div class="card-footer">
-							<small class="text-body-secondary">Przeglądane 58 sekund temu</small>
-							</div>
-						</div>
-					</div><div style="width: 280px;" class="flex-shrink-0">
-						<div class="card h-100">
-							<div class="card-body">
-							<h5 class="card-title">Tytuł ogłoszenia</h5>
-							<p class="card-text">Treść ogłoszenia</p>
-							</div>
-							<div class="card-footer">
-							<small class="text-body-secondary">Przeglądane 58 sekund temu</small>
-							</div>
-						</div>
-					</div>
-				</div>
+			<section id="recentlyViewedOffers">
+				<?php
+					$months = array("stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia");
+					if(isset($_COOKIE["vistaaaRecentlyViewedOffers"]) && !empty($_COOKIE["vistaaaRecentlyViewedOffers"]))
+					{
+						$heading = "oglądane";
+						$recentlyViewed = json_decode($_COOKIE["vistaaaRecentlyViewedOffers"]);
+					}
+					else
+					{
+						$heading = "dodane";
+						$recentOffers = $connect->execute_query("SELECT advertisement_id FROM advertisement ORDER BY date_added DESC LIMIT 10");
+						$recentlyViewed = array();
+						while($row = $recentOffers->fetch_assoc())
+							array_push($recentlyViewed, $row["advertisement_id"]);
+					}
+					echo "<h2 class='text-center py-2'>Ostatnio $heading</h2>";
+					echo "<div class='d-flex overflow-y-auto'>";
+					foreach($recentlyViewed as $id)
+					{
+						$offerResult = $connect->execute_query("SELECT *, IF(date_expiration >= NOW(), 1, 0) AS available FROM advertisement INNER JOIN company USING(company_id) WHERE advertisement_id = ?", [$id]);
+						if($offerResult->num_rows > 0)
+						{
+							while($row = $offerResult->fetch_assoc())
+							{
+								echo "<div class='flex-shrink-0'>";
+								echo "<a data-offer='".$row["advertisement_id"]."' class='d-block w-100 text-decoration-none bg-white shadow rounded position-relative p-3 pt-4 position-relative jobOffer ".($row["available"] == 0 ? " jobOfferDisabled" : "")."' href='offerdetails.php?id=".$row["advertisement_id"]."'>";
+								$date_added = new DateTime($row["date_added"]);
+								echo "<div class='position-absolute bg-success text-white rounded-pill py-1 px-3 top-0'>".$date_added->format("j")." ".mb_substr($months[(int)($date_added->format("n")) - 1], 0, 3)." ".$date_added->format("Y")."</div>";
+								$categoryResult = $connect->execute_query('SELECT name FROM advertisement_category INNER JOIN category USING(category_id) WHERE advertisement_id = ?', [$row["advertisement_id"]]);
+								$categoryArray = array();
+								while($categoryRow = $categoryResult->fetch_assoc())
+									array_push($categoryArray, $categoryRow["name"]);
+								echo "<p class='text-secondary fw-bold fs-6 mb-1 me-4'>".implode(", ", $categoryArray)."</p>";
+								if(isset($_SESSION["logged"]) && array_key_exists("user_id", $_SESSION["logged"]))
+								{
+									$savedResult = $connect->execute_query('SELECT * FROM user_saved WHERE user_id = ? AND advertisement_id = ?', [$_SESSION["logged"]["user_id"], $row["advertisement_id"]]);
+									if($savedResult->num_rows > 0)
+										echo "<div data-bs-toggle='tooltip' title='Zapisano' class='color-orange mt-4 me-3 position-absolute end-0 top-0'><i class='fs-4 bi bi-star-fill'></i></div>";
+								}
+								echo "<p class='text-primary fw-bold fs-5 mb-0'>{$row["title"]}</p>";           
+								echo "<p class='text-primary-emphasis mb-2'>przez: ".$row["name"]."</p>";             
+								echo "<p class='text-success fw-bold'>".(is_null($row["salary_lowest"]) ? number_format($row["salary_highest"], 2, ",", " ") : number_format($row["salary_lowest"], 2, ",", " ")." - ".number_format($row["salary_highest"], 2, ",", " "))." zł</p>";
+								echo "<hr class='text-body-tertiary'>";
+								echo "<p class='text-body-secondary'>".mb_strtolower($row["position_level"])." &#x2022; ".mb_strtolower($row["contract_type"])." &#x2022; ".strtolower($row["employment_type"])." &#x2022; ".mb_strtolower($row["work_type"])."</p>";
+								echo "</a>";
+								echo "</div>";
+							}
+							
+						}
+					}
+					echo "</div>";							
+				?>
 			</section>
 		</article>			
 	</main>

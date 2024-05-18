@@ -93,12 +93,21 @@ html, body
 {
 	background-color: transparent;
 }
+#recentlyViewedOffers > div
+{
+	gap: .5rem;
+	padding: 1.25rem;
+}
+#recentlyViewedOffers > div > div
+{
+	width: 280px;
+}
 .formInput > :is(input, textarea):placeholder-shown:not(:focus) ~ label
 {
     font-size: 1.2rem;
     top: 50%;
     transform: translateY(-50%);
-    left: .25rem;
+    left: .35rem;
     pointer-events: none;
 	text-transform: none;
 	font-weight: normal;

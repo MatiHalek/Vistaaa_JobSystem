@@ -10,7 +10,7 @@
     $sortColumn = array(", salary_highest DESC");
     $search = (isset($_POST["search"]) && !empty($_POST["search"]) && !ctype_space($_POST["search"])) ? " AND POSITION(TRIM('".$_POST["search"]."') IN title) > 0" : "";
     $search_filters = array("position_name", "category", "city", "company", "position_level", "contract_type", "employment_type", "work_type");
-    foreach($search_filters as $filter)
+    foreach($search_filters as $filter) 
     {
         if(isset($_POST[$filter]) && !empty($_POST[$filter]) && !ctype_space($_POST[$filter]))
         {
@@ -24,6 +24,8 @@
             $search .= " AND $filter IN ('".$tmp."')";
         }
     }
+    if(isset($_SESSION["logged"]) && array_key_exists("user_id", $_SESSION["logged"]) && isset($_POST["saved"]) && $_POST["saved"] == 1)
+        $search .= " AND advertisement_id IN (SELECT advertisement_id FROM user_saved WHERE user_id = ".$_SESSION["logged"]["user_id"].")";
     $sort = (isset($_POST["sort"]) && in_array($_POST["sort"], $sortOptions)) ? $sortColumn[array_search($_POST["sort"], $sortOptions)] : ", date_added DESC";
     $offersPerPage = (isset($_POST["offersPerPage"]) && is_numeric($_POST["offersPerPage"]) && $_POST["offersPerPage"] > 0) ? $_POST["offersPerPage"] : 20;
     /*$query_company = "<br>SELECT *, 1 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = 1 AND date_expiration >= NOW()".$search." UNION SELECT *, 0 AS available FROM advertisement INNER JOIN company USING(company_id) WHERE company_id = 1 AND date_expiration < NOW()".$search." ORDER BY available DESC".$sort." LIMIT ".(($page - 1) * $offersPerPage).", ".$offersPerPage.";";

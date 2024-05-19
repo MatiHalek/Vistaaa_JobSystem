@@ -43,7 +43,7 @@
     $totalPages = ceil($totalOffers / $offersPerPage);
     if($result->num_rows > 0)
     {
-        echo "<p class='text-center signika-negative fs-4 fw-bold'>Znalezione wyniki: ".$totalOffers."</p>";
+        echo "<p class='text-center signika-negative fs-4 mt-5 fw-bold'>Znalezione wyniki: ".$totalOffers."</p>";
         $months = array("stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia");
         while($row = $result->fetch_assoc())
         {

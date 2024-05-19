@@ -159,25 +159,33 @@
 				echo "<div class='container'>";
 				echo "<section class='p-2'>";
 				echo "<h4>Doświadczenie zawodowe</h4>";
-				$positionResult = $connect->execute_query("SELECT * FROM user_position INNER JOIN company USING(company_id) WHERE user_id = ? ORDER BY date_start DESC;", [$_GET["id"]]);
 				$months = array("stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia");
-				if($positionResult->num_rows > 0)
+				if(!$editMode)
 				{
-					while($positionRow = $positionResult->fetch_assoc())
+					$positionResult = $connect->execute_query("SELECT * FROM user_position INNER JOIN company USING(company_id) WHERE user_id = ? ORDER BY date_start DESC;", [$_GET["id"]]);
+					if($positionResult->num_rows > 0)
 					{
-						echo "<div class='d-flex mt-2'>";
-						$dateStart = new DateTime($positionRow["date_start"]);
-						$dateEnd = new DateTime($positionRow["date_end"]);
-						echo "<div class='profilePositionDate border-end border-black border-2'><b>".$dateStart->format("j")." ".$months[(int)($dateStart->format("n")) - 1]." ".$dateStart->format("Y")." r. - ".($positionRow["date_end"] != null ? ($dateEnd->format("j")." ".$months[(int)($dateEnd->format("n")) - 1]." ".$dateEnd->format("Y")." r. ") : "nadal")."</b></div>";
-						echo "<div class='profilePositionInfo p-2'>";
-						echo "<p class='mb-0 fs-5 text-break signika-negative'><i>".$positionRow["name"]."</i></p>";
-						echo "<p class='mb-0'>".$positionRow["street"]." ".$positionRow["number"].", ".$positionRow["postcode"]." ".$positionRow["city"]."</p>";
-						echo "<p class='mb-0 text-primary'>".$positionRow["position"]."</p>";
-						echo "</div></div>";
+						while($positionRow = $positionResult->fetch_assoc())
+						{
+							echo "<div class='d-flex mt-2'>";
+							$dateStart = new DateTime($positionRow["date_start"]);
+							$dateEnd = new DateTime($positionRow["date_end"]);
+							echo "<div class='profilePositionDate border-end border-black border-2'><b>".$dateStart->format("j")." ".$months[(int)($dateStart->format("n")) - 1]." ".$dateStart->format("Y")." r. - ".($positionRow["date_end"] != null ? ($dateEnd->format("j")." ".$months[(int)($dateEnd->format("n")) - 1]." ".$dateEnd->format("Y")." r. ") : "nadal")."</b></div>";
+							echo "<div class='profilePositionInfo p-2'>";
+							echo "<p class='mb-0 fs-5 text-break signika-negative'><i>".$positionRow["name"]."</i></p>";
+							echo "<p class='mb-0'>".$positionRow["street"]." ".$positionRow["number"].", ".$positionRow["postcode"]." ".$positionRow["city"]."</p>";
+							echo "<p class='mb-0 text-primary'>".$positionRow["position"]."</p>";
+							echo "</div></div>";
+						}
 					}
+					else
+						echo "<div class='alert alert-info information'><strong>Brak informacji o doświadczeniu zawodowym.</strong></div>";
 				}
 				else
-					echo "<div class='alert alert-info information'><strong>Brak informacji o doświadczeniu zawodowym.</strong></div>";
+				{
+					echo "<button type='button' class='commonButton addToProfileButton py-2 px-3' id='addExperienceButton'><i class='bi bi-plus-circle-fill me-2'></i>Dodaj pracę</button>";
+					echo "<div id='userExperiences'></div>";
+				}				
 				echo "</section></div><hr>";
 				echo "<div class='container'>";
 				echo "<section class='p-2'>";
@@ -253,32 +261,66 @@
 				echo "<div class='container'>";
 				echo "<section class='p-2'>";
 				echo "<h4>Kursy, szkolenia, certyfikaty</h4>";
-				$courseResult = $connect->execute_query("SELECT user_course.name AS course_name, company.name AS company_name, user_course.date_start, user_course.date_end FROM user_course INNER JOIN company USING(company_id) WHERE user_id = ? ORDER BY date_start DESC;", [$_GET["id"]]);
-				if($courseResult->num_rows > 0)
+				if(!$editMode)
 				{
-					echo "<div class='accordion' id='accordionExample'>";
-					$i = 1;
-					while($courseRow = $courseResult->fetch_assoc())
+					$courseResult = $connect->execute_query("SELECT user_course.name AS course_name, company.name AS company_name, user_course.date_start, user_course.date_end FROM user_course INNER JOIN company USING(company_id) WHERE user_id = ? ORDER BY date_start DESC;", [$_GET["id"]]);
+					if($courseResult->num_rows > 0)
 					{
-						echo "<div class='accordion-item'>";
-						echo "<h2 class='accordion-header'>";
-						echo "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapse".$i."' aria-controls='collapse".$i."'>";
-						echo $i.". ".$courseRow["course_name"];
-						echo "</button></h2>";
-						echo "<div id='collapse".$i."' class='accordion-collapse collapse' data-bs-parent='#accordionExample'>";
-						echo "<div class='accordion-body'>";
-						echo "<p><strong>Organizator: </strong>".$courseRow["company_name"]."</p>";
-						echo "<p><strong>Data: </strong>".date("j.m.Y", strtotime($courseRow["date_start"]))." r.".($courseRow["date_end"] != null ? (" - ".date("j.m.Y", strtotime($courseRow["date_end"]))." r.") : "")."</p>";
-						echo "</div></div></div>";
-						$i++;
+						echo "<div class='accordion' id='accordionExample'>";
+						$i = 1;
+						while($courseRow = $courseResult->fetch_assoc())
+						{
+							echo "<div class='accordion-item'>";
+							echo "<h2 class='accordion-header'>";
+							echo "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapse".$i."' aria-controls='collapse".$i."'>";
+							echo $i.". ".$courseRow["course_name"];
+							echo "</button></h2>";
+							echo "<div id='collapse".$i."' class='accordion-collapse collapse' data-bs-parent='#accordionExample'>";
+							echo "<div class='accordion-body'>";
+							echo "<p><strong>Organizator: </strong>".$courseRow["company_name"]."</p>";
+							echo "<p><strong>Data: </strong>".date("j.m.Y", strtotime($courseRow["date_start"]))." r.".($courseRow["date_end"] != null ? (" - ".date("j.m.Y", strtotime($courseRow["date_end"]))." r.") : "")."</p>";
+							echo "</div></div></div>";
+							$i++;
+						}
+						echo "</div>";
 					}
-					echo "</div>";
+					else
+						echo "<div class='alert alert-info information'><strong>Brak informacji o kursach, szkoleniach, certyfikatach.</strong></div>";
 				}
 				else
-					echo "<div class='alert alert-info information'><strong>Brak informacji o kursach, szkoleniach, certyfikatach.</strong></div>";
+				{
+					echo "<button type='button' class='commonButton addToProfileButton py-2 px-3' id='addCourseButton'><i class='bi bi-plus-circle-fill me-2'></i>Dodaj kurs/szkolenie</button>";
+					echo "<div id='userCourses'></div>";
+				}				
 				echo "</section></div>";
 				if($editMode)
 				{
+					echo "<hr><div class='container'>";
+					echo "<section class='p-2'>";
+					echo "<h4>Aktywne aplikacje</h4>";
+					$applicationResult = $connect->execute_query("SELECT * FROM user_applied INNER JOIN advertisement USING(advertisement_id) INNER JOIN company USING(company_id) WHERE user_id = ?", [$_GET["id"]]);
+					if($applicationResult->num_rows > 0)
+					{
+						while($applicationRow = $applicationResult->fetch_assoc())
+						{
+							echo "<a href='offerdetails.php?id=".$applicationRow["advertisement_id"]."' class='profileAppliedOffers text-black text-decoration-none bg-white rounded m-3 p-2 d-flex align-items-center flex-wrap'>";
+							$path = './img/company/'.$applicationRow["company_id"].'/';
+							$files = array_diff(scandir($path ? $path : "./img/company/default"), array(".", "..", "default"));
+							echo "<img title='".$applicationRow["name"]."' data-bs-toggle='tooltip' class='bg-white' src='".(count($files) > 0 ? ($path.scandir($path)[2]) : "./img/user.png")."' alt='Logo firmy ".$applicationRow["name"]."' width='100' height='100'>";
+							echo "<div class='flex-grow-1 fs-5 fw-bold signika-negative'>".$applicationRow["title"]."</div>";
+							echo "<div class='flex-grow-1'>";
+							echo "<p class='text-body-secondary mb-0'>Poziom stanowiska: <i>".mb_strtolower(htmlspecialchars($applicationRow["position_level"]))."</i></p>";
+							echo "<p class='text-body-secondary mb-0'>Rodzaj umowy: <i>".mb_strtolower(htmlspecialchars($applicationRow["contract_type"]))."</i></p>";
+							echo "<p class='text-body-secondary mb-0'>Rodzaj zatrudnienia: <i>".mb_strtolower(htmlspecialchars($applicationRow["employment_type"]))."</i></p>";
+							echo "<p class='text-body-secondary mb-0'>Rodzaj pracy: <i>".mb_strtolower(htmlspecialchars($applicationRow["work_type"]))."</i></p>";
+							echo "</div>";
+							$date_applied = new DateTime($applicationRow["applied_date"]);
+							echo "<div><i class='bi bi-alarm-fill me-2'></i>Aplikowano ".$date_applied->format("j")." ".mb_substr($months[(int)($date_applied->format("n")) - 1], 0, 3)." ".$date_applied->format("Y")."</div>";
+							echo "</a>";
+						}
+					}
+					else
+						echo "<div class='alert alert-info information'><strong>Brak aktywnych aplikacji.</strong></div>";
 					echo "<button type='submit' class='successButton d-block mx-auto mt-3'><i class='bi bi-check-circle-fill me-2'></i>Zapisz zmiany</button>";
 					echo "</form>";
 				}
@@ -338,6 +380,8 @@
 		const languages = [];
 		const languageValues = ["podstawowy", "średniozaawansowany", "zaawansowany"];
 		let languageDivsCount = 0;
+		let experienceDivsCount = 0;
+		let courseDivsCount = 0;
 		<?php
 			if($editMode && (!isset($_GET["type"]) || $_GET["type"] != "company"))
 			{
@@ -349,6 +393,27 @@
 				}
 			}
 		?>
+		function GetCompaniesSelect(id, forCourses = false, selected = null)
+		{
+			let companiesSelect = "<select name='profile_" + (forCourses ? "courses" : "experiences") + "_companies[]' class='form-control form-select' id='" + (forCourses ? ("cc" + id) : ("ec" + id)) + "' required><option value='' disabled selected hidden>Wybierz...</option>";
+			<?php
+				if($editMode && (!isset($_GET["type"]) || $_GET["type"] != "company"))
+				{
+					$result = $connect->execute_query('SELECT * FROM company');
+					if($result->num_rows > 0)
+					{
+						while($row = $result->fetch_assoc())
+						{
+							echo "let tmp = ".$row["company_id"].";";
+							echo "companiesSelect += \"<option value='".$row["company_id"]."'\" + ((tmp == selected) ? \" selected\" : \"\") + \">".htmlspecialchars($row["name"])."</option>\";";
+						}
+							
+					}
+				}
+			?>
+			companiesSelect += "</select>";
+			return companiesSelect;
+		}
 		const oldImage = document.querySelector("#profilePicture").getAttribute("src");
 		document.querySelector("input[type='file']")?.addEventListener("change", function(){
 		if(this.files[0])
@@ -362,6 +427,26 @@
 			document.querySelector("#uploadedFileName").textContent = "";
 		}
 		});
+		function AddExperience(dateFrom = "", dateTo = "", companyId = "", position = "")
+		{
+			if(document.querySelector("#userExperiences").children.length >= 10)
+                return;
+			document.querySelector("#userExperiences").innerHTML += `<div class='d-flex align-items-center py-3'><div class='row flex-grow-1'><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><label class='position-absolute' for='edf${experienceDivsCount}'>Data rozpoczęcia</label><input type='date' id='edf${experienceDivsCount}' name='profile_experiences_dates_from[]' class='form-control' value='${dateFrom}' required></div></div><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><label class='position-absolute' for='edt${experienceDivsCount}'>Data zakończenia</label><input type='date' value='${dateTo}' id='edt${experienceDivsCount}' name='profile_experiences_dates_to[]' class='form-control'></div></div><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><label class='position-absolute' for='ec${experienceDivsCount}'>Firma</label>${((companyId == "") ? GetCompaniesSelect(experienceDivsCount) : GetCompaniesSelect(experienceDivsCount, false, companyId))}</div></div><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><input type='text' value='${position}' placeholder='Stanowisko' id='ep${experienceDivsCount}' name='profile_experiences_positions[]' class='form-control' required><label class='position-absolute' for='ep${experienceDivsCount}'>Stanowisko</label></div></div></div><button class='dangerButton mt-2' type='button' onclick='bootstrap.Tooltip.getInstance(this).dispose();
+				this.parentElement.remove();' data-bs-toggle='tooltip' title='Usuń pracę'><span class='bi bi-trash-fill'></span></button></div>`;
+			UpdateTooltips();
+			experienceDivsCount++;
+		}
+		document.querySelector("#addExperienceButton")?.addEventListener("click", () => AddExperience());
+		function AddCourse(dateFrom = "", dateTo = "", companyId = "", name = "")
+		{
+			if(document.querySelector("#userCourses").children.length >= 10)
+                return;
+			document.querySelector("#userCourses").innerHTML += `<div class='d-flex align-items-center py-3'><div class='row flex-grow-1'><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><label class='position-absolute' for='cdf${courseDivsCount}'>Data rozpoczęcia</label><input type='date' id='cdf${courseDivsCount}' name='profile_experiences_dates_from[]' class='form-control' value='${dateFrom}' required></div></div><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><label class='position-absolute' for='cdt${courseDivsCount}'>Data zakończenia</label><input type='date' value='${dateTo}' id='cdt${courseDivsCount}' name='profile_experiences_dates_to[]' class='form-control'></div></div><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><label class='position-absolute' for='cc${courseDivsCount}'>Firma</label>${((companyId == "") ? GetCompaniesSelect(experienceDivsCount, true) : GetCompaniesSelect(courseDivsCount, true, companyId))}</div></div><div class='col-12 col-sm-6 col-lg-3'><div class='position-relative formInput mt-3'><input type='text' value='${name}' placeholder='Nazwa' id='cn${courseDivsCount}' name='profile_experiences_positions[]' class='form-control' required><label class='position-absolute' for='cc${courseDivsCount}'>Nazwa</label></div></div></div><button class='dangerButton mt-2' type='button' onclick='bootstrap.Tooltip.getInstance(this).dispose();
+				this.parentElement.remove();' data-bs-toggle='tooltip' title='Usuń kurs/szkolenie'><span class='bi bi-trash-fill'></span></button></div>`;
+			UpdateTooltips();
+			experienceDivsCount++;
+		}
+		document.querySelector("#addCourseButton")?.addEventListener("click", () => AddCourse());
 		function AddSkill(value = "")
         {
             if(document.querySelector("#userSkills").children.length >= 10)
@@ -398,7 +483,7 @@
             if(document.querySelector("#userLanguages").children.length >= languages.length)
                 return;
             const languageDiv = document.createElement("div");
-			languageDiv.className = "d-flex m-2";
+			languageDiv.className = "d-flex m-2 flex-wrap justify-content-center";
             document.querySelector("#userLanguages").appendChild(languageDiv);
 			const languageLabelDiv = document.createElement("div");
 			languageLabelDiv.className = "position-relative formInput mt-3 flex-grow-1 me-2";
@@ -420,7 +505,7 @@
 			for(let i = 0; i < languages.length; i++)
 				newLanguage.options.add(new Option(languages[i].name, languages[i].id, languages[i].id == language.id, languages[i].id == language.id));
             newLanguage.name = "profile_languages[]";
-            newLanguage.className = "form-control";          
+            newLanguage.className = "form-control form-select";          
             languageLabelDiv.appendChild(newLanguage);
             newLanguage.setAttribute("required", "");
             const newLanguageValue = document.createElement("select");
@@ -443,7 +528,7 @@
 			for(let i = 0; i < languageValues.length; i++)
 				newLanguageValue.options.add(new Option(languageValues[i], languageValues[i], languageValues[i] == language.level, languageValues[i] == language.level));
             newLanguageValue.name = "profile_language_values[]";
-            newLanguageValue.className = "form-control";          
+            newLanguageValue.className = "form-control form-select";          
             languageValueLabelDiv.appendChild(newLanguageValue);
             newLanguageValue.setAttribute("required", "");
             const deleteButton = document.createElement("button");
@@ -481,6 +566,22 @@
 					echo "AddLanguage(new Language('".$row["language_id"]."', '".htmlspecialchars($row["language"])."', '".htmlspecialchars($row["level"])."'));";
 				echo "</script>";                  
 			}      
+			$result = $connect->execute_query(("SELECT * FROM user_position WHERE user_id = ? LIMIT 10"), [$_GET["id"]]);
+			if($result->num_rows > 0)
+			{
+				echo "<script>";
+				while($row = $result->fetch_assoc())
+					echo "AddExperience('".htmlspecialchars($row["date_start"])."', '".htmlspecialchars($row["date_end"])."', '".htmlspecialchars($row["company_id"])."', '".htmlspecialchars($row["position"])."');";
+				echo "</script>";
+			}
+			$result = $connect->execute_query('SELECT * FROM user_course WHERE user_id = ? LIMIT 10', [$_GET["id"]]);
+			if($result->num_rows > 0)
+			{
+				echo "<script>";
+				while($row = $result->fetch_assoc())
+					echo "AddCourse('".htmlspecialchars($row["date_start"])."', '".htmlspecialchars($row["date_end"])."', '".htmlspecialchars($row["company_id"])."', '".htmlspecialchars($row["name"])."');";
+				echo "</script>";
+			}
             $result->free_result();
         }       
         $connect->close();

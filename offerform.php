@@ -130,7 +130,7 @@
 			$connect = new mysqli($host, $db_user, $db_password, $db_name);
 			if($editing)
 			{
-				$connect->execute_query('UPDATE advertisement SET title = ?, company_id = ?, position_name = ?, position_level = ?, contract_type = ?, employment_type = ?, work_type = ?, work_days = ?, salary_lowest = ?, salary_highest = ?, date_expiration = ?, responsibilities = ?, requirements = ?, offer = ? WHERE advertisement_id = ?', [$_POST["title"], $companyId, $_POST["name"], $_POST["level"], $contract_types[$_POST["contract"]], $employment_types[$_POST["employment"]], $work_types[$_POST["work"]], $_POST["days"], $_POST["salary_lowest"], $_POST["salary_highest"], $_POST["date"], $_POST["responsibilities"], $_POST["requirements"], $_POST["offer"], $_POST["id"]]);
+				$connect->execute_query('UPDATE advertisement SET title = ?, company_id = ?, position_name = ?, position_level = ?, contract_type = ?, employment_type = ?, work_type = ?, work_days = ?, salary_lowest = ?, salary_highest = ?, date_expiration = ?, responsibilities = ?, requirements = ?, offer = ? WHERE advertisement_id = ?', [$_POST["title"], $companyId, $_POST["name"], $_POST["level"], $contract_types[$_POST["contract"]], $employment_types[$_POST["employment"]], $work_types[$_POST["work"]], $_POST["days"], ((!isset($_POST["salary_lowest"]) || empty($_POST["salary_lowest"])) ? null : $_POST["salary_lowest"]), $_POST["salary_highest"], $_POST["date"], $_POST["responsibilities"], $_POST["requirements"], $_POST["offer"], $_POST["id"]]);
 				$connect->execute_query('DELETE FROM advertisement_category WHERE advertisement_id = ?', [$_POST["id"]]);
 				foreach($_POST["category"] as $category)
 					$connect->execute_query('INSERT INTO advertisement_category (advertisement_id, category_id) VALUES (?, ?)', [$_POST["id"], $category]);
@@ -138,7 +138,7 @@
 			}
 			else
 			{
-				$connect->execute_query('INSERT INTO advertisement (title, company_id, position_name, position_level, contract_type, employment_type, work_type, work_days, salary_lowest, salary_highest, date_added, date_expiration, responsibilities, requirements, offer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$_POST["title"], $companyId, $_POST["name"], $_POST["level"], $contract_types[$_POST["contract"]], $employment_types[$_POST["employment"]], $work_types[$_POST["work"]], $_POST["days"], $_POST["salary_lowest"], $_POST["salary_highest"], date("Y-m-d H:i:s"), $_POST["date"], $_POST["responsibilities"], $_POST["requirements"], $_POST["offer"]]);
+				$connect->execute_query('INSERT INTO advertisement (title, company_id, position_name, position_level, contract_type, employment_type, work_type, work_days, salary_lowest, salary_highest, date_added, date_expiration, responsibilities, requirements, offer) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [$_POST["title"], $companyId, $_POST["name"], $_POST["level"], $contract_types[$_POST["contract"]], $employment_types[$_POST["employment"]], $work_types[$_POST["work"]], $_POST["days"], ((!isset($_POST["salary_lowest"]) || empty($_POST["salary_lowest"])) ? null : $_POST["salary_lowest"]), $_POST["salary_highest"], date("Y-m-d H:i:s"), $_POST["date"], $_POST["responsibilities"], $_POST["requirements"], $_POST["offer"]]);
 				$returnedId = $connect->insert_id;
 				foreach($_POST["category"] as $category)
 					$connect->execute_query('INSERT INTO advertisement_category (advertisement_id, category_id) VALUES (?, ?)', [$returnedId, $category]);

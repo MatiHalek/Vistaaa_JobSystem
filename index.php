@@ -228,7 +228,7 @@
 							array_push($recentlyViewed, $row["advertisement_id"]);
 					}
 					echo "<h2 class='text-center py-2'>Ostatnio $heading</h2>";
-					echo "<div class='d-flex overflow-y-auto'>";
+					echo "<div class='position-relative'><button type='button' title='Wstecz' class='position-absolute border-0 rounded-circle bg-primary text-white'><i class='bi bi-caret-left-fill fs-5'></i></button><div class='d-flex overflow-y-auto'>";
 					foreach($recentlyViewed as $id)
 					{
 						$offerResult = $connect->execute_query("SELECT *, IF(date_expiration >= NOW(), 1, 0) AS available FROM advertisement INNER JOIN company USING(company_id) WHERE advertisement_id = ?", [$id]);
@@ -262,7 +262,7 @@
 							
 						}
 					}
-					echo "</div>";							
+					echo "</div><button type='button' title='Dalej' class='position-absolute border-0 rounded-circle bg-primary text-white'><i class='bi bi-caret-right-fill fs-5'></i></button></div>";							
 				?>
 			</section>
 		</article>			
@@ -350,6 +350,34 @@
 		}
 		UpdateInputs();
 		window.addEventListener("pageshow", UpdateInputs);
+		document.querySelector("#recentlyViewedOffers > div > div")?.addEventListener("scroll", function(){
+			if(this.offsetWidth + this.scrollLeft >= this.scrollWidth)
+				this.parentElement.parentElement.classList.remove("moreRight");
+			else
+				this.parentElement.parentElement.classList.add("moreRight");
+			if (this.scrollLeft === 0)
+        		this.parentElement.parentElement.classList.remove("moreLeft");
+    		else
+        		this.parentElement.parentElement.classList.add("moreLeft");
+		});
+		function TriggerScrollEvent()
+		{
+			document.querySelector("#recentlyViewedOffers > div > div").dispatchEvent(new Event("scroll"));
+		}
+		addEventListener("resize", TriggerScrollEvent);
+		TriggerScrollEvent();
+		document.querySelector("#recentlyViewedOffers > div > button:first-of-type").addEventListener("click", function() {
+			document.querySelector("#recentlyViewedOffers > div > div").scrollBy({
+      			left: -140,
+      			behavior: 'smooth'
+    		});
+		});
+		document.querySelector("#recentlyViewedOffers > div > button:last-of-type").addEventListener("click", function() {
+			document.querySelector("#recentlyViewedOffers > div > div").scrollBy({
+	  			left: 140,
+	  			behavior: 'smooth'
+			});
+		});
 	</script>
 </body>
 </html>

@@ -95,10 +95,38 @@ html, body
 }
 #recentlyViewedOffers > div
 {
+	padding: 0 1rem;
+}
+#recentlyViewedOffers > div > div
+{
 	gap: .5rem;
 	padding: 1.25rem;
 }
-#recentlyViewedOffers > div > div
+#recentlyViewedOffers > div::after, #recentlyViewedOffers > div::before
+{
+	content: '';
+    position: absolute;
+    inset: calc(1.25rem - 6px) .8rem auto auto;
+    width: 80px;
+    height: calc(100% - 2.5rem + 12px);
+    display: block;
+    pointer-events: none;
+    background-image: linear-gradient(to right, transparent 40%, rgb(65 105 225 / .5));
+    filter: blur(3px);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity .5s ease-in-out;
+}
+#recentlyViewedOffers > div::before
+{
+	inset: calc(1.25rem - 6px) auto auto .8rem;
+	transform: scaleX(-1);
+}
+#recentlyViewedOffers.moreRight > div::after, #recentlyViewedOffers.moreLeft > div::before
+{
+	opacity: .8;
+}
+#recentlyViewedOffers > div > div > div
 {
 	width: 280px;
 }
@@ -451,7 +479,7 @@ footer
 {
 	margin-left: -.5rem;
 }
-#editOfferButton
+#editOfferButton, #recentlyViewedOffers > div > button
 {
 	width: 3rem;
 	height: 3rem;
@@ -459,7 +487,26 @@ footer
 	transform: translateY(.5rem);
 	z-index: 2;
 }
-#editOfferButton:hover
+#recentlyViewedOffers > div > button
+{
+	top: 50%;
+	left: 1.25rem;
+	transform: translateY(-50%);
+	visibility: hidden;
+	opacity: 0;
+	transition: opacity .5s ease-in-out, visibility .1s, filter .3s ease-in-out;
+}
+:is(#recentlyViewedOffers.moreRight > div > button:last-of-type, #recentlyViewedOffers.moreLeft > div > button:first-of-type)
+{
+	visibility: visible;
+	opacity: 1;
+}
+#recentlyViewedOffers > div > button:last-of-type
+{
+	left: initial;
+	right: 1.25rem;
+}
+:is(#editOfferButton, #recentlyViewedOffers > div > button):hover
 {
 	filter: brightness(1.5);
 }
@@ -487,6 +534,19 @@ footer
 #profilePictureEdit label:hover::after
 {
 	opacity: 1;
+}
+.profileAppliedOffers
+{
+	gap: .75rem;
+	transition: box-shadow .3s ease-in-out;
+}
+.profileAppliedOffers:hover
+{
+	box-shadow: rgb(0 0 0 / .15) 0px .5rem 1rem 0px;
+}
+.profileAppliedOffers > img
+{
+	object-fit: cover;
 }
 #searchCheckboxes input
 {

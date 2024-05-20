@@ -570,3 +570,7 @@ footer
 	align-items: center;
 	pointer-events: none;
 }
+#error404 > img
+{
+	max-width: 520px;
+}

@@ -39,7 +39,7 @@
 			$success = false;
 			$_SESSION["offer_error_category"] = "Musisz wybrać co najmniej jedną kategorię.";
 		}
-		if(!isset($_POST["company"]) || empty($_POST["company"]) || !is_numeric($_POST["company"]))
+		if(!array_key_exists("company_id", $_SESSION["logged"]) && (!isset($_POST["company"]) || empty($_POST["company"]) || !is_numeric($_POST["company"])))
 		{
 			$success = false;
 			$_SESSION["offer_error_company"] = "Musisz wybrać firmę.";

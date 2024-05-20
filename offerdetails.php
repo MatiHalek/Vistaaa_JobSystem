@@ -137,7 +137,7 @@
 				$path = "./img/company/".$row["company_id"]."/";
 				$companyResult = $connect->execute_query('SELECT * FROM company WHERE company_id = ?', [$row["company_id"]]);
 				$companyRow = $companyResult->fetch_assoc();
-				echo "<img class='align-self-start me-4 rounded-3' src='".$path.scandir($path)[2]."' width='75' alt='Logo firmy ".$companyRow["name"]."'>";
+				echo "<img class='align-self-start me-4 rounded-3' src='".(is_dir($path) ? $path.scandir($path)[2] : "./img/user.png")."' width='75' alt='Logo firmy ".$companyRow["name"]."'>";
 				echo "<div>";
 				echo "<h5 class='fs-6 text-primary'>O firmie</h5>";
 				echo "<h6 class='fs-4'>".$companyRow["name"]."</h6>";
@@ -226,7 +226,7 @@
 				echo "</ul></section>";
 			}
 			else
-				echo "<article class='container-md'><div class='alert alert-danger information'><strong>Błąd 404: Nieprawidłowy identyfikator produktu.</strong> <a href='index.php'>Wróć na stronę główną</a></div></article>";
+				include "404.html";
             $result->free_result();
             $connect->close();
 		?>
@@ -256,7 +256,8 @@
             }
             catch
             {
-                saveApplySection.innerHTML = "<div class='alert alert-danger mb-0 shadow text-center'><p class='fw-bold mb-1'>Coś poszło nie tak. Spróbuj ponownie lub odśwież stronę.</p>Kod błędu: 1 (Nie udało połączyć się z serwerem)<br><button type='button' class='commonButton mt-1' id='reload'><i class='bi bi-arrow-clockwise me-2'></i>Załaduj ponownie</a></div>";
+                if(saveApplySection != null)
+					saveApplySection.innerHTML = "<div class='alert alert-danger mb-0 shadow text-center'><p class='fw-bold mb-1'>Coś poszło nie tak. Spróbuj ponownie lub odśwież stronę.</p>Kod błędu: 1 (Nie udało połączyć się z serwerem)<br><button type='button' class='commonButton mt-1' id='reload'><i class='bi bi-arrow-clockwise me-2'></i>Załaduj ponownie</a></div>";
             }
 			AddFeatures(); 
 		}

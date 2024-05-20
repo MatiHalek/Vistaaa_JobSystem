@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 18, 2024 at 05:04 AM
+-- Generation Time: Maj 20, 2024 at 05:31 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -52,7 +52,8 @@ CREATE TABLE `advertisement` (
 
 INSERT INTO `advertisement` (`advertisement_id`, `title`, `company_id`, `position_name`, `position_level`, `contract_type`, `employment_type`, `work_type`, `salary_lowest`, `salary_highest`, `work_days`, `date_added`, `date_expiration`, `responsibilities`, `requirements`, `offer`) VALUES
 (1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', 'Pełny etat', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test'),
-(2, 'nowa23', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 1999.99, 3999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '2024-05-05 00:48:19', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol\r\nehhhh', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf');
+(2, 'nowa23', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 1876.00, 3999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '2024-05-05 00:48:19', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol\r\nehhhh', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf'),
+(5, 'Frontend developer', 2, 'Programista', 'Junior developer', 'Umowa zlecenie', '3/4 etatu', 'Hybrydowa', 4000.00, 6000.00, 'pn-pt 8:00-12:00', '2024-05-20 04:38:42', '2024-05-31 04:38:00', 'obowiązek1\r\nobowiązek2\r\nobowiązek3', 'wymaganie1\r\nwymaganie2', 'oferta1\r\noferta2\r\noferta3');
 
 -- --------------------------------------------------------
 
@@ -72,7 +73,8 @@ CREATE TABLE `advertisement_category` (
 
 INSERT INTO `advertisement_category` (`advertisement_category_id`, `advertisement_id`, `category_id`) VALUES
 (1, 1, 1),
-(12, 2, 1);
+(15, 2, 1),
+(16, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -115,7 +117,8 @@ CREATE TABLE `company` (
 --
 
 INSERT INTO `company` (`company_id`, `email`, `password`, `name`, `description`, `street`, `number`, `city`, `postcode`) VALUES
-(1, 'vistaaa_advertising@outlook.com', '$2y$10$nZ0vnDlPKwlQM/a5.QvaW.Lyf1Q434IH25PRYx7M0Q11q38NNweGq', 'Vistaaa Sp. z o.o.', 'test', 'Zielona', '2', 'Limanowa', '34-600');
+(1, 'vistaaa_advertising@outlook.com', '$2y$10$nZ0vnDlPKwlQM/a5.QvaW.Lyf1Q434IH25PRYx7M0Q11q38NNweGq', 'Vistaaa Sp. z o.o.', 'test', 'Zielona', '2', 'Limanowa', '34-600'),
+(2, 'mh@op.pl', '$2y$10$aUCWiOll7WS7PERVcT3ftOrSYiI2Af9ndl4TIpO1bllP9xx.9wp5O', 'MH S.A.', NULL, 'Zielona', '5', 'Limanowa', '34-600');
 
 -- --------------------------------------------------------
 
@@ -175,7 +178,8 @@ CREATE TABLE `school` (
 
 INSERT INTO `school` (`school_id`, `name`, `city`) VALUES
 (1, 'Szkoła Podstawowa nr 3', 'Limanowa'),
-(2, 'Zespół Szkół Technicznych i Ogólnokształcących', 'Limanowa');
+(2, 'Zespół Szkół Technicznych i Ogólnokształcących', 'Limanowa'),
+(3, 'Szkoła Podstawowa nr 2', 'Kraków');
 
 -- --------------------------------------------------------
 
@@ -205,8 +209,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `date_of_birth`, `phone`, `street`, `home_number`, `city`, `postcode`, `position`, `experience`, `is_admin`) VALUES
-(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$nZ0vnDlPKwlQM/a5.QvaW.Lyf1Q434IH25PRYx7M0Q11q38NNweGq', '2005-02-07', '123456789', 'Zielona', '5', 'Limanowa', '34-600', 'Programista', 'Jestem programistą od X lat', 1),
-(2, 'aaa', 'aaa', 'aaa', 'aaa', '2024-05-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+(1, 'Mateusz', 'Marmuźniak', 'mateusz.marmuzniak.poland@gmail.com', '$2y$10$nZ0vnDlPKwlQM/a5.QvaW.Lyf1Q434IH25PRYx7M0Q11q38NNweGq', '2005-02-07', '123456789', 'Zielona', '52', 'Limanowa', '34-600', 'Programista', 'Jestem programistą od X lat', 1),
+(3, 'aaa', 'aaa', 'matimarmuzniak@gmail.com', '$2y$10$kFe47sL4xtSow32gHPGcqumeV.2B8rPeaRihGdgW8JZy0/dBtTmY6', '2005-02-07', NULL, 'Zielona', '19', 'Limanowa', '34-600', 'aaaaaa', 'aaaaaaaaaaabbb', 0);
 
 -- --------------------------------------------------------
 
@@ -226,7 +230,9 @@ CREATE TABLE `user_applied` (
 --
 
 INSERT INTO `user_applied` (`user_applied_id`, `user_id`, `advertisement_id`, `applied_date`) VALUES
-(14, 1, 2, '2024-05-18 04:29:57');
+(14, 1, 2, '2024-05-18 04:29:57'),
+(15, 1, 5, '2024-05-20 04:59:26'),
+(16, 3, 5, '2024-05-20 05:06:08');
 
 --
 -- Wyzwalacze `user_applied`
@@ -256,8 +262,9 @@ CREATE TABLE `user_course` (
 --
 
 INSERT INTO `user_course` (`user_course`, `user_id`, `name`, `company_id`, `date_start`, `date_end`) VALUES
-(1, 1, 'Kurs językowy', 1, '2019-09-01', NULL),
-(2, 1, 'Programowanie w C++', 1, '2016-12-31', '2019-05-13');
+(36, 1, 'Kurs językowy', 1, '2019-09-01', NULL),
+(37, 1, 'Programowanie w C++', 1, '2016-12-31', '2019-05-13'),
+(38, 1, 'test', 1, '2024-05-02', NULL);
 
 -- --------------------------------------------------------
 
@@ -269,7 +276,7 @@ CREATE TABLE `user_education` (
   `user_education_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `school_id` mediumint(8) UNSIGNED NOT NULL,
-  `level` enum('podstawowe','średnie','wyższe','') NOT NULL,
+  `level` enum('podstawowe','średnie','wyższe') NOT NULL,
   `field` varchar(50) DEFAULT NULL,
   `date_start` date NOT NULL,
   `date_end` date DEFAULT NULL
@@ -280,8 +287,9 @@ CREATE TABLE `user_education` (
 --
 
 INSERT INTO `user_education` (`user_education_id`, `user_id`, `school_id`, `level`, `field`, `date_start`, `date_end`) VALUES
-(1, 1, 1, 'podstawowe', NULL, '2014-09-01', '2020-06-26'),
-(2, 1, 2, 'średnie', 'programista', '2020-09-01', NULL);
+(53, 1, 1, 'podstawowe', NULL, '2014-09-01', '2020-06-26'),
+(54, 1, 2, 'średnie', 'programista', '2020-09-01', NULL),
+(55, 1, 3, 'wyższe', 'aaa', '2024-05-03', '2024-05-02');
 
 -- --------------------------------------------------------
 
@@ -301,8 +309,9 @@ CREATE TABLE `user_language` (
 --
 
 INSERT INTO `user_language` (`user_language_id`, `user_id`, `language_id`, `level`) VALUES
-(1, 1, 1, 'średniozaawansowany'),
-(2, 1, 2, 'podstawowy');
+(69, 1, 1, 'średniozaawansowany'),
+(70, 1, 2, 'podstawowy'),
+(71, 1, 4, 'podstawowy');
 
 -- --------------------------------------------------------
 
@@ -322,8 +331,7 @@ CREATE TABLE `user_link` (
 --
 
 INSERT INTO `user_link` (`user_link_id`, `user_id`, `portal_id`, `link`) VALUES
-(1, 1, 1, 'https://github.com/MatiHalek/'),
-(3, 2, 1, 'aa');
+(51, 1, 1, 'https://google.com');
 
 -- --------------------------------------------------------
 
@@ -336,7 +344,7 @@ CREATE TABLE `user_position` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `company_id` int(10) UNSIGNED NOT NULL,
   `position` varchar(50) NOT NULL,
-  `description` text NOT NULL,
+  `description` text DEFAULT NULL,
   `date_start` date NOT NULL,
   `date_end` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
@@ -346,8 +354,9 @@ CREATE TABLE `user_position` (
 --
 
 INSERT INTO `user_position` (`user_position_id`, `user_id`, `company_id`, `position`, `description`, `date_start`, `date_end`) VALUES
-(1, 1, 1, 'Informatyk', 'esa esa', '2024-04-01', '2024-04-15'),
-(2, 1, 1, 'Programista', 'esa esa', '2024-04-16', NULL);
+(81, 1, 1, 'Informatyk', NULL, '2024-04-01', '2024-04-15'),
+(82, 1, 1, 'ez', NULL, '2024-05-16', NULL),
+(85, 3, 1, 'aaaa', NULL, '2024-05-10', '2024-05-10');
 
 -- --------------------------------------------------------
 
@@ -379,14 +388,6 @@ CREATE TABLE `user_skill` (
   `user_id` int(11) UNSIGNED NOT NULL,
   `skill` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
-
---
--- Dumping data for table `user_skill`
---
-
-INSERT INTO `user_skill` (`user_skill_id`, `user_id`, `skill`) VALUES
-(3, 1, 'Programowanie aplikacji webowych i mobilnych'),
-(4, 1, 'Wykonywanie testów jednostkowych');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -514,13 +515,13 @@ ALTER TABLE `user_skill`
 -- AUTO_INCREMENT for table `advertisement`
 --
 ALTER TABLE `advertisement`
-  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `advertisement_category`
 --
 ALTER TABLE `advertisement_category`
-  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -532,7 +533,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `company_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `company_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `language`
@@ -550,61 +551,61 @@ ALTER TABLE `portal`
 -- AUTO_INCREMENT for table `school`
 --
 ALTER TABLE `school`
-  MODIFY `school_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `school_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_applied`
 --
 ALTER TABLE `user_applied`
-  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `user_applied_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `user_course`
 --
 ALTER TABLE `user_course`
-  MODIFY `user_course` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_course` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `user_education`
 --
 ALTER TABLE `user_education`
-  MODIFY `user_education_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_education_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `user_language`
 --
 ALTER TABLE `user_language`
-  MODIFY `user_language_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_language_id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `user_link`
 --
 ALTER TABLE `user_link`
-  MODIFY `user_link_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_link_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `user_position`
 --
 ALTER TABLE `user_position`
-  MODIFY `user_position_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_position_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `user_saved`
 --
 ALTER TABLE `user_saved`
-  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `user_saved_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `user_skill`
 --
 ALTER TABLE `user_skill`
-  MODIFY `user_skill_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_skill_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

@@ -1,5 +1,5 @@
 <?php
-	//error_reporting(0);
+	error_reporting(0);
 	session_start();
 	if(!isset($_SESSION["logged"]) || array_key_exists("user_id", $_SESSION["logged"]) && $_SESSION["logged"]["is_admin"] == 0)
 	{

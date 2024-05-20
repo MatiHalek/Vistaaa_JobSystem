@@ -1,5 +1,5 @@
 <?php
-    //error_reporting(0);
+    error_reporting(0);
     session_start();
     require "../connect.php";
     $connect = new mysqli($host, $db_user, $db_password, $db_name);

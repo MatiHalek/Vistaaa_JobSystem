@@ -1,5 +1,5 @@
 <?php
-    //error_reporting(0);
+    error_reporting(0);
     function ValidateName($item)
     {
         $function = substr(strtolower(__FUNCTION__), 8);

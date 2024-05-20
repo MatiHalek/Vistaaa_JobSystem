@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Maj 20, 2024 at 05:31 AM
+-- Generation Time: Maj 20, 2024 at 06:13 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -53,7 +53,11 @@ CREATE TABLE `advertisement` (
 INSERT INTO `advertisement` (`advertisement_id`, `title`, `company_id`, `position_name`, `position_level`, `contract_type`, `employment_type`, `work_type`, `salary_lowest`, `salary_highest`, `work_days`, `date_added`, `date_expiration`, `responsibilities`, `requirements`, `offer`) VALUES
 (1, 'Programista', 1, 'programista', 'starszy programista', 'Umowa zlecenie', 'Pełny etat', 'Zdalna', 2000.00, 4000.00, 'poniedziałek - piątek 8:00-16:00', '2024-04-17 17:31:21', '2024-04-17 17:31:21', 'test', 'test', 'test'),
 (2, 'nowa23', 1, 'programista', 'starszy programista', 'Umowa o dzieło', '1/4 etatu', 'Hybrydowa', 1876.00, 3999.99, 'pn - pt 8:00-13:00\r\nsb 8:00-12:00aaa', '2024-05-05 00:48:19', '2024-06-01 23:27:00', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nxD', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nlol\r\nehhhh', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\nwtf'),
-(5, 'Frontend developer', 2, 'Programista', 'Junior developer', 'Umowa zlecenie', '3/4 etatu', 'Hybrydowa', 4000.00, 6000.00, 'pn-pt 8:00-12:00', '2024-05-20 04:38:42', '2024-05-31 04:38:00', 'obowiązek1\r\nobowiązek2\r\nobowiązek3', 'wymaganie1\r\nwymaganie2', 'oferta1\r\noferta2\r\noferta3');
+(5, 'Frontend developer', 2, 'Programista', 'Junior developer', 'Umowa zlecenie', '3/4 etatu', 'Hybrydowa', 4000.00, 6000.00, 'pn-pt 8:00-12:00', '2024-05-20 04:38:42', '2024-05-31 04:38:00', 'obowiązek1\r\nobowiązek2\r\nobowiązek3', 'wymaganie1\r\nwymaganie2', 'oferta1\r\noferta2\r\noferta3'),
+(6, 'ogłoszenie - produkcja', 1, 'producent', 'test', 'Umowa o dzieło', 'Pół etatu', 'Zdalna', 5000.00, 7867.00, 'pn - pt 8:00-15:00', '2024-05-20 05:58:31', '2024-06-07 05:57:00', 'obowiązek1\r\nobowiązek2\r\nobowiązek3', 'wymag1\r\nwymag2\r\nwydłużenie', 'byle co\r\ntest\r\nez\r\nhaha'),
+(7, 'Jazda', 2, 'kierowca', 'przewóz towarów', 'Umowa zlecenie', '1/4 etatu', 'Zdalna', 5000.00, 10000.00, 'zależnie', '2024-05-20 06:01:04', '2024-06-07 06:01:00', 'aaaaaaaaaaaaaaaaaaaaaa\r\naaaaaaaaaaaaaaaaaaaaaaaa\r\naaaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbb\r\nbbbbbbbbbbbbbbbbbbbbbb\r\nbbbbbbbbbbbbbbbbb', 'cccccccccccccccccc\r\ncccccccccccccccc\r\ncccccccccccccccccccccccc'),
+(8, 'ostatnia', 1, 'przykład', 'reklamowanie usług', 'Umowa zlecenie', '3/4 etatu', 'Zdalna', 2000.00, 5000.00, 'pn - pt 8:00-12:00\r\nsb 8:00 - 17:00', '2024-05-20 06:02:44', '2024-05-30 06:02:00', 'aaaaaaaaaaaaaa\r\naaaaaaaaaaaaaa\r\naaaaaaaaaaaaaaaaaa', 'xDDDDDDDD\r\nxDDDDDDDDD\r\nxDDDDDDDD', 'oferta pracodawcy\r\noferta jakaś inna\r\nkoniec esa'),
+(9, 'Profesjonalne ogłoszenie', 1, 'Programista', 'senior developer', 'Umowa zlecenie', '3/4 etatu', 'Hybrydowa', 7000.00, 15000.00, 'pn - pt 15:00 - 23:00', '2024-05-20 06:08:11', '2024-09-30 06:07:00', 'Biegła znajomość języka programowania Python oraz doświadczenie w jego praktycznym wykorzystaniu.\r\nUmiejętność pracy z bazami danych, takimi jak MySQL, PostgreSQL lub MongoDB.\r\nZnajomość systemów kontroli wersji, takich jak Git.\r\nZdolność do pracy w zespole oraz efektywnej komunikacji.\r\nMinimum 3 lata doświadczenia na podobnym stanowisku.', 'Tworzenie i utrzymywanie wysokiej jakości kodu zgodnie z najlepszymi praktykami programistycznymi.\r\nWspółpraca z zespołem projektowym nad opracowywaniem nowych funkcjonalności.\r\nAnalizowanie i rozwiązywanie problemów zgłaszanych przez użytkowników.\r\nOptymalizacja istniejących aplikacji pod kątem wydajności i bezpieczeństwa.\r\nUdział w spotkaniach zespołowych oraz raportowanie postępów prac.', 'Atrakcyjne wynagrodzenie oraz system premiowy.\r\nElastyczne godziny pracy oraz możliwość pracy zdalnej.\r\nPrywatna opieka medyczna oraz pakiet sportowy.\r\nDostęp do szkoleń i kursów podnoszących kwalifikacje.\r\nPrzyjazna atmosfera pracy w dynamicznie rozwijającej się firmie.');
 
 -- --------------------------------------------------------
 
@@ -74,7 +78,13 @@ CREATE TABLE `advertisement_category` (
 INSERT INTO `advertisement_category` (`advertisement_category_id`, `advertisement_id`, `category_id`) VALUES
 (1, 1, 1),
 (15, 2, 1),
-(16, 5, 1);
+(16, 5, 1),
+(17, 6, 2),
+(18, 6, 4),
+(19, 7, 4),
+(20, 7, 5),
+(21, 8, 2),
+(22, 9, 1);
 
 -- --------------------------------------------------------
 
@@ -92,7 +102,11 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`category_id`, `name`) VALUES
-(1, 'Programowanie');
+(1, 'Programowanie'),
+(2, 'Marketing'),
+(3, 'Prawo'),
+(4, 'Produkcja'),
+(5, 'Transport');
 
 -- --------------------------------------------------------
 
@@ -515,19 +529,19 @@ ALTER TABLE `user_skill`
 -- AUTO_INCREMENT for table `advertisement`
 --
 ALTER TABLE `advertisement`
-  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `advertisement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `advertisement_category`
 --
 ALTER TABLE `advertisement_category`
-  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `advertisement_category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `category_id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `company`
